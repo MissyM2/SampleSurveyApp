@@ -65,4 +65,7 @@
 	  <Folder Include="Pages\" />
 	  <Folder Include="Services\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\SampleSurveyApp.Core\SampleSurveyApp.Core.csproj" />
+	</ItemGroup>
 </Project>

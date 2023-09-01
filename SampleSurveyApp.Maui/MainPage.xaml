@@ -1,42 +1,93 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SampleSurveyApp.Maui.MainPage">
+             x:Class="SampleSurveyApp.Maui.MainPage"
+             xmlns:model="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
+             xmlns:vm="clr-namespace:SampleSurveyApp.Core.ViewModels;assembly=SampleSurveyApp.Core"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2021/maui"
+             x:DataType="vm:MainPageVM">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <Grid RowDefinitions="50, *"
+          Margin="0,20,0,0">
+        <StackLayout Grid.Row="0">
+            <Button Text="Create survey"
+                        WidthRequest="150"
+                        Command="{Binding CreateSurveyCommand}"
+                        BackgroundColor="green"/>
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+        </StackLayout>
 
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+        <Grid Grid.Row="1"
+              RowDefinitions="50,200,40,50,200" Padding="15" BackgroundColor="Transparent">
+            <FlexLayout Grid.Row="0"
+                        Direction="Row"
+                        AlignItems="Center"
+                        JustifyContent="SpaceEvenly"
+                        Margin="0,0,0,15">
+                <Button Text="View surveys"
+                        WidthRequest="150"
+                        Command="{Binding ViewSurveyListCommand}"/>
+                <Button Text="Delete surveys"
+                        BackgroundColor="red"
+                    WidthRequest="150"
+                    Command="{Binding DeleteAllSurveysCommand}"/>
+            </FlexLayout>
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding SurveyList}"
+                            WidthRequest="350"
+                            BackgroundColor="LightGray">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:SurveyModel">
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Id}" Padding="5,0,5,0" />
+                            <Label Text="{Binding SurveyDate}" Padding="5,0,5,0" />
+                            <Label Text="{Binding Suid}" Padding="5,0,5,0" />
+                            <Label Text="{Binding SurveyStatus}" Padding="5,0,5,0" />
+                            <Label Text="{Binding SyncStatus}" Padding="5,0,5,0" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
-
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
-
-        </VerticalStackLayout>
-    </ScrollView>
+            <FlexLayout Grid.Row="3"
+                     Direction="Row"
+                     AlignItems="Center"
+                     JustifyContent="SpaceEvenly"
+                     Margin="0,0,0,15">
+                <Button Text="View responses"
+                        WidthRequest="150"
+                        Command="{Binding ViewResponseListCommand}"/>
+                <Button Text="Delete responses"
+                    WidthRequest="150"
+                    BackgroundColor="red"
+                    Command="{Binding DeleteAllResponsesCommand}"/>
+            </FlexLayout>
+            <CollectionView Grid.Row="4"
+                            ItemsSource="{Binding SurveyResponseList}"
+                            WidthRequest="350"
+                            BackgroundColor="LightGray">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:SurveyResponseModel">
+                        <VerticalStackLayout>
+                            <Frame BorderColor="LightGray" HasShadow="false">
+                                <VerticalStackLayout>
+                                    <HorizontalStackLayout>
+                                        <Label Text="{Binding Id}" Padding="5,0,5,0" />
+                                        <Label Text="{Binding SurveyId}" Padding="5,0,5,0" />
+                                        <Label Text="{Binding SequenceNo}" Padding="5,0,5,0" />
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout>
+                                        <Label Text="{Binding QuestionCode}" Padding="5,0,5,0" />
+                                        <Label Text="{Binding QuestionText}" Padding="5,0,5,0" />
+                                        <Label Text="{Binding AnswerText}" Padding="5,0,5,0" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
 
 </ContentPage>
-
