@@ -18,9 +18,5 @@ public partial class SurveyPage : ContentPage
             new Repository<SurveyModel>());
     }
 
-    protected async override void OnAppearing()
-    {
-        base.OnAppearing();
-        //await vm.RefreshCommand.ExecuteAsync(null);
-    }
+    
 }

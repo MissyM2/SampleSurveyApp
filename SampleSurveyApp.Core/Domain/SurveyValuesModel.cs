@@ -5,7 +5,7 @@ namespace SampleSurveyApp.Core.Domain
 {
 	public class SurveyValuesModel : BaseDatabaseItem
 	{
-        public string NameText { get; set; }
+        public string SurveyValueType { get; set; }
 
         public string ValueText { get; set; }
 

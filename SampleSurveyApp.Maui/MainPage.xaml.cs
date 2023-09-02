@@ -21,7 +21,14 @@ public partial class MainPage : ContentPage
           new Repository<SurveyResponseModel>());
     }
 
-	
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        var vm = (MainPageVM)BindingContext;
+        await vm.RefreshCommand.ExecuteAsync(null);
+    }
+
+
 }
 
 

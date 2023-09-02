@@ -48,6 +48,25 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
         [RelayCommand]
+        public async Task Refresh()
+        {
+            IsBusy = true;
+
+
+#if DEBUG
+            await Task.Delay(500);
+#endif
+
+            var asd = new AddSurveyData(_surveyValuesModelRepository);
+            await asd.AddSurveyValuesAsync();
+
+
+            IsBusy = false;
+
+            //toaster?.MakeToast("Refreshed!");
+        }
+
+        [RelayCommand]
         public async Task CreateSurvey()
         {
             if (IsBusy) return;

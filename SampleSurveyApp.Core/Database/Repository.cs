@@ -29,7 +29,7 @@ namespace SampleSurveyApp.Core.Database
     {
         readonly Lazy<SQLiteAsyncConnection> lazyInitializer = new Lazy<SQLiteAsyncConnection>(() =>
         {
-            Console.WriteLine("Missy db: " + DatabaseConstants.DatabasePath);
+            Console.WriteLine("SampleSurveyApp db: " + DatabaseConstants.DatabasePath);
             return new SQLiteAsyncConnection(DatabaseConstants.DatabasePath, DatabaseConstants.Flags);
         });
 

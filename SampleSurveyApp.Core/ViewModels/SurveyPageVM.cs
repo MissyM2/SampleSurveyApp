@@ -40,41 +40,43 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-//        [RelayCommand]
-//        public async Task GetLogins()
-//        {
-//#if DEBUG
-//            await Task.Delay(500);
-//#endif
+       
 
-//            LoginList.Clear();
+        //        [RelayCommand]
+        //        public async Task GetLogins()
+        //        {
+        //#if DEBUG
+        //            await Task.Delay(500);
+        //#endif
 
-//            var items = await _surveyValuesModelRepository.GetAllAsync();
+        //            LoginList.Clear();
 
-//            foreach (var item in items) LoginList.Add(item);
-//        }
+        //            var items = await _surveyValuesModelRepository.GetAllAsync();
 
-//        [RelayCommand]
-//        public async Task DeleteAllLogins()
-//        {
-//            await _surveyValuesModelRepository.DeleteAllAsync();
+        //            foreach (var item in items) LoginList.Add(item);
+        //        }
 
-//        }
+        //        [RelayCommand]
+        //        public async Task DeleteAllLogins()
+        //        {
+        //            await _surveyValuesModelRepository.DeleteAllAsync();
 
-//        [RelayCommand]
-//        public async Task<SurveyModel> GetLoginById(int id)
-//        {
-//            var selectedListItem = await _surveyValuesModelRepository.GetById(id);
-//            return selectedListItem;
+        //        }
 
-//        }
+        //        [RelayCommand]
+        //        public async Task<SurveyModel> GetLoginById(int id)
+        //        {
+        //            var selectedListItem = await _surveyValuesModelRepository.GetById(id);
+        //            return selectedListItem;
 
-//        [RelayCommand]
-//        public void GoToDetails()
-//        {
-//            Console.WriteLine("Go to getils");
+        //        }
 
-//        }
+        //        [RelayCommand]
+        //        public void GoToDetails()
+        //        {
+        //            Console.WriteLine("Go to getils");
+
+        //        }
 
 
 
