@@ -14,6 +14,6 @@ public partial class SurveyReviewPage : ContentPage
            new NavigationService(),
            new MessageService(),
            new UserPreferences(),
-           new Repository<SurveyResponseModel>());
+           new AsyncRepository<SurveyResponseModel>());
     }
 }

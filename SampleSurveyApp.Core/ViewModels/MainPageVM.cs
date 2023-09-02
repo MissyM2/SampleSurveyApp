@@ -16,9 +16,9 @@ namespace SampleSurveyApp.Core.ViewModels
         private readonly IMessageService _messageService;
         private readonly IUserPreferences _userPreferences;
 
-        private readonly IRepository<SurveyValuesModel> _surveyValuesModelRepository;
-        private readonly IRepository<SurveyModel> _surveyModelRepository;
-        private readonly IRepository<SurveyResponseModel> _surveyResponseModelRepository;
+        private readonly IAsyncRepository<SurveyValuesModel> _surveyValuesModelRepository;
+        private readonly IAsyncRepository<SurveyModel> _surveyModelRepository;
+        private readonly IAsyncRepository<SurveyResponseModel> _surveyResponseModelRepository;
 
         [ObservableProperty]
         public SurveyModel newSurvey;
@@ -33,9 +33,9 @@ namespace SampleSurveyApp.Core.ViewModels
             INavigationService navigationService,
             IMessageService messageService,
             IUserPreferences userPreferences,
-            IRepository<SurveyValuesModel> surveyValuesModelRepository,
-            IRepository<SurveyModel> surveyModelRepository,
-            IRepository<SurveyResponseModel> surveyResponseModelRepository)
+            IAsyncRepository<SurveyValuesModel> surveyValuesModelRepository,
+            IAsyncRepository<SurveyModel> surveyModelRepository,
+            IAsyncRepository<SurveyResponseModel> surveyResponseModelRepository)
         {
             _navigationService = navigationService;
             _messageService = messageService;
@@ -81,7 +81,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
 
                     // insert a new record
-                await _surveyModelRepository.SaveAsync(NewSurvey);
+                await _surveyModelRepository.InsertAsync(NewSurvey);
                 InsertedSurvey = NewSurvey;
 
                 //await _navigationService.PushAsync<SurveyPageVM>($"itemID={InsertedSurvey.ItemID}");

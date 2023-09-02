@@ -1,14 +1,15 @@
 ﻿using System;
 using SampleSurveyApp.Core.Domain;
+using SampleSurveyApp.Core.Services;
 
 namespace SampleSurveyApp.Core.Database
 {
 	public class AddSurveyData
 	{
-        private readonly IRepository<SurveyValuesModel> _surveyValuesModelRepository;
+        private readonly IAsyncRepository<SurveyValuesModel> _surveyValuesModelRepository;
         public List<SurveyValuesModel> SurveyValuesList { get; set; }
 
-		public AddSurveyData(IRepository<SurveyValuesModel> surveyValuesModelRepository)
+		public AddSurveyData(IAsyncRepository<SurveyValuesModel> surveyValuesModelRepository)
 		{
             _surveyValuesModelRepository = surveyValuesModelRepository;
             SurveyValuesList = new List<SurveyValuesModel>()
@@ -92,11 +93,11 @@ namespace SampleSurveyApp.Core.Database
         {
             try
             {
-                _surveyValuesModelRepository.DeleteAllAsync();
+                await _surveyValuesModelRepository.DeleteAllAsync();
 
                 foreach (var surveyvalue in SurveyValuesList)
                 {
-                    await _surveyValuesModelRepository.SaveAsync(new SurveyValuesModel()
+                    await _surveyValuesModelRepository.InsertAsync(new SurveyValuesModel()
                     {
                         Id = surveyvalue.Id,
                         SurveyValueType = surveyvalue.SurveyValueType,

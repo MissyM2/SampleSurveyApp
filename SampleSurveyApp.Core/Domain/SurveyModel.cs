@@ -1,5 +1,5 @@
 ﻿using System;
-using SampleSurveyApp.Core.Database;
+using SampleSurveyApp.Core.Domain.Base;
 
 namespace SampleSurveyApp.Core.Domain
 {

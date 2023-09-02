@@ -25,6 +25,11 @@ namespace SampleSurveyApp.Maui.Services
             await Shell.Current.GoToAsync($"//{nameof(SurveyPage)}");
         }
 
+        public async Task GoToSurveyReviewPageAsync()
+        {
+            await Shell.Current.GoToAsync($"//{nameof(SurveyReviewPage)}");
+        }
+
 
         // look at this
         //private Task GoToAsync<TViewModel>(string routePrefix, string parameters) where TViewModel : BaseVM

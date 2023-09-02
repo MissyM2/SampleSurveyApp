@@ -15,14 +15,14 @@ namespace SampleSurveyApp.Core.ViewModels
         private readonly IMessageService _messageService;
         private readonly IUserPreferences _userPreferences;
 
-        private readonly IRepository<SurveyResponseModel> _surveyResponseModelRepository;
+        private readonly IAsyncRepository<SurveyResponseModel> _surveyResponseModelRepository;
 
 
         public SurveyReviewPageVM(
             INavigationService navigationService,
             IMessageService messageService,
             IUserPreferences userPreferences,
-            IRepository<SurveyResponseModel> surveyResponseModelRepository)
+            IAsyncRepository<SurveyResponseModel> surveyResponseModelRepository)
         {
             _navigationService = navigationService;
             _messageService = messageService;

@@ -16,9 +16,9 @@ public partial class MainPage : ContentPage
           new NavigationService(),
           new MessageService(),
           new UserPreferences(),
-          new Repository<SurveyValuesModel>(),
-          new Repository<SurveyModel>(),
-          new Repository<SurveyResponseModel>());
+          new AsyncRepository<SurveyValuesModel>(),
+          new AsyncRepository<SurveyModel>(),
+          new AsyncRepository<SurveyResponseModel>());
     }
 
     protected async override void OnAppearing()

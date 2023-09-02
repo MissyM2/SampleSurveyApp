@@ -2,40 +2,140 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SampleSurveyApp.Maui.Pages.SurveyPage"
+             xmlns:vm="clr-namespace:SampleSurveyApp.Core.ViewModels;assembly=SampleSurveyApp.Core"
              xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
              xmlns:controls="clr-namespace:SampleSurveyApp.Maui.Controls"
              Title="SurveytPage"
-             Shell.FlyoutBehavior="Flyout">
+             x:DataType="vm:SurveyPageVM">
 
-    <!--<ContentPage.ToolbarItems>
-        <ToolbarItem Text="Logout" Command="{Binding LogoutUserCommand}"/>
-    </ContentPage.ToolbarItems>
-   <Grid  WidthRequest="400"
-        Padding="5"
-        RowDefinitions="50, *"
-        ColumnDefinitions="*"
-        RowSpacing="5">
+    <ContentPage.Resources>
+        <Style TargetType="ContentView">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter TargetName="checkImage" Property="Image.IsVisible" Value="false"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter TargetName="checkImage" Property="Image.IsVisible" Value="true"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+<Shell.TitleView>
+    <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*" BackgroundColor="Black">
+      <Button Text="Back"
+              BackgroundColor="Black"
+              TextColor="Blue"
+              FontSize="18"
+              Grid.Column="0"
+              HorizontalOptions="Start"
+              Command="{Binding BackButtonClickedCommand}"/>
+            <Label x:Name="titleLabel" FontSize="20" FontAttributes="Bold"
+                   Text="{Binding ScreenName}"
+                   HorizontalTextAlignment="Center"
+                   BackgroundColor="Black" TextColor="White" Grid.Column="1" />
+       <Button Text="Next"
+               BackgroundColor="Black"
+               TextColor="CornflowerBlue"
+               Grid.Column="2" FontSize="18"
+               HorizontalOptions="End"
+               Command="{Binding NextButtonClickedCommand}"/>
 
-        <StackLayout Grid.Row="0"
-                     Grid.Column="0"
-                     Margin="0,0,0,25">
-            <Button Text="Add Todo Item"
-                    Command="{Binding AddTodoItemCommand}"
-                    WidthRequest="300"/>
+        </Grid>
+</Shell.TitleView>
+
+<Grid RowDefinitions="40,100,30, *">
+        <VerticalStackLayout x:Name="caseHeaderLabel"
+                             Grid.Row="0"
+                             BackgroundColor="CornflowerBlue"
+                             Padding="5">
+           
+            <Label Text="{Binding SPID}" HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"/>
+
+        </VerticalStackLayout>
+        <FlexLayout x:Name="questionLabel"
+                             Grid.Row="1"
+                             BackgroundColor="PeachPuff">
+           
+            <Label Text="{Binding CurrentSurveyQuestion}"
+                   VerticalOptions="Center"
+                   Margin="10,0,10,0"/>
+        </FlexLayout>
+        <VerticalStackLayout x:Name="instructionLabel"
+                             Grid.Row="2"
+                             Padding="5">
+            <Label Text="{Binding InstructionLabel}" Margin="10,0,0,0"
+                   TextColor="Blue"/>
+
+            <!--<Label Text="{Binding IsPortraitOrientation}"
+                   TextColor="Red"/>-->
+        </VerticalStackLayout>
+        <StackLayout Grid.Row="3">
+            <CollectionView x:Name="answerCV"
+                        ItemsSource="{Binding AnswerListValues}"
+                        SelectionMode="{Binding CvSelectionMode}"
+                        SelectedItem="{Binding SelectedResponse, Mode=TwoWay}"
+                        SelectionChangedCommand="{Binding ResponseChangedCommand}"
+                        SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference answerCV}}"
+                        BackgroundColor="White"
+                        Margin="12,8,12,0"
+                        IsVisible="{Binding IsQuestionTypeList}">
+            <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:SurveyValuesModel">
+                                <ContentView BackgroundColor="White">
+                                  <Grid x:Name="responseGrid"
+                                        ColumnDefinitions="*, 40"
+                                        RowDefinitions="40, 20">
+                                        <VerticalStackLayout >
+                                            <Label Text="{Binding ValueText}" Margin="10,4,4,4" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Grid.Row="0">
+                                            <Image x:Name="checkImage"
+                                                   Source="check.png" Margin="0,5,0,0"
+                                                   HeightRequest="20">
+                                            </Image>
+                                        </VerticalStackLayout>
+                                        <BoxView Grid.Column="0"
+                                                 Grid.ColumnSpan="2"
+                                                 Grid.Row="1"
+                                                 BackgroundColor="LightBlue"
+                                                 HeightRequest="1"/>
+                                    </Grid>                  
+                                </ContentView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+
+            </CollectionView>
         </StackLayout>
 
-        <RefreshView Grid.Row="1"
-                     Grid.Column="0">
-            <CollectionView ItemsSource="{Binding TodoItemList}"
-                            SelectionMode="Single">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:TodoItemModel">
-                        <controls:TodoItemCardView />
-                    </DataTemplate>
-                    
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+        <!-- TEXT EDITOR-->
+        <VerticalStackLayout Grid.Row="3"
+                     IsVisible="{Binding IsQuestionTypeText}"
+                     BackgroundColor="White"
+                     HeightRequest="200"
+                     Margin="12,8,12,0"
+                     VerticalOptions="Start">
+            <Frame HeightRequest="200"
+                   BorderColor="LightGray"
+                   Padding="0">
+                <StackLayout>
+                    <Editor Placeholder="Text goes here"
+                            HeightRequest="250"
+                            TextColor="green"/>
+                </StackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
 
-        </RefreshView>
-    </Grid>-->
 </ContentPage>
