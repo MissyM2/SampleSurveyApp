@@ -49,6 +49,9 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         SurveyValuesModel lastQuestion;
 
+        [ObservableProperty]
+        bool isFinalQuestion;
+
         public ObservableCollection<SurveyValuesModel> AnswersForCurrentQuestionList { get; set; } = new();
 
         #endregion
@@ -206,7 +209,7 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             SPID = "987654";
 
-            if (IsVisibleAnswerReview == false)
+            if (IsFinalQuestion == false)
             {
                 ScreenNameLbl = CurrentQuestion.ValueCode;
                 CurrentQuestionLbl = CurrentQuestion.ValueText;
@@ -252,6 +255,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 LeftBtnLbl = "Back";
                 IsVisibleQuestionTypeList = false;
                 IsVisibleQuestionTypeText = false;
+                IsVisibleAnswerReview = true;
                 ScreenNameLbl = "Review Page";
                 
             }
@@ -348,10 +352,16 @@ namespace SampleSurveyApp.Core.ViewModels
                     //await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
                 }
 
-                if (SelectedResponse.RuleType.ToLower().Equals("done"))
+                if (IsFinalQuestion == true)
                 {
 
-                    await _messageService.DisplayAlert("Review", "GoToReview", "OK", null);
+                    Debug.WriteLine("GO TO REVIEW!");
+                    var setScreenValuesReturn = await SetScreenValues();
+                    if (setScreenValuesReturn == 1)
+                    {
+                        // get answers for currentQuestion
+                        CreateUserResponsesCollection();
+                    }
 
                 }
                 else
@@ -379,7 +389,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         private async Task<int> GetCurrentQuestion()
         {
-            //CurrentQuestion = surveyQuestionList.Find(x => x.ValueType.Equals(SelectedResponse.RuleType));
             CurrentQuestion = AllPossibleQuestionsList.Find(x => x.ValueCode.Equals(SelectedResponse.RuleType));
 
             return 1;
@@ -394,6 +403,16 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 SurveyValuesModel tempResponse = new SurveyValuesModel();
                 tempResponse = SelectedResponse;
+
+                // check to see if there are any questions after this answer is added
+                if (tempResponse.RuleType.ToLower().Equals("done"))
+                {
+                    IsFinalQuestion = true;
+                }
+                else
+                {
+                    IsFinalQuestion = false;
+                }
                 SelectedResponses.Add(tempResponse);
 
             }
@@ -401,7 +420,23 @@ namespace SampleSurveyApp.Core.ViewModels
             else
             {
                 List<SurveyValuesModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyValuesModel>().ToList();
+
+                // check to see if there are any questions after this answer is added
+                var tempResponse = myListItems.FirstOrDefault(x => x.RuleType.ToLower().Equals("done"));
+                if(tempResponse != null)
+                {
+                    IsFinalQuestion = true;
+                }
+                else
+                {
+                    IsFinalQuestion = false;
+                }
+                
+
+
                 SelectedResponses = new ObservableCollection<SurveyValuesModel>(myListItems);
+
+
                 Debug.WriteLine("Count of selected responses in parameter = " + SelectedResponses.Count.ToString());
 
             }
@@ -462,6 +497,19 @@ namespace SampleSurveyApp.Core.ViewModels
             //{
             //    await _databaseHelper.InsertData(item);
             //}
+        }
+
+        private void CreateUserResponsesCollection()
+        {
+            UserResponseGroups.Clear();
+
+            var dict = ActualUserSelectedAnswersList.GroupBy(o => o.QuestionText)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach (KeyValuePair<string, List<SurveyResponseModel>> item in dict)
+            {
+                UserResponseGroups.Add(new ResponseGroup(item.Key, new List<SurveyResponseModel>(item.Value)));
+            }
         }
 
 
