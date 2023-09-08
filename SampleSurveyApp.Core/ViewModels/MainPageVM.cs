@@ -71,8 +71,8 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             if (IsBusy) return;
 
-            try
-            {
+            //try
+            //{
                 IsBusy = true;
                 NewSurvey = new SurveyModel();
                 NewSurvey.SurveyDate = DateTime.Now;
@@ -84,20 +84,21 @@ namespace SampleSurveyApp.Core.ViewModels
                 await _surveyModelRepository.InsertAsync(NewSurvey);
                 InsertedSurvey = NewSurvey;
 
-                //await _navigationService.PushAsync<SurveyPageVM>($"itemID={InsertedSurvey.ItemID}");
-               
+                //await _navigationService.GoToSurveyPageAsync<SurveyPageVM>($"itemID={InsertedSurvey.Id");
+                await _navigationService.GoToSurveyPageAsync(InsertedSurvey.Id);
 
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to insert a survey: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to insert a surveys", "OK", null);
 
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"Unable to insert a survey: {ex.Message}");
+            //    await _messageService.DisplayAlert("Error", "Failed to insert a surveys", "OK", null);
+
+            //}
+            //finally
+            //{
+            IsBusy = false;
+            //}
 
         }
 
@@ -106,29 +107,29 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             if (IsBusy) return;
 
-            try
-            {
-                IsBusy = true;
-                if (SurveyList.Any()) SurveyList.Clear();
-                var surveys = new List<SurveyModel>();
+            //try
+            //{
+            //    IsBusy = true;
+            //    if (SurveyList.Any()) SurveyList.Clear();
+            //    var surveys = new List<SurveyModel>();
 
-                surveys = await _surveyModelRepository.GetAllAsync();
-                foreach (var survey in surveys)
-                {
-                    await _surveyModelRepository.DeleteAsync(survey);
-                }
+            //    surveys = await _surveyModelRepository.GetAllAsync();
+            //    foreach (var survey in surveys)
+            //    {
+            //        await _surveyModelRepository.DeleteAsync(survey);
+            //    }
 
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", null);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
+            //    await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", null);
 
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //}
 
         }
 
@@ -137,27 +138,27 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             if (IsBusy) return;
 
-            try
-            {
-                IsBusy = true;
-                if (SurveyResponseList.Any()) SurveyResponseList.Clear();
-                var responses = new List<SurveyResponseModel>();
-                responses = await _surveyResponseModelRepository.GetAllAsync();
-                foreach (var response in responses)
-                {
-                    await _surveyResponseModelRepository.DeleteAsync(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to delete all responses: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", null);
+            //try
+            //{
+            //    IsBusy = true;
+            //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
+            //    var responses = new List<SurveyResponseModel>();
+            //    responses = await _surveyResponseModelRepository.GetAllAsync();
+            //    foreach (var response in responses)
+            //    {
+            //        await _surveyResponseModelRepository.DeleteAsync(response);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"Unable to delete all responses: {ex.Message}");
+            //    await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", null);
 
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //}
 
         }
 
@@ -165,26 +166,26 @@ namespace SampleSurveyApp.Core.ViewModels
         public async Task ViewSurveyList()
         {
             if (IsBusy) return;
-            try
-            {
-                IsBusy = true;
-                if (SurveyList.Any()) SurveyList.Clear();
-                var surveys = new List<SurveyModel>();
+            //try
+            //{
+            //    IsBusy = true;
+            //    if (SurveyList.Any()) SurveyList.Clear();
+            //    var surveys = new List<SurveyModel>();
 
-                surveys = await _surveyModelRepository.GetAllAsync();
+            //    surveys = await _surveyModelRepository.GetAllAsync();
 
-                foreach (var survey in surveys) SurveyList.Add(survey);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to get cars: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to retrieve surveys", "OK", null);
+            //    foreach (var survey in surveys) SurveyList.Add(survey);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"Unable to get cars: {ex.Message}");
+            //    await _messageService.DisplayAlert("Error", "Failed to retrieve surveys", "OK", null);
 
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //}
 
         }
 
@@ -192,25 +193,25 @@ namespace SampleSurveyApp.Core.ViewModels
         public async Task ViewResponseList()
         {
             if (IsBusy) return;
-            try
-            {
-                IsBusy = true;
-                if (SurveyResponseList.Any()) SurveyResponseList.Clear();
-                var surveyResponseValues = new List<SurveyResponseModel>();
-                surveyResponseValues = await _surveyResponseModelRepository.GetAllAsync();
+            //try
+            //{
+            //    IsBusy = true;
+            //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
+            //    var surveyResponseValues = new List<SurveyResponseModel>();
+            //    surveyResponseValues = await _surveyResponseModelRepository.GetAllAsync();
 
-                foreach (var surveyResponseValue in surveyResponseValues) SurveyResponseList.Add(surveyResponseValue);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to get cars: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to retrieve survey list values", "OK", null);
+            //    foreach (var surveyResponseValue in surveyResponseValues) SurveyResponseList.Add(surveyResponseValue);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"Unable to get cars: {ex.Message}");
+            //    await _messageService.DisplayAlert("Error", "Failed to retrieve survey list values", "OK", null);
 
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //}
 
         }
     }

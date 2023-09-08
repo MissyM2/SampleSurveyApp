@@ -7,8 +7,7 @@ namespace SampleSurveyApp.Core.Services
 	{
         Task GoBackAsync();
         Task GoToMainPageAsync();
-        Task GoToSurveyPageAsync();
-        Task GoToSurveyReviewPageAsync();
+        Task GoToSurveyPageAsync(int id);
     }
 }
 

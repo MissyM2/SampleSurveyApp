@@ -15,8 +15,21 @@ public partial class SurveyPage : ContentPage
             new MessageService(),
             new UserPreferences(),
             new AsyncRepository<SurveyValuesModel>(),
-            new AsyncRepository<SurveyModel>());
+            new AsyncRepository<SurveyModel>(),
+            new AsyncRepository<SurveyResponseModel>());
     }
 
-    
+    //protected override async void OnAppearing()
+    //{
+    //    base.OnAppearing();
+    //    await BindingContext.LoadInitialQuestion();
+    //}
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        var vm = (SurveyPageVM)BindingContext;
+        await vm.LoadInitialQuestion();
+    }
+
+
 }

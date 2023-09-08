@@ -8,20 +8,87 @@ using SampleSurveyApp.Core.Domain;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
     [QueryProperty("Id", "Id")]
     public partial class SurveyPageVM : BaseVM
     {
+
+        #region Dependency Injection
+
         private readonly INavigationService _navigationService;
         private readonly IMessageService _messageService;
         private readonly IUserPreferences _userPreferences;
 
         private readonly IAsyncRepository<SurveyValuesModel> _surveyValuesModelRepository;
         private readonly IAsyncRepository<SurveyModel> _surveyModelRepository;
+        private readonly IAsyncRepository<SurveyResponseModel> _surveyResponseModelRepository;
 
-        public ObservableCollection<SurveyModel> SurveyList { get; set; }
+        #endregion
+
+        #region Q and A lists
+
+        List<SurveyValuesModel> AllPossibleQuestionsList { get; set; } = new();
+        List<SurveyValuesModel> AllPossibleAnswersList { get; set; } = new();
+
+        List<SurveyValuesModel> ActualQuestionsList { get; set; } = new();
+        List<SurveyResponseModel> ActualUserSelectedAnswersList { get; set; } = new();
+
+        #endregion
+
+        #region Current Question
+
+        [ObservableProperty]
+        int currentIndexNum;
+
+        [ObservableProperty]
+        SurveyValuesModel currentQuestion;
+
+        [ObservableProperty]
+        SurveyValuesModel lastQuestion;
+
+        public ObservableCollection<SurveyValuesModel> AnswersForCurrentQuestionList { get; set; } = new();
+
+        #endregion
+
+
+        #region UI properties
+        [ObservableProperty]
+        string currentQuestionLbl;
+
+        [ObservableProperty]
+        string instructionLbl;
+
+        [ObservableProperty]
+        int count;
+
+        [ObservableProperty]
+        string screenNameLbl;
+
+        [ObservableProperty]
+        string leftBtnLbl;
+
+        [ObservableProperty]
+        string rightBtnLbl;
+
+        [ObservableProperty]
+        bool isVisibleQuestionTypeText;
+
+        [ObservableProperty]
+        bool isVisibleQuestionTypeList;
+
+        [ObservableProperty]
+        bool isVisibleAnswerReview;
+
+        [ObservableProperty]
+        Microsoft.Maui.Controls.SelectionMode cvSelectionMode;
+
+        #endregion
+
+        [ObservableProperty]
+        bool reverseDirection;
 
         [ObservableProperty]
         string selectedListItem;
@@ -30,48 +97,7 @@ namespace SampleSurveyApp.Core.ViewModels
         int id;
 
         [ObservableProperty]
-        string screenName;
-
-        [ObservableProperty]
         string sPID;
-
-        [ObservableProperty]
-        string instructionLabel;
-
-        private double width = 0;
-        private double height = 0;
-
-        [ObservableProperty]
-        bool isPortraitOrientation;
-
-        [ObservableProperty]
-        int count;
-
-        [ObservableProperty]
-        bool isLandscapeOrientation;
-
-        [ObservableProperty]
-        string leftBtnText;
-
-        [ObservableProperty]
-        string rightBtnText;
-
-        [ObservableProperty]
-        bool isQuestionTypeText;
-
-        [ObservableProperty]
-        bool isQuestionTypeList;
-
-        [ObservableProperty]
-        Microsoft.Maui.Controls.SelectionMode cvSelectionMode;
-
-        [ObservableProperty]
-        SurveyValuesModel currentQuestion;
-
-        List<SurveyValuesModel> surveyQuestionList { get; set; } = new();
-        public ObservableCollection<SurveyValuesModel> SurveyListValuesList { get; set; } = new();
-        public ObservableCollection<SurveyValuesModel> CurrentSurveyValues { get; set; } = new();
-        public ObservableCollection<SurveyValuesModel> AnswerListValues { get; set; } = new();
 
         // these two properties (1 object, 1 list of objects are for answers selected by user - either single or multiselecct
         [ObservableProperty]
@@ -83,106 +109,84 @@ namespace SampleSurveyApp.Core.ViewModels
         public List<SurveyResponseModel> responseList { get; set; } = new();
 
         [ObservableProperty]
-        string currentSurveyQuestion;
-
-        [ObservableProperty]
         string questionType;
 
         [ObservableProperty]
         string ruleType;
+
+        public List<ResponseGroup> UserResponseGroups { get; private set; } = new List<ResponseGroup>();
+        public ObservableCollection<SurveyResponseModel> ResponseCollection { get; set; } = new();
+        public List<SurveyResponseModel> UserResponseList { get; set; } = new();
+
+        [ObservableProperty]
+        string questionText;
+
+        [ObservableProperty]
+        string answerText;
 
         public SurveyPageVM(
             INavigationService navigationService,
             IMessageService messageService,
             IUserPreferences userPreferences,
             IAsyncRepository<SurveyValuesModel> surveyValuesModelRepository,
-            IAsyncRepository<SurveyModel> surveyModelRepository)
+            IAsyncRepository<SurveyModel> surveyModelRepository,
+            IAsyncRepository<SurveyResponseModel> surveyResponseModelRepository)
         {
             _navigationService = navigationService;
             _messageService = messageService;
             _userPreferences = userPreferences;
             _surveyValuesModelRepository = surveyValuesModelRepository;
             _surveyModelRepository = surveyModelRepository;
-
-            SurveyList = new ObservableCollection<SurveyModel>();
+            _surveyResponseModelRepository = surveyResponseModelRepository;
 
         }
 
 
 
         [RelayCommand]
-        public async Task LoadSurveyListValuesList()
+        public async Task LoadInitialQuestion()
         {
             if (IsBusy) return;
             try
             {
                 IsBusy = true;
-                if (CurrentSurveyValues.Any()) CurrentSurveyValues.Clear();
 
-                // Get question list
-                //surveyQuestionList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Questions"));
-
-                var query = _surveyValuesModelRepository.AsQueryable();
-                query = query.Where(q => q.SurveyValueType.Equals("Questions"));
-
-                surveyQuestionList = await query.OrderBy(b => b.Order).ToListAsync();
+                // get all possible questions and answers
+                if (AllPossibleQuestionsList.Any()) AllPossibleQuestionsList.Clear();
 
 
-                if (surveyQuestionList.Count > 0)
+                AllPossibleQuestionsList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Questions"));
+
+                if (AllPossibleAnswersList.Any()) AllPossibleAnswersList.Clear();
+                // var queryAnswers = _surveyValuesModelRepository.AsQueryable();
+                AllPossibleAnswersList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Answers"));
+
+                //AllPossibleQuestionsList = await _surveyValuesModelRepository.OrderBy(b => b.Order).ToListAsync();
+
+
+                // find the first question in the list and assign it to the current question. Find the last possible question and assign it to LastQuestion.
+                // LastQuestion may change..
+                if (AllPossibleQuestionsList.Count > 0)
                 {
-                    CurrentQuestion = surveyQuestionList[0];
+                    CurrentQuestion = AllPossibleQuestionsList[0];
+                    LastQuestion = AllPossibleQuestionsList.Last();
 
-                    LeftBtnText = "Cancel";
-                    RightBtnText = "Next";
-                    CurrentSurveyQuestion = CurrentQuestion.ValueText;
-                    ScreenName = CurrentQuestion.ValueCode;
-                    SPID = "987654";
-
-                    if (CurrentQuestion.RuleType == "Multiple")
+                    // set screen values based on properties in CurrentQuestion
+                    var setScreenValuesReturn = await SetScreenValues();
+                    if (setScreenValuesReturn == 1)
                     {
-                        InstructionLabel = "Select all that apply.";
-                        CvSelectionMode = SelectionMode.Multiple;
-                    }
-                    else
-                    {
-                        InstructionLabel = "Select one of the following options.";
-                        CvSelectionMode = SelectionMode.Single;
+                        // get answers for currentQuestion
+                        var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
                     }
 
 
-                    if (CurrentQuestion.QuestionType == "List")
-                    {
-                        IsQuestionTypeList = true;
-                        IsQuestionTypeText = false;
-                    }
-                    else
-                    {
-                        IsQuestionTypeList = false;
-                        IsQuestionTypeText = true;
-                    }
-
-                    // Get Answers
-                    AnswerListValues.Clear();
-                    var query1 = _surveyValuesModelRepository.AsQueryable();
-                    query1 = query1.Where(t => t.SurveyValueType.Equals("Answers") && t.ValueType.Equals(CurrentQuestion.ValueType));
-
-                    List<SurveyValuesModel> answerList = await query.OrderBy(b => b.Order).ToListAsync();
-
-                    //List<SurveyValuesModel> answerList = await _surveyValuesModelRepository.GetSurveyAnswersForAQuestionAsync(string valueType)
-
-                    //    return await _dbConnection.Table<SurveyValuesModel>().Where((t => t.SurveyValueType.Equals("Answers") && t.ValueType.Equals(valueType);
 
 
-                    foreach (var anserValue in answerList)
-                    {
-                        AnswerListValues.Add(anserValue);
-                    }
-
-                }
-                else
-                {
-                    // Show error
-                    await _messageService.DisplayAlert("HEC", "Problem with current HEC Question", "OK", null);
+                    //else
+                    //{
+                    //    // Show error
+                    //    await _messageService.DisplayAlert("Problem", "Problem with current question", "OK", null);
+                    //}
                 }
             }
             catch (Exception ex)
@@ -197,7 +201,73 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
+        
 
+        public async Task<int> SetScreenValues()
+        {
+            SPID = "987654";
+
+            if (IsVisibleAnswerReview == false)
+            {
+                ScreenNameLbl = CurrentQuestion.ValueCode;
+                CurrentQuestionLbl = CurrentQuestion.ValueText;
+
+                if (CurrentQuestion.Order.Equals(1))
+                    LeftBtnLbl = "Cancel";
+                else
+                    LeftBtnLbl = "Back";
+
+                if (CurrentQuestion.ValueCode.Equals(LastQuestion.ValueCode)) // lastQuestion may change??
+                    RightBtnLbl = "Review";
+                else
+                    RightBtnLbl = "Next";
+
+                if (CurrentQuestion.QuestionType == "List")
+                {
+                    IsVisibleQuestionTypeList = true;
+                    IsVisibleQuestionTypeText = false;
+                    IsVisibleAnswerReview = false;
+
+                    if (CurrentQuestion.RuleType == "Multiple")
+                    {
+                        InstructionLbl = "Select all that apply.";
+                        CvSelectionMode = SelectionMode.Multiple;
+                    }
+                    else
+                    {
+                        InstructionLbl = "Select one of the following options.";
+                        CvSelectionMode = SelectionMode.Single;
+                    }
+                }
+                else if (CurrentQuestion.QuestionType == "Text")
+                {
+                    IsVisibleQuestionTypeList = false;
+                    IsVisibleQuestionTypeText = true;
+                    IsVisibleAnswerReview = false;
+                }
+            }
+            else
+            {
+                ScreenNameLbl = "Review Page";
+                CurrentQuestionLbl = "Please review your answers here.";
+                LeftBtnLbl = "Back";
+                IsVisibleQuestionTypeList = false;
+                IsVisibleQuestionTypeText = false;
+                ScreenNameLbl = "Review Page";
+                
+            }
+
+            return 1;
+        }
+
+        public async Task<int> GetAnswersForCurrentQuestion()
+        {
+            AnswersForCurrentQuestionList.Clear();
+            var itemList = AllPossibleAnswersList.FindAll(t => t.ValueType.Equals(CurrentQuestion.ValueCode));
+
+            foreach (var item in itemList) AnswersForCurrentQuestionList.Add(item);
+            return 1;
+        }
 
         [RelayCommand]
         private async void BackButtonClicked()
@@ -210,130 +280,130 @@ namespace SampleSurveyApp.Core.ViewModels
         public async Task NextButtonClicked()
         {
             Console.WriteLine("NextButtonClicked");
-            if (CurrentQuestion != null)
-            {
-                if (CurrentQuestion.RuleType.Equals("Single"))
-                {
-                    if (SelectedResponse == null)
-                    {
-                        await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
-                    }
-                    else
-                    {
-                        int findIndex = responseList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                        if (findIndex < 0)
-                            await SaveSelected();
-                        else
-                        {
-                            responseList.RemoveAt(findIndex);
-                            await SaveSelected();
-                        }
-                    }
-                }
-                else if (CurrentQuestion.RuleType.Equals("Multiple"))
-                {
-                    if (SelectedResponses.Count <= 0)
-                    {
-                        await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
-                    }
-                    else
-                    {
-                        SelectedResponse = SelectedResponses[0]; //Getting a value to pull next question
+            //if (CurrentQuestion != null)
+            //{
+            //    if (CurrentQuestion.RuleType.Equals("Single"))
+            //    {
+            //        if (SelectedResponse == null)
+            //        {
+            //            await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
+            //        }
+            //        else
+            //        {
+            //            int findIndex = responseList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+            //            if (findIndex < 0)
+            //                await SaveSelected();
+            //            else
+            //            {
+            //                responseList.RemoveAt(findIndex);
+            //                await SaveSelected();
+            //            }
+            //        }
+            //    }
+            //    else if (CurrentQuestion.RuleType.Equals("Multiple"))
+            //    {
+            //        if (SelectedResponses.Count <= 0)
+            //        {
+            //            await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
+            //        }
+            //        else
+            //        {
+            //            SelectedResponse = SelectedResponses[0]; //Getting a value to pull next question
 
-                        var findAllList = responseList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                        if (findAllList.Count == 0)
-                        {
-                            await SaveSelected();
-                        }
-                        else
-                        {
-                            responseList.RemoveAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                            await SaveSelected();
-                        }
-                    }
+            //            var findAllList = responseList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+            //            if (findAllList.Count == 0)
+            //            {
+            //                await SaveSelected();
+            //            }
+            //            else
+            //            {
+            //                responseList.RemoveAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+            //                await SaveSelected();
+            //            }
+            //        }
 
-                }
-                else if (CurrentQuestion.QuestionType.Equals("Text"))
-                {
-                    SelectedResponse = AnswerListValues[0];
-                    //await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
-                }
+            //    }
+            //    else if (CurrentQuestion.QuestionType.Equals("Text"))
+            //    {
+            //        SelectedResponse = AnswerListValues[0];
+            //        //await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
+            //    }
 
-                if (SelectedResponse.RuleType.ToLower().Equals("done"))
-                {
+            //    if (SelectedResponse.RuleType.ToLower().Equals("done"))
+            //    {
 
-                    await Shell.Current.GoToAsync($"{nameof(SurveyReviewPageVM)}",
-                        new Dictionary<string, object>
-                        {
-                            ["ResponseList"] = responseList
-                        });
+            //        await Shell.Current.GoToAsync($"{nameof(SurveyReviewPageVM)}",
+            //            new Dictionary<string, object>
+            //            {
+            //                ["ResponseList"] = responseList
+            //            });
 
-                }
-                else
-                {
-                    //GET NEW CURRENT QUESTION
-                    //CurrentQuestion = surveyQuestionList.Find(x => x.ValueType.Equals(SelectedResponse.RuleType));
-                    CurrentQuestion = surveyQuestionList.Find(x => x.ValueCode.Equals(SelectedResponse.RuleType));
-
-
-                    // SET NAVIGATION BUTTONS
-                    if (CurrentQuestion.Order == 1)
-                        LeftBtnText = "Cancel";
-                    else
-                        LeftBtnText = "Back";
-                    // NEXT BUTTON
-                    if (CurrentQuestion.ValueCode.Equals("HEC7"))
-                        RightBtnText = "Review";
-                    else
-                        RightBtnText = "Next";
-
-                    // UPDATE SCREEN
-                    CurrentSurveyQuestion = CurrentQuestion.ValueText;
-                    //ScreenName = CurrentQuestion.ValueType;
-                    ScreenName = CurrentQuestion.ValueCode;
-                    SPID = "987654";
-                    QuestionType = CurrentQuestion.QuestionType;
-
-                    if (CurrentQuestion.RuleType == "Multiple")
-                    {
-                        InstructionLabel = "Select all that apply.";
-                        CvSelectionMode = SelectionMode.Multiple;
-                    }
-                    else
-                    {
-                        InstructionLabel = "Select one of the following options.";
-                        CvSelectionMode = SelectionMode.Single;
-                    }
+            //    }
+            //    else
+            //    {
+            //        //GET NEW CURRENT QUESTION
+            //        //CurrentQuestion = surveyQuestionList.Find(x => x.ValueType.Equals(SelectedResponse.RuleType));
+            //        CurrentQuestion = surveyQuestionList.Find(x => x.ValueCode.Equals(SelectedResponse.RuleType));
 
 
-                    // RENDER SCREEN BASED ON QUESTION TYPE
-                    if (QuestionType == "List")
-                    {
-                        IsQuestionTypeList = true;
-                        IsQuestionTypeText = false;
-                    }
-                    else
-                    {
-                        IsQuestionTypeList = false;
-                        IsQuestionTypeText = true;
-                    }
+            //        // SET NAVIGATION BUTTONS
+            //        if (CurrentQuestion.Order == 1)
+            //            LeftBtnLbl = "Cancel";
+            //        else
+            //            LeftBtnLbl = "Back";
+            //        // NEXT BUTTON
+            //        if (CurrentQuestion.ValueCode.Equals("HEC7"))
+            //            RightBtnLbl = "Review";
+            //        else
+            //            RightBtnLbl = "Next";
 
-                    // Get Answers
-                    AnswerListValues.Clear();
+            //        // UPDATE SCREEN
+            //        CurrentSurveyQuestion = CurrentQuestion.ValueText;
+            //        //ScreenName = CurrentQuestion.ValueType;
+            //        ScreenName = CurrentQuestion.ValueCode;
+            //        SPID = "987654";
+            //        QuestionType = CurrentQuestion.QuestionType;
 
-                    var query2 = _surveyValuesModelRepository.AsQueryable();
-                    query2 = query2.Where(t => t.SurveyValueType.Equals("Answers") && t.ValueType.Equals(CurrentQuestion.ValueType));
+            //        if (CurrentQuestion.RuleType == "Multiple")
+            //        {
+            //            InstructionLbl = "Select all that apply.";
+            //            CvSelectionMode = SelectionMode.Multiple;
+            //        }
+            //        else
+            //        {
+            //            InstructionLbl = "Select one of the following options.";
+            //            CvSelectionMode = SelectionMode.Single;
+            //        }
 
-                    List<SurveyValuesModel> answerList = await query2.OrderBy(b => b.Order).ToListAsync();
 
-                    //surveyQuestionList = await query.OrderBy(b => b.Order).ToListAsync();
-                    //List<SurveyValuesModel> answerList = await _surveysDatabaseHelper.GetSurveyAnswersForAQuestionAsync(CurrentQuestion.ValueCode);
-                    foreach (var anserValue in answerList)
-                    {
-                        AnswerListValues.Add(anserValue);
-                    }
-                }
-            }
+            //        // RENDER SCREEN BASED ON QUESTION TYPE
+            //        if (QuestionType == "List")
+            //        {
+            //            IsVisibleQuestionTypeList = true;
+            //            IsVisibleQuestionTypeText = false;
+            //        }
+            //        else
+            //        {
+            //            IsVisibleQuestionTypeList = false;
+            //            IsVisibleQuestionTypeText = true;
+            //        }
+
+            //        // Get Answers
+            //        AnswerListValues.Clear();
+
+            //        var query2 = _surveyValuesModelRepository.AsQueryable();
+            //        query2 = query2.Where(t => t.SurveyValueType.Equals("Answers") && t.ValueType.Equals(CurrentQuestion.ValueType));
+
+            //        List<SurveyValuesModel> answerList = await query2.OrderBy(b => b.Order).ToListAsync();
+
+            //        //surveyQuestionList = await query.OrderBy(b => b.Order).ToListAsync();
+            //        //List<SurveyValuesModel> answerList = await _surveysDatabaseHelper.GetSurveyAnswersForAQuestionAsync(CurrentQuestion.ValueCode);
+            //        foreach (var anserValue in answerList)
+            //        {
+            //            AnswerListValues.Add(anserValue);
+            //        }
+            //    }
+            //}
         }
 
         [RelayCommand]
@@ -347,54 +417,55 @@ namespace SampleSurveyApp.Core.ViewModels
                 SelectedResponses.Add(tempResponse);
 
             }
-            else if (CurrentQuestion.RuleType.Equals("Multiple"))
+            //else (CurrentQuestion.RuleType.Equals("Multiple"))
+            else
             {
                 List<SurveyValuesModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyValuesModel>().ToList();
                 SelectedResponses = new ObservableCollection<SurveyValuesModel>(myListItems);
                 Debug.WriteLine("Count of selected responses in parameter = " + SelectedResponses.Count.ToString());
 
             }
-            else if (CurrentQuestion.RuleType.Equals("Text"))
-            {
-                await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
-            }
-
-        }
-
-        public async Task SaveSelected()
-        {
-
-            if (CurrentQuestion.RuleType.Equals("Single"))
-            {
-                SurveyResponseModel responseObj = new SurveyResponseModel();
-                responseObj.QuestionCode = CurrentQuestion.ValueCode;
-                responseObj.QuestionText = CurrentQuestion.ValueText;
-                responseObj.AnswerCode = SelectedResponse.ValueCode;
-                responseObj.Id = Id;
-                responseObj.AnswerText = SelectedResponse.ValueText;
-
-                responseList.Add(responseObj);
-            }
-            if (CurrentQuestion.RuleType.Equals("Multiple"))
-            {
-                foreach (var item in SelectedResponses)
-                {
-                    SurveyResponseModel responseObj = new SurveyResponseModel();
-                    responseObj.QuestionCode = CurrentQuestion.ValueCode;
-                    responseObj.QuestionText = CurrentQuestion.ValueText;
-                    responseObj.Id = Id;
-                    responseObj.AnswerCode = item.ValueCode;
-                    responseObj.AnswerText = item.ValueText;
-
-                    responseList.Add(responseObj);
-                }
-            }
-
-            //foreach(var item in responseList)
+            //else if (CurrentQuestion.RuleType.Equals("Text"))
             //{
-            //    await _databaseHelper.InsertData(item);
+            //    await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
             //}
+
         }
+
+        //public async Task SaveSelected()
+        //{
+
+        //    if (CurrentQuestion.RuleType.Equals("Single"))
+        //    {
+        //        SurveyResponseModel responseObj = new SurveyResponseModel();
+        //        responseObj.QuestionCode = CurrentQuestion.ValueCode;
+        //        responseObj.QuestionText = CurrentQuestion.ValueText;
+        //        responseObj.AnswerCode = SelectedResponse.ValueCode;
+        //        responseObj.Id = Id;
+        //        responseObj.AnswerText = SelectedResponse.ValueText;
+
+        //        responseList.Add(responseObj);
+        //    }
+        //    if (CurrentQuestion.RuleType.Equals("Multiple"))
+        //    {
+        //        foreach (var item in SelectedResponses)
+        //        {
+        //            SurveyResponseModel responseObj = new SurveyResponseModel();
+        //            responseObj.QuestionCode = CurrentQuestion.ValueCode;
+        //            responseObj.QuestionText = CurrentQuestion.ValueText;
+        //            responseObj.Id = Id;
+        //            responseObj.AnswerCode = item.ValueCode;
+        //            responseObj.AnswerText = item.ValueText;
+
+        //            responseList.Add(responseObj);
+        //        }
+        //    }
+
+        //    //foreach(var item in responseList)
+        //    //{
+        //    //    await _databaseHelper.InsertData(item);
+        //    //}
+        //}
 
 
         //[RelayCommand]
@@ -418,6 +489,16 @@ namespace SampleSurveyApp.Core.ViewModels
         //        IsLandscapeOrientation = false;
         //    }
         //}
+
+        public class ResponseGroup : List<SurveyResponseModel>
+        {
+            public string QuestionText { get; private set; }
+
+            public ResponseGroup(string questionText, List<SurveyResponseModel> userResponses) : base(userResponses)
+            {
+                QuestionText = questionText;
+            }
+        }
     }
 }
 

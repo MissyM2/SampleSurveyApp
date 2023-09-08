@@ -20,14 +20,9 @@ namespace SampleSurveyApp.Maui.Services
             await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
         }
 
-        public async Task GoToSurveyPageAsync()
+        public async Task GoToSurveyPageAsync(int id)
         {
-            await Shell.Current.GoToAsync($"//{nameof(SurveyPage)}");
-        }
-
-        public async Task GoToSurveyReviewPageAsync()
-        {
-            await Shell.Current.GoToAsync($"//{nameof(SurveyReviewPage)}");
+            await Shell.Current.GoToAsync($"{nameof(SurveyPage)}");
         }
 
 

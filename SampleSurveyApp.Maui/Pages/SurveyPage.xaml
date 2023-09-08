@@ -2,11 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SampleSurveyApp.Maui.Pages.SurveyPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:SampleSurveyApp.Core.ViewModels;assembly=SampleSurveyApp.Core"
              xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
-             xmlns:controls="clr-namespace:SampleSurveyApp.Maui.Controls"
-             Title="SurveytPage"
+             Title="Survey Page"
              x:DataType="vm:SurveyPageVM">
+
+    <!--<ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding LoadInitialQuestionCommand}"/>
+    </ContentPage.Behaviors>-->
 
     <ContentPage.Resources>
         <Style TargetType="ContentView">
@@ -27,6 +33,16 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
+
+         <Style x:Key="InvalidEntryStyle"
+               TargetType="Entry">
+            <Setter Property="TextColor" Value="IndianRed"/>
+        </Style>
+
+        <Style x:Key="ValidEntryStyle"
+               TargetType="Entry">
+            <Setter Property="TextColor" Value="Green"/>
+        </Style>
     </ContentPage.Resources>
 <Shell.TitleView>
     <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*" BackgroundColor="Black">
@@ -38,7 +54,7 @@
               HorizontalOptions="Start"
               Command="{Binding BackButtonClickedCommand}"/>
             <Label x:Name="titleLabel" FontSize="20" FontAttributes="Bold"
-                   Text="{Binding ScreenName}"
+                   Text="{Binding ScreenNameLbl}"
                    HorizontalTextAlignment="Center"
                    BackgroundColor="Black" TextColor="White" Grid.Column="1" />
        <Button Text="Next"
@@ -52,8 +68,7 @@
 </Shell.TitleView>
 
 <Grid RowDefinitions="40,100,30, *">
-        <VerticalStackLayout x:Name="caseHeaderLabel"
-                             Grid.Row="0"
+        <VerticalStackLayout Grid.Row="0"
                              BackgroundColor="CornflowerBlue"
                              Padding="5">
            
@@ -61,33 +76,30 @@
                    VerticalTextAlignment="Center"/>
 
         </VerticalStackLayout>
-        <FlexLayout x:Name="questionLabel"
-                             Grid.Row="1"
-                             BackgroundColor="PeachPuff">
+        <FlexLayout Grid.Row="1"
+                    BackgroundColor="PeachPuff">
            
-            <Label Text="{Binding CurrentSurveyQuestion}"
+            <Label Text="{Binding CurrentQuestionLbl}"
                    VerticalOptions="Center"
                    Margin="10,0,10,0"/>
         </FlexLayout>
-        <VerticalStackLayout x:Name="instructionLabel"
-                             Grid.Row="2"
+        <VerticalStackLayout Grid.Row="2"
                              Padding="5">
-            <Label Text="{Binding InstructionLabel}" Margin="10,0,0,0"
+            <Label Text="{Binding InstructionLbl}" Margin="10,0,0,0"
                    TextColor="Blue"/>
-
-            <!--<Label Text="{Binding IsPortraitOrientation}"
-                   TextColor="Red"/>-->
         </VerticalStackLayout>
+
+        <!-- QuestionType is List-->
         <StackLayout Grid.Row="3">
             <CollectionView x:Name="answerCV"
-                        ItemsSource="{Binding AnswerListValues}"
+                        ItemsSource="{Binding AnswersForCurrentQuestionList}"
                         SelectionMode="{Binding CvSelectionMode}"
                         SelectedItem="{Binding SelectedResponse, Mode=TwoWay}"
                         SelectionChangedCommand="{Binding ResponseChangedCommand}"
                         SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference answerCV}}"
                         BackgroundColor="White"
                         Margin="12,8,12,0"
-                        IsVisible="{Binding IsQuestionTypeList}">
+                        IsVisible="{Binding IsVisibleQuestionTypeList}">
             <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:SurveyValuesModel">
                                 <ContentView BackgroundColor="White">
@@ -118,9 +130,9 @@
             </CollectionView>
         </StackLayout>
 
-        <!-- TEXT EDITOR-->
+        <!-- QuestionType is Text-->
         <VerticalStackLayout Grid.Row="3"
-                     IsVisible="{Binding IsQuestionTypeText}"
+                     IsVisible="{Binding IsVisibleQuestionTypeText}"
                      BackgroundColor="White"
                      HeightRequest="200"
                      Margin="12,8,12,0"
@@ -135,7 +147,48 @@
                 </StackLayout>
             </Frame>
         </VerticalStackLayout>
-    </Grid>
-</ContentPage>
 
+         <!-- REVIEW ANSWERS-->
+        <VerticalStackLayout Grid.Row="3"
+                     IsVisible="{Binding IsVisibleAnswerReview}"
+                     BackgroundColor="White"
+                     HeightRequest="200"
+                     Margin="12,8,12,0"
+                     VerticalOptions="Start">
+            <CollectionView x:Name="responseCV"
+                            HeightRequest="300"
+                            ItemsSource="{Binding UserResponseGroups}"
+                            SelectionMode="None"
+                            Margin="0,8,0,0"
+                            IsGrouped="True">
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout>
+                            <StackLayout BackgroundColor="PeachPuff"
+                                         Padding="5,10,5,9"
+                                         VerticalOptions="CenterAndExpand">
+                                <Label Text="{Binding QuestionText}"
+                                       TextColor="Black"
+                                       FontAttributes="Bold"/>
+                            </StackLayout>
+                            <BoxView BackgroundColor="LightBlue"
+                                     HeightRequest="1"/>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+            <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <!--<Label Text="{Binding AnswerText}"/>-->
+                        <!--<ContentView BackgroundColor="White">-->
+                            <VerticalStackLayout>
+                                    <Label Text="{Binding AnswerText}" Padding="5,10,5,10"/>
+                                    <BoxView BackgroundColor="LightBlue"
+                                             HeightRequest="1"/>
+                            </VerticalStackLayout>
+                       <!-- </ContentView>-->
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>

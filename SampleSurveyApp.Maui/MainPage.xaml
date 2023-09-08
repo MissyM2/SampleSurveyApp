@@ -4,7 +4,6 @@
              x:Class="SampleSurveyApp.Maui.MainPage"
              xmlns:model="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
              xmlns:vm="clr-namespace:SampleSurveyApp.Core.ViewModels;assembly=SampleSurveyApp.Core"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2021/maui"
              x:DataType="vm:MainPageVM">
 
     <Grid RowDefinitions="50, *"
