@@ -92,7 +92,7 @@
         <!-- QuestionType is List-->
         <StackLayout Grid.Row="3">
             <CollectionView x:Name="answerCV"
-                        ItemsSource="{Binding AnswersForCurrentQuestionList}"
+                        ItemsSource="{Binding AnswerOptionsForCurrentQuestionList}"
                         SelectionMode="{Binding CvSelectionMode}"
                         SelectedItem="{Binding SelectedResponse, Mode=TwoWay}"
                         SelectionChangedCommand="{Binding ResponseChangedCommand}"

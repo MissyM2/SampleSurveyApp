@@ -31,7 +31,7 @@ namespace SampleSurveyApp.Core.ViewModels
         #region Q and A lists
 
         List<SurveyValuesModel> AllPossibleQuestionsList { get; set; } = new();
-        List<SurveyValuesModel> AllPossibleAnswersList { get; set; } = new();
+        List<SurveyValuesModel> AllPossibleAnswerOptionsList { get; set; } = new();
 
         List<SurveyValuesModel> ActualQuestionsList { get; set; } = new();
         List<SurveyResponseModel> ActualUserSelectedAnswersList { get; set; } = new();
@@ -52,7 +52,7 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         bool isFinalQuestion;
 
-        public ObservableCollection<SurveyValuesModel> AnswersForCurrentQuestionList { get; set; } = new();
+        public ObservableCollection<SurveyValuesModel> AnswerOptionsForCurrentQuestionList { get; set; } = new();
 
         #endregion
 
@@ -165,8 +165,8 @@ namespace SampleSurveyApp.Core.ViewModels
                 if (AllPossibleQuestionsList.Any()) AllPossibleQuestionsList.Clear();
                 AllPossibleQuestionsList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Questions"));
 
-                if (AllPossibleAnswersList.Any()) AllPossibleAnswersList.Clear();
-                AllPossibleAnswersList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Answers"));
+                if (AllPossibleAnswerOptionsList.Any()) AllPossibleAnswerOptionsList.Clear();
+                AllPossibleAnswerOptionsList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Answers"));
 
 
                 // find the first question in the list and assign it to the current question. Find the last possible question and assign it to LastQuestion.
@@ -181,7 +181,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     if (setScreenValuesReturn == 1)
                     {
                         // get answers for currentQuestion
-                        var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
+                        var getAnswersForCurrentQuestionReturn = await GetAnswerOptionsForCurrentQuestion();
                     }
 
                     //else
@@ -263,12 +263,12 @@ namespace SampleSurveyApp.Core.ViewModels
             return 1;
         }
 
-        public async Task<int> GetAnswersForCurrentQuestion()
+        public async Task<int> GetAnswerOptionsForCurrentQuestion()
         {
-            AnswersForCurrentQuestionList.Clear();
-            var itemList = AllPossibleAnswersList.FindAll(t => t.ValueType.Equals(CurrentQuestion.ValueCode));
+            AnswerOptionsForCurrentQuestionList.Clear();
+            var itemList = AllPossibleAnswerOptionsList.FindAll(t => t.ValueType.Equals(CurrentQuestion.ValueCode));
 
-            foreach (var item in itemList) AnswersForCurrentQuestionList.Add(item);
+            foreach (var item in itemList) AnswerOptionsForCurrentQuestionList.Add(item);
             return 1;
         }
 
@@ -281,7 +281,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 // Save user question to ActualQuestionsList
                 ActualQuestionsList.Add(CurrentQuestion);
 
-                // find the index of the question in ActualQuestionsList that matches the currentquestion valuecode.
+                // find the index of the question in ActualQuestionsList that matches the currentquestion valuecode and display
                 int currQuestionIndex = ActualQuestionsList.FindIndex(x => x.ValueCode == CurrentQuestion.ValueCode);
                 if (currQuestionIndex == 0)
                 {
@@ -290,27 +290,44 @@ namespace SampleSurveyApp.Core.ViewModels
                 else
                 {
                     CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
+
+                    if (CurrentQuestion.RuleType.Equals("Single"))
+                    {
+
+                    }
+
+
+
                     var setScreenValuesReturn = await SetScreenValues();
                     if (setScreenValuesReturn == 1)
                     {
                         // get answers for currentQuestion
-                        var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
+                        var getAnswersForCurrentQuestionReturn = await GetAnswerOptionsForCurrentQuestion();
+
+                        if (CurrentQuestion.RuleType.Equals("Single"))
+                        {
+                            // see which answer(s) that the user selected in Response Format
+                            var tempSelectedAnswer = ActualUserSelectedAnswersList.Find(t => t.QuestionCode.Equals(CurrentQuestion.ValueCode));
+
+                            // find the answer in the current question list that has been selected
+                            var userSelectedOption = AnswerOptionsForCurrentQuestionList.FirstOrDefault(t => t.ValueCode == tempSelectedAnswer.AnswerCode);
+
+                            // once you get the answer(s) the at the user selected, place a checkmark next to them.
+                            SelectedResponse = userSelectedOption;
+                        }
+                        else if (CurrentQuestion.RuleType.Equals("Multiple"))
+                        {
+                            Debug.WriteLine("Multiple");
+
+                        }
+                        else if (CurrentQuestion.QuestionType.Equals("Text"))
+                        {
+                            Debug.WriteLine("Multiple");
+
+                        }
                     }
                 }
             }
-
-           
-
-
-            //  CurrentQuestion.ValueCode
-            // ActualQuestionsList
-            // I need to get the existing answers for that question
-            //ActualQuestionsList
-            //ActualUserSelectedAnswersList
-            // search actual answer lsit and find the ???  that matches the CurrentQuestion.ValueCode
-            // put these answers in the AnswersForCurrentQuestionList
-
-            // must compare possible answers with actual selected answer in ActualUserSelectedResponses to get the checkmark.
         }
 
 
@@ -412,7 +429,7 @@ namespace SampleSurveyApp.Core.ViewModels
                         if (setScreenValuesReturn == 1)
                         {
                             // get answers for currentQuestion
-                            var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
+                            var getAnswersForCurrentQuestionReturn = await GetAnswerOptionsForCurrentQuestion();
                         }
 
                     }
