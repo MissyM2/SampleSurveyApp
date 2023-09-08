@@ -214,7 +214,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 ScreenNameLbl = CurrentQuestion.ValueCode;
                 CurrentQuestionLbl = CurrentQuestion.ValueText;
 
-                if (CurrentQuestion.Order.Equals(1))
+                if (ActualQuestionsList.Count > 0)
                     LeftBtnLbl = "Cancel";
                 else
                     LeftBtnLbl = "Back";
@@ -283,15 +283,23 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 // find the index of the question in ActualQuestionsList that matches the currentquestion valuecode.
                 int currQuestionIndex = ActualQuestionsList.FindIndex(x => x.ValueCode == CurrentQuestion.ValueCode);
-                CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
+                if (currQuestionIndex == 0)
+                {
+                    return;
+                }
+                else
+                {
+                    CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
+                    var setScreenValuesReturn = await SetScreenValues();
+                    if (setScreenValuesReturn == 1)
+                    {
+                        // get answers for currentQuestion
+                        var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
+                    }
+                }
             }
 
-            var setScreenValuesReturn = await SetScreenValues();
-            if (setScreenValuesReturn == 1)
-            {
-                // get answers for currentQuestion
-                var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
-            }
+           
 
 
             //  CurrentQuestion.ValueCode
