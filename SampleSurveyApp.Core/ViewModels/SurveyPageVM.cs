@@ -105,6 +105,13 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public ObservableCollection<SurveyValuesModel> SelectedResponses { get; set; } = new();
 
+        [ObservableProperty]
+        public string userTextAnswer;
+
+        [ObservableProperty]
+        int textLen = 0;
+
+
         // this  list is for all responses available to user
         public List<SurveyResponseModel> responseList { get; set; } = new();
 
@@ -153,15 +160,10 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 // get all possible questions and answers
                 if (AllPossibleQuestionsList.Any()) AllPossibleQuestionsList.Clear();
-
-
                 AllPossibleQuestionsList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Questions"));
 
                 if (AllPossibleAnswersList.Any()) AllPossibleAnswersList.Clear();
-                // var queryAnswers = _surveyValuesModelRepository.AsQueryable();
                 AllPossibleAnswersList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Answers"));
-
-                //AllPossibleQuestionsList = await _surveyValuesModelRepository.OrderBy(b => b.Order).ToListAsync();
 
 
                 // find the first question in the list and assign it to the current question. Find the last possible question and assign it to LastQuestion.
@@ -178,9 +180,6 @@ namespace SampleSurveyApp.Core.ViewModels
                         // get answers for currentQuestion
                         var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
                     }
-
-
-
 
                     //else
                     //{
@@ -280,130 +279,111 @@ namespace SampleSurveyApp.Core.ViewModels
         public async Task NextButtonClicked()
         {
             Console.WriteLine("NextButtonClicked");
-            //if (CurrentQuestion != null)
-            //{
-            //    if (CurrentQuestion.RuleType.Equals("Single"))
-            //    {
-            //        if (SelectedResponse == null)
-            //        {
-            //            await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
-            //        }
-            //        else
-            //        {
-            //            int findIndex = responseList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-            //            if (findIndex < 0)
-            //                await SaveSelected();
-            //            else
-            //            {
-            //                responseList.RemoveAt(findIndex);
-            //                await SaveSelected();
-            //            }
-            //        }
-            //    }
-            //    else if (CurrentQuestion.RuleType.Equals("Multiple"))
-            //    {
-            //        if (SelectedResponses.Count <= 0)
-            //        {
-            //            await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
-            //        }
-            //        else
-            //        {
-            //            SelectedResponse = SelectedResponses[0]; //Getting a value to pull next question
 
-            //            var findAllList = responseList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-            //            if (findAllList.Count == 0)
-            //            {
-            //                await SaveSelected();
-            //            }
-            //            else
-            //            {
-            //                responseList.RemoveAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-            //                await SaveSelected();
-            //            }
-            //        }
+            if (CurrentQuestion != null)
+            {
+                // Save user question to ActualQuestionsList
+                ActualQuestionsList.Add(CurrentQuestion);
 
-            //    }
-            //    else if (CurrentQuestion.QuestionType.Equals("Text"))
-            //    {
-            //        SelectedResponse = AnswerListValues[0];
-            //        //await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
-            //    }
+                // Save user answer to ActualUserSelectedAnswersList
+                if (CurrentQuestion.RuleType.Equals("Single"))
+                {
+                    if (SelectedResponse == null)
+                    {
+                        await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
+                    }
+                    else
+                    {
+                        int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                        if (findIndex < 0)
+                            await SaveSelected();
+                        else
+                        {
+                            responseList.RemoveAt(findIndex);
+                            await SaveSelected();
+                        }
+                    }
+                }
+                else if (CurrentQuestion.RuleType.Equals("Multiple"))
+                {
+                    if (SelectedResponses.Count <= 0)
+                    {
+                        await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
+                    }
+                    else
+                    {
+                        SelectedResponse = SelectedResponses[0]; //Getting a value to pull next question
 
-            //    if (SelectedResponse.RuleType.ToLower().Equals("done"))
-            //    {
+                        var findAllList = ActualUserSelectedAnswersList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                        if (findAllList.Count == 0)
+                        {
+                            await SaveSelected();
+                        }
+                        else
+                        {
+                            responseList.RemoveAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                            await SaveSelected();
+                        }
+                    }
 
-            //        await Shell.Current.GoToAsync($"{nameof(SurveyReviewPageVM)}",
-            //            new Dictionary<string, object>
-            //            {
-            //                ["ResponseList"] = responseList
-            //            });
+                }
+                else if (CurrentQuestion.QuestionType.Equals("Text"))
+                {
 
-            //    }
-            //    else
-            //    {
-            //        //GET NEW CURRENT QUESTION
-            //        //CurrentQuestion = surveyQuestionList.Find(x => x.ValueType.Equals(SelectedResponse.RuleType));
-            //        CurrentQuestion = surveyQuestionList.Find(x => x.ValueCode.Equals(SelectedResponse.RuleType));
+                    if (UserTextAnswer == null)
+                    {
+                        await _messageService.DisplayAlert("", "Please add your response", "OK", null);
+                    }
+                    else
+                    {
+                        int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                        if (findIndex < 0)
+                            await SaveSelected();
+                        else
+                        {
+                            responseList.RemoveAt(findIndex);
+                            await SaveSelected();
+                        }
+                    }
+                    //await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
+                }
 
+                if (SelectedResponse.RuleType.ToLower().Equals("done"))
+                {
 
-            //        // SET NAVIGATION BUTTONS
-            //        if (CurrentQuestion.Order == 1)
-            //            LeftBtnLbl = "Cancel";
-            //        else
-            //            LeftBtnLbl = "Back";
-            //        // NEXT BUTTON
-            //        if (CurrentQuestion.ValueCode.Equals("HEC7"))
-            //            RightBtnLbl = "Review";
-            //        else
-            //            RightBtnLbl = "Next";
+                    await _messageService.DisplayAlert("Review", "GoToReview", "OK", null);
 
-            //        // UPDATE SCREEN
-            //        CurrentSurveyQuestion = CurrentQuestion.ValueText;
-            //        //ScreenName = CurrentQuestion.ValueType;
-            //        ScreenName = CurrentQuestion.ValueCode;
-            //        SPID = "987654";
-            //        QuestionType = CurrentQuestion.QuestionType;
+                }
+                else
+                {
+                    // Get new current question
 
-            //        if (CurrentQuestion.RuleType == "Multiple")
-            //        {
-            //            InstructionLbl = "Select all that apply.";
-            //            CvSelectionMode = SelectionMode.Multiple;
-            //        }
-            //        else
-            //        {
-            //            InstructionLbl = "Select one of the following options.";
-            //            CvSelectionMode = SelectionMode.Single;
-            //        }
+                    var GetCurrentQuestionReturn = await GetCurrentQuestion();
+                   
+                    if (GetCurrentQuestionReturn == 1)
+                    {
+                        // set screen values based on properties in CurrentQuestion
+                        var setScreenValuesReturn = await SetScreenValues();
+                        if (setScreenValuesReturn == 1)
+                        {
+                            // get answers for currentQuestion
+                            var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
+                        }
+
+                    }
 
 
-            //        // RENDER SCREEN BASED ON QUESTION TYPE
-            //        if (QuestionType == "List")
-            //        {
-            //            IsVisibleQuestionTypeList = true;
-            //            IsVisibleQuestionTypeText = false;
-            //        }
-            //        else
-            //        {
-            //            IsVisibleQuestionTypeList = false;
-            //            IsVisibleQuestionTypeText = true;
-            //        }
+                }
+            }
+        }
 
-            //        // Get Answers
-            //        AnswerListValues.Clear();
+        private async Task<int> GetCurrentQuestion()
+        {
+            //CurrentQuestion = surveyQuestionList.Find(x => x.ValueType.Equals(SelectedResponse.RuleType));
+            CurrentQuestion = AllPossibleQuestionsList.Find(x => x.ValueCode.Equals(SelectedResponse.RuleType));
 
-            //        var query2 = _surveyValuesModelRepository.AsQueryable();
-            //        query2 = query2.Where(t => t.SurveyValueType.Equals("Answers") && t.ValueType.Equals(CurrentQuestion.ValueType));
+            return 1;
 
-            //        List<SurveyValuesModel> answerList = await query2.OrderBy(b => b.Order).ToListAsync();
-
-            //        //surveyQuestionList = await query.OrderBy(b => b.Order).ToListAsync();
-            //        //List<SurveyValuesModel> answerList = await _surveysDatabaseHelper.GetSurveyAnswersForAQuestionAsync(CurrentQuestion.ValueCode);
-            //        foreach (var anserValue in answerList)
-            //        {
-            //            AnswerListValues.Add(anserValue);
-            //        }
-            //    }
-            //}
         }
 
         [RelayCommand]
@@ -432,40 +412,57 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-        //public async Task SaveSelected()
-        //{
+        public async Task<int> SaveSelected()
+        {
 
-        //    if (CurrentQuestion.RuleType.Equals("Single"))
-        //    {
-        //        SurveyResponseModel responseObj = new SurveyResponseModel();
-        //        responseObj.QuestionCode = CurrentQuestion.ValueCode;
-        //        responseObj.QuestionText = CurrentQuestion.ValueText;
-        //        responseObj.AnswerCode = SelectedResponse.ValueCode;
-        //        responseObj.Id = Id;
-        //        responseObj.AnswerText = SelectedResponse.ValueText;
+            if (CurrentQuestion.RuleType.Equals("Single"))
+            {
+                SurveyResponseModel responseObj = new SurveyResponseModel();
+                responseObj.QuestionCode = CurrentQuestion.ValueCode;
+                responseObj.QuestionText = CurrentQuestion.ValueText;
+                responseObj.AnswerCode = SelectedResponse.ValueCode;
+                responseObj.Id = Id;
+                responseObj.AnswerText = SelectedResponse.ValueText;
 
-        //        responseList.Add(responseObj);
-        //    }
-        //    if (CurrentQuestion.RuleType.Equals("Multiple"))
-        //    {
-        //        foreach (var item in SelectedResponses)
-        //        {
-        //            SurveyResponseModel responseObj = new SurveyResponseModel();
-        //            responseObj.QuestionCode = CurrentQuestion.ValueCode;
-        //            responseObj.QuestionText = CurrentQuestion.ValueText;
-        //            responseObj.Id = Id;
-        //            responseObj.AnswerCode = item.ValueCode;
-        //            responseObj.AnswerText = item.ValueText;
+                ActualUserSelectedAnswersList.Add(responseObj);
+            }
+            if (CurrentQuestion.RuleType.Equals("Multiple"))
+            {
+                foreach (var item in SelectedResponses)
+                {
+                    SurveyResponseModel responseObj = new SurveyResponseModel();
+                    responseObj.QuestionCode = CurrentQuestion.ValueCode;
+                    responseObj.QuestionText = CurrentQuestion.ValueText;
+                    responseObj.Id = Id;
+                    responseObj.AnswerCode = item.ValueCode;
+                    responseObj.AnswerText = item.ValueText;
 
-        //            responseList.Add(responseObj);
-        //        }
-        //    }
+                    ActualUserSelectedAnswersList.Add(responseObj);
+                }
+            }
 
-        //    //foreach(var item in responseList)
-        //    //{
-        //    //    await _databaseHelper.InsertData(item);
-        //    //}
-        //}
+            if (CurrentQuestion.QuestionType.Equals("Text"))
+            {
+                foreach (var item in SelectedResponses)
+                {
+                    SurveyResponseModel responseObj = new SurveyResponseModel();
+                    responseObj.QuestionCode = CurrentQuestion.ValueCode;
+                    responseObj.QuestionText = CurrentQuestion.ValueText;
+                    responseObj.Id = Id;
+                    responseObj.AnswerCode = "Text";
+                    responseObj.AnswerText = UserTextAnswer;
+
+                    ActualUserSelectedAnswersList.Add(responseObj);
+                }
+            }
+
+            return 1;
+
+            //foreach(var item in responseList)
+            //{
+            //    await _databaseHelper.InsertData(item);
+            //}
+        }
 
 
         //[RelayCommand]
