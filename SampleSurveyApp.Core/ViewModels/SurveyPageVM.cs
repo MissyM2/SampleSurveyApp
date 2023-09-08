@@ -194,7 +194,7 @@ namespace SampleSurveyApp.Core.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Unable to get list values: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to retrieve survey list values", "OK", null);
+                await _messageService.DisplayAlert("Error", "Failed to retrieve survey list values", "OK", "Cancel");
             }
             finally
             {
@@ -276,6 +276,33 @@ namespace SampleSurveyApp.Core.ViewModels
         private async void BackButtonClicked()
         {
             Console.WriteLine("BackButtonClicked");
+            if (CurrentQuestion != null)
+            {
+                // Save user question to ActualQuestionsList
+                ActualQuestionsList.Add(CurrentQuestion);
+
+                // find the index of the question in ActualQuestionsList that matches the currentquestion valuecode.
+                int currQuestionIndex = ActualQuestionsList.FindIndex(x => x.ValueCode == CurrentQuestion.ValueCode);
+                CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
+            }
+
+            var setScreenValuesReturn = await SetScreenValues();
+            if (setScreenValuesReturn == 1)
+            {
+                // get answers for currentQuestion
+                var getAnswersForCurrentQuestionReturn = await GetAnswersForCurrentQuestion();
+            }
+
+
+            //  CurrentQuestion.ValueCode
+            // ActualQuestionsList
+            // I need to get the existing answers for that question
+            //ActualQuestionsList
+            //ActualUserSelectedAnswersList
+            // search actual answer lsit and find the ???  that matches the CurrentQuestion.ValueCode
+            // put these answers in the AnswersForCurrentQuestionList
+
+            // must compare possible answers with actual selected answer in ActualUserSelectedResponses to get the checkmark.
         }
 
 
@@ -294,7 +321,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
                     if (SelectedResponse == null)
                     {
-                        await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
+                        await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
                     }
                     else
                     {
@@ -312,7 +339,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
                     if (SelectedResponses.Count <= 0)
                     {
-                        await _messageService.DisplayAlert("", "Please make a selection", "OK", null);
+                        await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
                     }
                     else
                     {
@@ -336,7 +363,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     if (UserTextAnswer == null)
                     {
-                        await _messageService.DisplayAlert("", "Please add your response", "OK", null);
+                        await _messageService.DisplayAlert("", "Please add your response", "OK", "Cancel");
                     }
                     else
                     {

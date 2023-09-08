@@ -107,29 +107,29 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             if (IsBusy) return;
 
-            //try
-            //{
-            //    IsBusy = true;
-            //    if (SurveyList.Any()) SurveyList.Clear();
-            //    var surveys = new List<SurveyModel>();
+            try
+            {
+                IsBusy = true;
+                if (SurveyList.Any()) SurveyList.Clear();
+                var surveys = new List<SurveyModel>();
 
-            //    surveys = await _surveyModelRepository.GetAllAsync();
-            //    foreach (var survey in surveys)
-            //    {
-            //        await _surveyModelRepository.DeleteAsync(survey);
-            //    }
+                surveys = await _surveyModelRepository.GetAllAsync();
+                foreach (var survey in surveys)
+                {
+                    await _surveyModelRepository.DeleteAsync(survey);
+                }
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
-            //    await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", null);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
+                await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", "Cancel");
 
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //}
+            }
+            finally
+            {
+                IsBusy = false;
+            }
 
         }
 
