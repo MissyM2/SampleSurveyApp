@@ -215,11 +215,14 @@ namespace SampleSurveyApp.Core.ViewModels
             // Save selected answer(s)
             await SaveUserSelectedAnswers();
 
+            
+
+
             // after confirming save of userSelectedAnswer(s), Save currentQ to ActualQuestionsList
 
-                // determine what screen comes next
+            // determine what screen comes next
 
-            if (CurrentQuestion.prevQCode == "")  // this is the first q
+            if (PrevQCode == "")  // this is the first q
             {
                 if (UserSelectedAnswer.ACode == "DONE") // this is the first q and the last q.  there is no prevQ and no nextQ
                 {
@@ -227,25 +230,29 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
                 else // this is the first question.  there is no prevQ but there is a nextQ
                 {
+                    // save current q,using existing Rules
 
-                    // set rule types
-                    PrevQCode = CurrQCode;
-                    NextQCode = UserSelectedAnswer.RuleType;
-
-                    // get the next question and assign to currentQ
-                    CurrentQuestion = AssignCurrentQuestion(NextQCode);
-                    CurrQCode = CurrentQuestion.RuleType;
-
-                    // save question
                     ActualQuestionsList.Add(new SurveyQuestionModel
                     {
                         QText = CurrentQuestion.QText,
                         QCode = CurrentQuestion.QCode,
-                        prevQCode ="",
+                        prevQCode = "",
                         nextQCode = UserSelectedAnswer.RuleType,
                         RuleType = CurrentQuestion.RuleType,
                         QType = CurrentQuestion.QType
                     });
+                    CurrQCode = CurrentQuestion.QCode;
+                    NextQCode = UserSelectedAnswer.RuleType;
+                    PrevQCode = "";
+
+                    // get the next question and assign to currentQ
+                    CurrentQuestion = AssignCurrentQuestion(NextQCode);
+
+                    // assign currQCode and prevQCode.  You cannot assign next because it comes from next user's answer
+                    PrevQCode = CurrQCode;
+                    CurrQCode = CurrentQuestion.QCode;
+                    
+                    
 
                     // get answers for the current question
                     var rtn = GetAnswerOptionsForCurrentQuestion();
@@ -258,16 +265,42 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (UserSelectedAnswer.ACode == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
                 {
-                    // set rule types
 
-                    PrevQCode = CurrQCode;
+                    // save current q,using existing Rules
+                    ActualQuestionsList.Add(new SurveyQuestionModel
+                    {
+                        QText = CurrentQuestion.QText,
+                        QCode = CurrentQuestion.QCode,
+                        prevQCode = CurrentQuestion.prevQCode,
+                        nextQCode = "",
+                        RuleType = CurrentQuestion.RuleType,
+                        QType = CurrentQuestion.QType
+                    });
+
+                    // assign currQCode and prevQCode.  You cannot assign next because there are no more questions.
+                    CurrQCode = CurrentQuestion.QCode;
                     NextQCode = "";
+                    PrevQCode = CurrentQuestion.prevQCode;
+
+
                     Debug.WriteLine("Go to review");
                     // go to review
                 }
                 else  // this is not the first q and not the last q.  there is a prevQ and a nextQ
                 {
+
+                    // save current q,using existing Rules
+                    ActualQuestionsList.Add(new SurveyQuestionModel
+                    {
+                        QText = CurrentQuestion.QText,
+                        QCode = CurrentQuestion.QCode,
+                        prevQCode = CurrentQuestion.prevQCode,
+                        nextQCode = UserSelectedAnswer.RuleType,
+                        RuleType = CurrentQuestion.RuleType,
+                        QType = CurrentQuestion.QType
+                    });
                     // set rule types
+                    currQCode = CurrentQuestion.QCode;
                     PrevQCode = CurrQCode;
                     NextQCode = UserSelectedAnswer.RuleType;
 
