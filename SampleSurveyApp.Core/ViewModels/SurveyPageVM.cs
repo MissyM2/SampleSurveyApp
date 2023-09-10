@@ -41,7 +41,7 @@ namespace SampleSurveyApp.Core.ViewModels
         #region Current Question
 
         [ObservableProperty]
-        int currentIndexNum;
+        int currQuestionIndex;
 
         [ObservableProperty]
         SurveyValuesModel currentQuestion;
@@ -50,10 +50,12 @@ namespace SampleSurveyApp.Core.ViewModels
         SurveyValuesModel lastQuestion;
 
         [ObservableProperty]
-        bool isFinalQuestion;
+        string nextQuestionRuleType;
+
+        [ObservableProperty]
+        string prevQuestionRuleType;
 
         public ObservableCollection<SurveyValuesModel> AnswerOptionsForCurrentQuestionList { get; set; } = new();
-        public ObservableCollection<SurveyValuesModel> AnswerOptionsForCurrentQuestionList2 { get; set; } = new();
 
         #endregion
 
@@ -107,7 +109,7 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         public SurveyValuesModel userSelectedAnswer;
 
-        public ObservableCollection<SurveyValuesModel> SelectedResponses { get; set; } = new();
+        public ObservableCollection<SurveyValuesModel> UserSelectedAnswers { get; set; } = new();
 
         [ObservableProperty]
         public string userTextAnswer;
@@ -174,22 +176,16 @@ namespace SampleSurveyApp.Core.ViewModels
                 // LastQuestion may change..
                 if (AllPossibleQuestionsList.Count > 0)
                 {
+
+                    // get the current Question
                     CurrentQuestion = AllPossibleQuestionsList[0];
-                    LastQuestion = AllPossibleQuestionsList.Last();
+
+                    // get answers for the current question
+                    var rtn = GetAnswerOptionsForCurrentQuestion();
 
                     // set screen values based on properties in CurrentQuestion
-                    var setScreenValuesReturn = await SetScreenValues();
-                    if (setScreenValuesReturn == 1)
-                    {
-                        // get answers for currentQuestion
-                        var getAnswersForCurrentQuestionReturn = await GetAnswerOptionsForCurrentQuestion();
-                    }
-
-                    //else
-                    //{
-                    //    // Show error
-                    //    await _messageService.DisplayAlert("Problem", "Problem with current question", "OK", null);
-                    //}
+                    var rtn1 = SetScreenValues();
+                    
                 }
             }
             catch (Exception ex)
@@ -204,56 +200,235 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-        
+        [RelayCommand]
+        public async Task NextButtonClicked()
+        {
+            Console.WriteLine("NextButtonClicked");
 
-        public async Task<int> SetScreenValues()
+            // Save selected answer(s)
+
+            await SaveUserSelectedAnswers();
+
+            // after confirming save of userSelectedAnswer(s), Save currentQ to ActualQuestionsList
+            ActualQuestionsList.Add(CurrentQuestion);
+
+            // determine what screen comes next
+
+            if (PrevQuestionRuleType == null)  // this is the first q
+            {
+                if (UserSelectedAnswer.ValueCode == "DONE") // this is the first q and the last q.  there is no prevQ and no nextQ
+                {
+                    // go to review
+                }
+                else // this is the first question.  there is no prevQ but there is a nextQ
+                {
+                    PrevQuestionRuleType = NextQuestionRuleType;
+                    NextQuestionRuleType = UserSelectedAnswer.RuleType;
+
+                    // get the next question and assign to currentQ
+                    CurrentQuestion = AssignCurrentQuestion(NextQuestionRuleType);
+
+                    // get answers for the current question
+                    var rtn = GetAnswerOptionsForCurrentQuestion();
+
+                    // set screen values based on properties in CurrentQuestion
+                    var rtn1 = SetScreenValues();
+                }
+            }
+            else // this is not the first q
+            {
+                if (UserSelectedAnswer.ValueCode == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
+                {
+                    PrevQuestionRuleType = NextQuestionRuleType;
+                    NextQuestionRuleType = null;
+                    Debug.WriteLine("Go to review");
+                    // go to review
+                }
+                else  // this is not the first q and not the last q.  there is a prevQ and a nextQ
+                {
+                    PrevQuestionRuleType = NextQuestionRuleType;
+                    NextQuestionRuleType = UserSelectedAnswer.RuleType;
+
+                    // get the next question and assign to current
+                    CurrentQuestion = AssignCurrentQuestion(NextQuestionRuleType);
+
+                    // get answers for the current question
+                    var rtn = GetAnswerOptionsForCurrentQuestion();
+
+                    // set screen values based on properties in CurrentQuestion
+                    var rtn1 = SetScreenValues();
+                }
+
+            }
+        }
+
+        async Task<int> SaveUserSelectedAnswers()
+        {
+            if (CurrentQuestion.RuleType.Equals("Single"))
+            {
+                if (UserSelectedAnswer == null)
+                {
+                    await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
+                }
+                else
+                {
+
+                    int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                    if (findIndex < 0)
+                        await SaveSelected();
+                }
+            }
+            else if (CurrentQuestion.RuleType.Equals("Multiple"))
+            {
+                if (UserSelectedAnswers.Count <= 0)
+                {
+                    await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
+                }
+                else
+                {
+                    var findAllList = ActualUserSelectedAnswersList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                    if (findAllList.Count == 0)
+                    {
+                        await SaveSelected();
+                    }
+                }
+
+            }
+            else if (CurrentQuestion.QuestionType.Equals("Text"))
+            {
+
+                if (UserTextAnswer == null)
+                {
+                    await _messageService.DisplayAlert("", "Please add your response", "OK", "Cancel");
+                }
+                else
+                {
+                    await SaveSelected();
+                }
+            }
+            return 1;
+        }
+
+        // Get new current question
+
+        //var GetCurrentQuestionReturn = await GetCurrentQuestion();
+
+        //if (GetCurrentQuestionReturn == 1)
+        //{
+        //    // set screen values based on properties in CurrentQuestion
+        //    var setScreenValuesReturn = await SetScreenValues();
+        //    if (setScreenValuesReturn == 1)
+        //    {
+        //        // get answers for currentQuestion
+        //        var getAnswersForCurrentQuestionReturn = await GetAnswerOptionsForCurrentQuestion();
+        //    }
+
+        //}
+
+
+
+        // Assign next current Question
+
+        //    if (CurrentQuestion != null)
+        //{
+        //    // Save user question to ActualQuestionsList
+        //    ActualQuestionsList.Add(CurrentQuestion);
+
+        // Save user answer to ActualUserSelectedAnswersList
+
+
+        //if (IsFinalQuestion == true)
+        //    {
+
+        //        Debug.WriteLine("GO TO REVIEW!");
+        //        var setScreenValuesReturn = await SetScreenValues();
+        //        if (setScreenValuesReturn == 1)
+        //        {
+        //            // get answers for currentQuestion
+        //            CreateUserResponsesCollection();
+        //        }
+
+        //    }
+        //    else
+        //    {
+
+
+
+        //     }
+        //    }
+        //}
+
+
+
+        #region Questions
+
+        private SurveyValuesModel AssignCurrentQuestion(string ruleType)
+        {
+            return AllPossibleQuestionsList.Find(x => x.ValueCode.Equals(ruleType));
+        }
+
+        #endregion
+
+        #region UI
+
+        public int SetScreenValues()
         {
             SPID = "987654";
 
-            if (IsFinalQuestion == false)
+            if (CurrentQuestion != null)
             {
                 ScreenNameLbl = CurrentQuestion.ValueCode;
                 CurrentQuestionLbl = CurrentQuestion.ValueText;
 
-                if (ActualQuestionsList.Count > 0)
-                    LeftBtnLbl = "Cancel";
+                if (CurrQuestionIndex==0)
+                {
+                    LeftBtnLbl = "";
+                }
                 else
+                {
                     LeftBtnLbl = "Back";
+                }
 
-                if (CurrentQuestion.ValueCode.Equals(LastQuestion.ValueCode)) // lastQuestion may change??
+                // not right.. first question will not have a nextqvaluecode
+                if (NextQuestionRuleType == null)
+                {
                     RightBtnLbl = "Review";
+                }
                 else
+                {
                     RightBtnLbl = "Next";
+                }
 
                 if (CurrentQuestion.QuestionType == "List")
                 {
-
-                    if (CurrentQuestion.RuleType == "Multiple")
-                    {
-                        IsVisibleRuleTypeSingle = false;
-                        IsVisibleRuleTypeMultiple = true;
-                        IsVisibleQuestionTypeText = false;
-                        IsVisibleAnswerReview = false;
-                        InstructionLbl = "Select all that apply.";
-                    }
-                    else
+                    if (CurrentQuestion.RuleType == "Single")
                     {
                         IsVisibleRuleTypeSingle = true;
                         IsVisibleRuleTypeMultiple = false;
-                        IsVisibleQuestionTypeText = false;
                         IsVisibleAnswerReview = false;
-                        InstructionLbl = "Select one of the following options.";
+                        IsVisibleQuestionTypeText = false;
+                        InstructionLbl = "SINGLE Select an option.";
                     }
+                    else // CurrentQuestion.RuleType must be multiple
+                    {
+                        IsVisibleRuleTypeSingle = false;
+                        IsVisibleRuleTypeMultiple = true;
+                        IsVisibleAnswerReview = false;
+                        IsVisibleQuestionTypeText = false;
+                        InstructionLbl = "MULTIPLE: Select all that apply.";
+                    }
+
                 }
-                else if (CurrentQuestion.QuestionType == "Text")
+                else // CurrentQuestion.QuestionType can only be Text
                 {
                     IsVisibleRuleTypeSingle = false;
                     IsVisibleRuleTypeMultiple = false;
                     IsVisibleQuestionTypeText = true;
                     IsVisibleAnswerReview = false;
+                    InstructionLbl = "TEXT: Shat shouild text label be.  Checking character cound.";
                 }
             }
-            else
+            else // must be review page
             {
                 ScreenNameLbl = "Review Page";
                 CurrentQuestionLbl = "Please review your answers here.";
@@ -263,13 +438,17 @@ namespace SampleSurveyApp.Core.ViewModels
                 IsVisibleQuestionTypeText = false;
                 IsVisibleAnswerReview = true;
                 ScreenNameLbl = "Review Page";
-                
+
             }
 
             return 1;
         }
 
-        public async Task<int> GetAnswerOptionsForCurrentQuestion()
+        #endregion
+
+        #region Answers
+
+        private int GetAnswerOptionsForCurrentQuestion()
         {
             AnswerOptionsForCurrentQuestionList.Clear();
             var itemList = AllPossibleAnswerOptionsList.FindAll(t => t.ValueType.Equals(CurrentQuestion.ValueCode));
@@ -278,204 +457,94 @@ namespace SampleSurveyApp.Core.ViewModels
             return 1;
         }
 
+        #endregion
+
         [RelayCommand]
         private async void BackButtonClicked()
         {
             Console.WriteLine("BackButtonClicked");
             if (CurrentQuestion != null)
             {
-                // Save user question to ActualQuestionsList
-                ActualQuestionsList.Add(CurrentQuestion);
+                //// Save user question to ActualQuestionsList
+                //ActualQuestionsList.Add(CurrentQuestion);
 
-                // find the index of the question in ActualQuestionsList that matches the currentquestion valuecode and display
-                int currQuestionIndex = ActualQuestionsList.FindIndex(x => x.ValueCode == CurrentQuestion.ValueCode);
-                if (currQuestionIndex == 0)
-                {
-                    return;
-                }
-                else
-                {
-                    CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
+                //// find the index of the question in ActualQuestionsList that matches the currentquestion valuecode and display
+                //int currQuestionIndex = ActualQuestionsList.FindIndex(x => x.ValueCode == CurrentQuestion.ValueCode);
+                //if (currQuestionIndex == 0)
+                //{
+                //    return;
+                //}
+                //else
+                //{
+                //    CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
 
-                    if (CurrentQuestion.RuleType.Equals("Single"))
-                    {
+                //    if (CurrentQuestion.RuleType.Equals("Single"))
+                //    {
 
-                    }
+                //    }
 
 
 
-                    var setScreenValuesReturn = await SetScreenValues();
-                    if (setScreenValuesReturn == 1)
-                    {
-                        // get answers for currentQuestion
-                        var getAnswersForCurrentQuestionReturn = await GetAnswerOptionsForCurrentQuestion();
+                //    var setScreenValuesReturn = await SetScreenValues();
+                //    if (setScreenValuesReturn == 1)
+                //    {
+                //        // get answers for currentQuestion
+                //        var getAnswersForCurrentQuestionReturn = GetAnswerOptionsForCurrentQuestion();
 
-                        //if (CurrentQuestion.RuleType.Equals("Single"))
-                        //{
-                        //    // see which answer(s) that the user selected in Response Format
-                        //    var tempSelectedAnswer = ActualUserSelectedAnswersList.Find(t => t.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                //        //if (CurrentQuestion.RuleType.Equals("Single"))
+                //        //{
+                //        //    // see which answer(s) that the user selected in Response Format
+                //        //    var tempSelectedAnswer = ActualUserSelectedAnswersList.Find(t => t.QuestionCode.Equals(CurrentQuestion.ValueCode));
 
-                        //    // find the answer in the current question list that has been selected
-                        //    var userSelectedOption = AnswerOptionsForCurrentQuestionList.FirstOrDefault(t => t.ValueCode == tempSelectedAnswer.AnswerCode);
+                //        //    // find the answer in the current question list that has been selected
+                //        //    var userSelectedOption = AnswerOptionsForCurrentQuestionList.FirstOrDefault(t => t.ValueCode == tempSelectedAnswer.AnswerCode);
 
-                        //    // once you get the answer(s) the at the user selected, place a checkmark next to them.
-                        //    SelectedResponse = userSelectedOption;
-                        //}
-                        if (CurrentQuestion.RuleType.Equals("Multiple"))
-                        {
-                            Debug.WriteLine("Multiple");
+                //        //    // once you get the answer(s) the at the user selected, place a checkmark next to them.
+                //        //    SelectedResponse = userSelectedOption;
+                //        //}
+                //        if (CurrentQuestion.RuleType.Equals("Multiple"))
+                //        {
+                //            Debug.WriteLine("Multiple");
 
-                        }
-                        else if (CurrentQuestion.QuestionType.Equals("Text"))
-                        {
-                            Debug.WriteLine("Multiple");
+                //        }
+                //        else if (CurrentQuestion.QuestionType.Equals("Text"))
+                //        {
+                //            Debug.WriteLine("Multiple");
 
-                        }
-                    }
-                }
+                //        }
+                //    }
+                //}
             }
         }
 
 
-        [RelayCommand]
-        public async Task NextButtonClicked()
-        {
-            Console.WriteLine("NextButtonClicked");
-
-            if (CurrentQuestion != null)
-            {
-                // Save user question to ActualQuestionsList
-                ActualQuestionsList.Add(CurrentQuestion);
-
-                // Save user answer to ActualUserSelectedAnswersList
-                if (CurrentQuestion.RuleType.Equals("Single"))
-                {
-                    //if (SelectedResponse == null)
-                    //{
-                    //    await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
-                    //}
-                    //else
-                    //{
-                    //    int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                    //    if (findIndex < 0)
-                    //        await SaveSelected();
-                    //    else
-                    //    {
-                    //        responseList.RemoveAt(findIndex);
-                    //        await SaveSelected();
-                    //    }
-                    //}
-                }
-                else if (CurrentQuestion.RuleType.Equals("Multiple"))
-                {
-                    if (SelectedResponses.Count <= 0)
-                    {
-                        await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
-                    }
-                    else
-                    {
-                        //SelectedResponse = SelectedResponses[0]; //Getting a value to pull next question
-
-                        //var findAllList = ActualUserSelectedAnswersList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                        //if (findAllList.Count == 0)
-                        //{
-                        //    await SaveSelected();
-                        //}
-                        //else
-                        //{
-                        //    responseList.RemoveAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                        //    await SaveSelected();
-                        //}
-                    }
-
-                }
-                else if (CurrentQuestion.QuestionType.Equals("Text"))
-                {
-
-                    if (UserTextAnswer == null)
-                    {
-                        await _messageService.DisplayAlert("", "Please add your response", "OK", "Cancel");
-                    }
-                    else
-                    {
-                        int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                        if (findIndex < 0)
-                            await SaveSelected();
-                        else
-                        {
-                            responseList.RemoveAt(findIndex);
-                            await SaveSelected();
-                        }
-                    }
-                    //await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
-                }
-
-                if (IsFinalQuestion == true)
-                {
-
-                    Debug.WriteLine("GO TO REVIEW!");
-                    var setScreenValuesReturn = await SetScreenValues();
-                    if (setScreenValuesReturn == 1)
-                    {
-                        // get answers for currentQuestion
-                        CreateUserResponsesCollection();
-                    }
-
-                }
-                else
-                {
-                    // Get new current question
-
-                    var GetCurrentQuestionReturn = await GetCurrentQuestion();
-                   
-                    if (GetCurrentQuestionReturn == 1)
-                    {
-                        // set screen values based on properties in CurrentQuestion
-                        var setScreenValuesReturn = await SetScreenValues();
-                        if (setScreenValuesReturn == 1)
-                        {
-                            // get answers for currentQuestion
-                            var getAnswersForCurrentQuestionReturn = await GetAnswerOptionsForCurrentQuestion();
-                        }
-
-                    }
-
-
-                }
-            }
-        }
-
-        private async Task<int> GetCurrentQuestion()
-        {
-            CurrentQuestion = AllPossibleQuestionsList.Find(x => x.ValueCode.Equals(UserSelectedAnswer.RuleType));
-
-            return 1;
-
-        }
+      
 
         [RelayCommand]
         public async Task SingleAnswerSelected()
         {
             Debug.WriteLine("Single option selected");
-            SurveyValuesModel tempResponse = new SurveyValuesModel();
-            tempResponse = UserSelectedAnswer;
+            SurveyValuesModel tempAnswer = new SurveyValuesModel();
+            tempAnswer = UserSelectedAnswer;
 
             // check to see if there are any questions after this answer is added
-            if (tempResponse.RuleType.ToLower().Equals("done"))
+            if (tempAnswer.RuleType.ToLower().Equals("done"))
             {
-                IsFinalQuestion = true;
+                NextQuestionRuleType = null;
+                //PrevQuestionRuleType = ?;
             }
             else
             {
-                IsFinalQuestion = false;
+                NextQuestionRuleType = tempAnswer.ValueCode;
+                //PrevQuestionRuleType = ?;
             }
-            SelectedResponses.Add(tempResponse);
+            UserSelectedAnswers.Add(tempAnswer);
         }
 
             [RelayCommand]
         public async Task ResponseChanged(object responseParams)
         {
-            SelectedResponses.Clear();
+            UserSelectedAnswers.Clear();
             
             List<SurveyValuesModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyValuesModel>().ToList();
 
@@ -483,19 +552,21 @@ namespace SampleSurveyApp.Core.ViewModels
             var tempResponse = myListItems.FirstOrDefault(x => x.RuleType.ToLower().Equals("done"));
             if(tempResponse != null)
             {
-                IsFinalQuestion = true;
+                NextQuestionRuleType = null;
+                //PrevQuestionRuleType = ?;
             }
             else
             {
-                IsFinalQuestion = false;
+                NextQuestionRuleType = tempResponse.ValueCode;
+                //PrevQuestionRuleType = ?;
             }
-                
 
 
-            SelectedResponses = new ObservableCollection<SurveyValuesModel>(myListItems);
+
+            UserSelectedAnswers = new ObservableCollection<SurveyValuesModel>(myListItems);
 
 
-            Debug.WriteLine("Count of selected responses in parameter = " + SelectedResponses.Count.ToString());
+            Debug.WriteLine("Count of selected responses in parameter = " + UserSelectedAnswers.Count.ToString());
 
             
             //else if (CurrentQuestion.RuleType.Equals("Text"))
@@ -521,7 +592,7 @@ namespace SampleSurveyApp.Core.ViewModels
             }
             if (CurrentQuestion.RuleType.Equals("Multiple"))
             {
-                foreach (var item in SelectedResponses)
+                foreach (var item in UserSelectedAnswers)
                 {
                     SurveyResponseModel responseObj = new SurveyResponseModel();
                     responseObj.QuestionCode = CurrentQuestion.ValueCode;
@@ -536,7 +607,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (CurrentQuestion.QuestionType.Equals("Text"))
             {
-                foreach (var item in SelectedResponses)
+                foreach (var item in UserSelectedAnswers)
                 {
                     SurveyResponseModel responseObj = new SurveyResponseModel();
                     responseObj.QuestionCode = CurrentQuestion.ValueCode;
