@@ -16,7 +16,10 @@ namespace SampleSurveyApp.Core.ViewModels
         private readonly IMessageService _messageService;
         private readonly IUserPreferences _userPreferences;
 
-        private readonly IAsyncRepository<SurveyValuesModel> _surveyValuesModelRepository;
+        //private readonly IAsyncRepository<SurveyValuesModel> _surveyValuesModelRepository;
+
+        private readonly IAsyncRepository<SurveyQuestionModel> _surveyQuestionModelRepository;
+        private readonly IAsyncRepository<SurveyAnswerModel> _surveyAnswerModelRepository;
         private readonly IAsyncRepository<SurveyModel> _surveyModelRepository;
         private readonly IAsyncRepository<SurveyResponseModel> _surveyResponseModelRepository;
 
@@ -33,14 +36,16 @@ namespace SampleSurveyApp.Core.ViewModels
             INavigationService navigationService,
             IMessageService messageService,
             IUserPreferences userPreferences,
-            IAsyncRepository<SurveyValuesModel> surveyValuesModelRepository,
+            IAsyncRepository<SurveyQuestionModel> surveyQuestionModelRepository,
+            IAsyncRepository<SurveyAnswerModel> surveyAnswerModelRepository,
             IAsyncRepository<SurveyModel> surveyModelRepository,
             IAsyncRepository<SurveyResponseModel> surveyResponseModelRepository)
         {
             _navigationService = navigationService;
             _messageService = messageService;
             _userPreferences = userPreferences;
-            _surveyValuesModelRepository = surveyValuesModelRepository;
+            _surveyQuestionModelRepository = surveyQuestionModelRepository;
+            _surveyAnswerModelRepository = surveyAnswerModelRepository;
             _surveyModelRepository = surveyModelRepository;
             _surveyResponseModelRepository = surveyResponseModelRepository;
 
@@ -57,8 +62,11 @@ namespace SampleSurveyApp.Core.ViewModels
             await Task.Delay(500);
 #endif
 
-            var asd = new AddSurveyData(_surveyValuesModelRepository);
-            await asd.AddSurveyValuesAsync();
+            var aqd = new AddQuestionData(_surveyQuestionModelRepository);
+            await aqd.AddQuestionsAsync();
+
+            var aad = new AddAnswerData(_surveyAnswerModelRepository);
+            await aad.AddAnswersAsync();
 
 
             IsBusy = false;

@@ -8,7 +8,6 @@ using SampleSurveyApp.Core.Domain;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
@@ -22,7 +21,8 @@ namespace SampleSurveyApp.Core.ViewModels
         private readonly IMessageService _messageService;
         private readonly IUserPreferences _userPreferences;
 
-        private readonly IAsyncRepository<SurveyValuesModel> _surveyValuesModelRepository;
+        private readonly IAsyncRepository<SurveyQuestionModel> _surveyQuestionModelRepository;
+        private readonly IAsyncRepository<SurveyAnswerModel> _surveyAnswerModelRepository;
         private readonly IAsyncRepository<SurveyModel> _surveyModelRepository;
         private readonly IAsyncRepository<SurveyResponseModel> _surveyResponseModelRepository;
 
@@ -30,10 +30,10 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #region Q and A lists
 
-        List<SurveyValuesModel> AllPossibleQuestionsList { get; set; } = new();
-        List<SurveyValuesModel> AllPossibleAnswerOptionsList { get; set; } = new();
+        List<SurveyQuestionModel> AllPossibleQuestionsList { get; set; } = new();
+        List<SurveyAnswerModel> AllPossibleAnswerOptionsList { get; set; } = new();
 
-        List<SurveyValuesModel> ActualQuestionsList { get; set; } = new();
+        List<SurveyQuestionModel> ActualQuestionsList { get; set; } = new();
         List<SurveyResponseModel> ActualUserSelectedAnswersList { get; set; } = new();
 
         #endregion
@@ -44,18 +44,21 @@ namespace SampleSurveyApp.Core.ViewModels
         int currQuestionIndex;
 
         [ObservableProperty]
-        SurveyValuesModel currentQuestion;
+        SurveyQuestionModel currentQuestion;
 
         [ObservableProperty]
-        SurveyValuesModel lastQuestion;
+        string currQCode;
 
         [ObservableProperty]
-        string nextQuestionRuleType;
+        SurveyQuestionModel lastQuestion;
 
         [ObservableProperty]
-        string prevQuestionRuleType;
+        string nextQCode;
 
-        public ObservableCollection<SurveyValuesModel> AnswerOptionsForCurrentQuestionList { get; set; } = new();
+        [ObservableProperty]
+        string prevQCode;
+
+        public ObservableCollection<SurveyAnswerModel> AnswerOptionsForCurrentQuestionList { get; set; } = new();
 
         #endregion
 
@@ -107,9 +110,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
         // these two properties (1 object, 1 list of objects are for answers selected by user - either single or multiselecct
         [ObservableProperty]
-        public SurveyValuesModel userSelectedAnswer;
+        public SurveyAnswerModel userSelectedAnswer;
 
-        public ObservableCollection<SurveyValuesModel> UserSelectedAnswers { get; set; } = new();
+        public ObservableCollection<SurveyAnswerModel> UserSelectedAnswers { get; set; } = new();
 
         [ObservableProperty]
         public string userTextAnswer;
@@ -132,30 +135,32 @@ namespace SampleSurveyApp.Core.ViewModels
         public List<SurveyResponseModel> UserResponseList { get; set; } = new();
 
         [ObservableProperty]
-        string questionText;
+        string qText;
 
         [ObservableProperty]
-        string answerText;
+        string aText;
 
         public SurveyPageVM(
             INavigationService navigationService,
             IMessageService messageService,
             IUserPreferences userPreferences,
-            IAsyncRepository<SurveyValuesModel> surveyValuesModelRepository,
+            IAsyncRepository<SurveyQuestionModel> surveyQuestionModelRepository,
+            IAsyncRepository<SurveyAnswerModel> surveyAnswerModelRepository,
             IAsyncRepository<SurveyModel> surveyModelRepository,
             IAsyncRepository<SurveyResponseModel> surveyResponseModelRepository)
         {
             _navigationService = navigationService;
             _messageService = messageService;
             _userPreferences = userPreferences;
-            _surveyValuesModelRepository = surveyValuesModelRepository;
+            _surveyQuestionModelRepository = surveyQuestionModelRepository;
+            _surveyAnswerModelRepository = surveyAnswerModelRepository;
             _surveyModelRepository = surveyModelRepository;
             _surveyResponseModelRepository = surveyResponseModelRepository;
 
         }
 
 
-
+        #region Navigation
         [RelayCommand]
         public async Task LoadInitialQuestion()
         {
@@ -166,10 +171,10 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 // get all possible questions and answers
                 if (AllPossibleQuestionsList.Any()) AllPossibleQuestionsList.Clear();
-                AllPossibleQuestionsList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Questions"));
+                AllPossibleQuestionsList = await _surveyQuestionModelRepository.GetAllAsync();
 
                 if (AllPossibleAnswerOptionsList.Any()) AllPossibleAnswerOptionsList.Clear();
-                AllPossibleAnswerOptionsList = await _surveyValuesModelRepository.GetWhereAsync(q => q.SurveyValueType.Equals("Answers"));
+                AllPossibleAnswerOptionsList = await _surveyAnswerModelRepository.GetAllAsync();
 
 
                 // find the first question in the list and assign it to the current question. Find the last possible question and assign it to LastQuestion.
@@ -179,6 +184,8 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     // get the current Question
                     CurrentQuestion = AllPossibleQuestionsList[0];
+                    CurrQCode = CurrentQuestion.QCode;
+                    PrevQCode = "";
 
                     // get answers for the current question
                     var rtn = GetAnswerOptionsForCurrentQuestion();
@@ -206,27 +213,39 @@ namespace SampleSurveyApp.Core.ViewModels
             Console.WriteLine("NextButtonClicked");
 
             // Save selected answer(s)
-
             await SaveUserSelectedAnswers();
 
             // after confirming save of userSelectedAnswer(s), Save currentQ to ActualQuestionsList
-            ActualQuestionsList.Add(CurrentQuestion);
 
-            // determine what screen comes next
+                // determine what screen comes next
 
-            if (PrevQuestionRuleType == null)  // this is the first q
+            if (CurrentQuestion.prevQCode == "")  // this is the first q
             {
-                if (UserSelectedAnswer.ValueCode == "DONE") // this is the first q and the last q.  there is no prevQ and no nextQ
+                if (UserSelectedAnswer.ACode == "DONE") // this is the first q and the last q.  there is no prevQ and no nextQ
                 {
                     // go to review
                 }
                 else // this is the first question.  there is no prevQ but there is a nextQ
                 {
-                    PrevQuestionRuleType = NextQuestionRuleType;
-                    NextQuestionRuleType = UserSelectedAnswer.RuleType;
+
+                    // set rule types
+                    PrevQCode = CurrQCode;
+                    NextQCode = UserSelectedAnswer.RuleType;
 
                     // get the next question and assign to currentQ
-                    CurrentQuestion = AssignCurrentQuestion(NextQuestionRuleType);
+                    CurrentQuestion = AssignCurrentQuestion(NextQCode);
+                    CurrQCode = CurrentQuestion.RuleType;
+
+                    // save question
+                    ActualQuestionsList.Add(new SurveyQuestionModel
+                    {
+                        QText = CurrentQuestion.QText,
+                        QCode = CurrentQuestion.QCode,
+                        prevQCode ="",
+                        nextQCode = UserSelectedAnswer.RuleType,
+                        RuleType = CurrentQuestion.RuleType,
+                        QType = CurrentQuestion.QType
+                    });
 
                     // get answers for the current question
                     var rtn = GetAnswerOptionsForCurrentQuestion();
@@ -237,20 +256,24 @@ namespace SampleSurveyApp.Core.ViewModels
             }
             else // this is not the first q
             {
-                if (UserSelectedAnswer.ValueCode == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
+                if (UserSelectedAnswer.ACode == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
                 {
-                    PrevQuestionRuleType = NextQuestionRuleType;
-                    NextQuestionRuleType = null;
+                    // set rule types
+
+                    PrevQCode = CurrQCode;
+                    NextQCode = "";
                     Debug.WriteLine("Go to review");
                     // go to review
                 }
                 else  // this is not the first q and not the last q.  there is a prevQ and a nextQ
                 {
-                    PrevQuestionRuleType = NextQuestionRuleType;
-                    NextQuestionRuleType = UserSelectedAnswer.RuleType;
+                    // set rule types
+                    PrevQCode = CurrQCode;
+                    NextQCode = UserSelectedAnswer.RuleType;
 
                     // get the next question and assign to current
-                    CurrentQuestion = AssignCurrentQuestion(NextQuestionRuleType);
+                    CurrentQuestion = AssignCurrentQuestion(UserSelectedAnswer.RuleType);
+                    CurrQCode = UserSelectedAnswer.RuleType;
 
                     // get answers for the current question
                     var rtn = GetAnswerOptionsForCurrentQuestion();
@@ -260,7 +283,151 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
 
             }
+
+            
         }
+
+        [RelayCommand]
+        private async void BackButtonClicked()
+        {
+            Console.WriteLine("BackButtonClicked");
+
+            // Save selected answer(s)
+            await SaveUserSelectedAnswers();
+
+            // after confirming save of userSelectedAnswer(s), Save currentQ to ActualQuestionsList
+            ActualQuestionsList.Add(CurrentQuestion);
+
+            // determine what screen comes next
+
+            if (PrevQCode == null)  // this is the first q
+            {
+                if (UserSelectedAnswer.ACode == "DONE") // this is the first q and the last q.  there is no prevQ and no nextQ
+                {
+                    // go to review
+                }
+                else // this is the first question.  there is no prevQ but there is a nextQ
+                {
+                    PrevQCode = "";
+                    NextQCode = UserSelectedAnswer.RuleType;
+
+                    // get the next question and assign to currentQ
+                    CurrentQuestion = AssignCurrentQuestion(PrevQCode);
+
+                    // get answers for the current question
+                    var rtn = GetAnswerOptionsForCurrentQuestion();
+
+                    //FOR BACK BUTTON NEED THIS
+                    // get the answers selected for that question
+                    var tempAnswers = ActualUserSelectedAnswersList.FindAll(x => x.QCode.Equals(CurrentQuestion.ValueType));
+
+                    if (tempAnswers.Count > 0)  // if so go to prev..this assumes that they have decided not to change the answers
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+
+                    // set screen values based on properties in CurrentQuestion
+                    var rtn1 = SetScreenValues();
+                }
+            }
+            else // this is not the first q
+            {
+                if (UserSelectedAnswer.ACode == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
+                {
+                    PrevQCode = NextQCode;
+                    NextQCode = null;
+                    Debug.WriteLine("Go to review");
+                    // go to review
+                }
+                else  // this is not the first q and not the last q.  there is a prevQ and a nextQ
+                {
+                    CurrentQuestion = AssignCurrentQuestion(PrevQCode);
+                    PrevQCode = NextQCode;
+                    NextQCode = UserSelectedAnswer.RuleType;
+
+                    // get the next question and assign to current
+                    //CurrentQuestion = AssignCurrentQuestion(PrevQCode);
+
+                    // get answers for the current question
+                    var rtn = GetAnswerOptionsForCurrentQuestion();
+
+                    //FOR BACK BUTTON NEED THIS
+                    // get the answers selected for that question
+                    var tempAnswers = ActualUserSelectedAnswersList.FindAll(x => x.QCode.Equals(CurrentQuestion.ValueType));
+
+                    if (tempAnswers.Count > 0)  // if so go to prev..this assumes that they have decided not to change the answers
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+
+                    // set screen values based on properties in CurrentQuestion
+                    var rtn1 = SetScreenValues();
+                }
+
+
+                //// Save user question to ActualQuestionsList
+                //ActualQuestionsList.Add(CurrentQuestion);
+
+                //// find the index of the question in ActualQuestionsList that matches the currentquestion valuecode and display
+                //int currQuestionIndex = ActualQuestionsList.FindIndex(x => x.QCode == CurrentQuestion.QCode);
+                //if (currQuestionIndex == 0)
+                //{
+                //    return;
+                //}
+                //else
+                //{
+                //    CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
+
+                //    if (CurrentQuestion.RuleType.Equals("Single"))
+                //    {
+
+                //    }
+
+
+
+                //    var setScreenValuesReturn = await SetScreenValues();
+                //    if (setScreenValuesReturn == 1)
+                //    {
+                //        // get answers for currentQuestion
+                //        var getAnswersForCurrentQuestionReturn = GetAnswerOptionsForCurrentQuestion();
+
+                //        //if (CurrentQuestion.RuleType.Equals("Single"))
+                //        //{
+                //        //    // see which answer(s) that the user selected in Response Format
+                //        //    var tempSelectedAnswer = ActualUserSelectedAnswersList.Find(t => t.QCode.Equals(CurrentQuestion.QCode));
+
+                //        //    // find the answer in the current question list that has been selected
+                //        //    var userSelectedOption = AnswerOptionsForCurrentQuestionList.FirstOrDefault(t => t.ACode == tempSelectedAnswer.ACode);
+
+                //        //    // once you get the answer(s) the at the user selected, place a checkmark next to them.
+                //        //    SelectedResponse = userSelectedOption;
+                //        //}
+                //        if (CurrentQuestion.RuleType.Equals("Multiple"))
+                //        {
+                //            Debug.WriteLine("Multiple");
+
+                //        }
+                //        else if (CurrentQuestion.QuestionType.Equals("Text"))
+                //        {
+                //            Debug.WriteLine("Multiple");
+
+                //        }
+                //    }
+                //}
+            }
+        }
+
+
+        #endregion
+
 
         async Task<int> SaveUserSelectedAnswers()
         {
@@ -273,7 +440,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 else
                 {
 
-                    int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                    int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QCode.Equals(CurrentQuestion.QCode));
                     if (findIndex < 0)
                         await SaveSelected();
                 }
@@ -286,7 +453,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
                 else
                 {
-                    var findAllList = ActualUserSelectedAnswersList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                    var findAllList = ActualUserSelectedAnswersList.FindAll(v => v.QCode.Equals(CurrentQuestion.QCode));
                     if (findAllList.Count == 0)
                     {
                         await SaveSelected();
@@ -294,7 +461,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
 
             }
-            else if (CurrentQuestion.QuestionType.Equals("Text"))
+            else if (CurrentQuestion.QType.Equals("Text"))
             {
 
                 if (UserTextAnswer == null)
@@ -362,9 +529,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #region Questions
 
-        private SurveyValuesModel AssignCurrentQuestion(string ruleType)
+        private SurveyQuestionModel AssignCurrentQuestion(string ruleType)
         {
-            return AllPossibleQuestionsList.Find(x => x.ValueCode.Equals(ruleType));
+            return AllPossibleQuestionsList.Find(x => x.QCode.Equals(ruleType));
         }
 
         #endregion
@@ -377,8 +544,8 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (CurrentQuestion != null)
             {
-                ScreenNameLbl = CurrentQuestion.ValueCode;
-                CurrentQuestionLbl = CurrentQuestion.ValueText;
+                ScreenNameLbl = CurrentQuestion.QCode;
+                CurrentQuestionLbl = CurrentQuestion.QText;
 
                 if (CurrQuestionIndex==0)
                 {
@@ -390,7 +557,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
 
                 // not right.. first question will not have a nextqvaluecode
-                if (NextQuestionRuleType == null)
+                if (NextQCode == null)
                 {
                     RightBtnLbl = "Review";
                 }
@@ -399,7 +566,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     RightBtnLbl = "Next";
                 }
 
-                if (CurrentQuestion.QuestionType == "List")
+                if (CurrentQuestion.QType == "List")
                 {
                     if (CurrentQuestion.RuleType == "Single")
                     {
@@ -451,7 +618,7 @@ namespace SampleSurveyApp.Core.ViewModels
         private int GetAnswerOptionsForCurrentQuestion()
         {
             AnswerOptionsForCurrentQuestionList.Clear();
-            var itemList = AllPossibleAnswerOptionsList.FindAll(t => t.ValueType.Equals(CurrentQuestion.ValueCode));
+            var itemList = AllPossibleAnswerOptionsList.FindAll(t => t.ValueType.Equals(CurrentQuestion.QCode));
 
             foreach (var item in itemList) AnswerOptionsForCurrentQuestionList.Add(item);
             return 1;
@@ -459,84 +626,24 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
-        [RelayCommand]
-        private async void BackButtonClicked()
-        {
-            Console.WriteLine("BackButtonClicked");
-            if (CurrentQuestion != null)
-            {
-                //// Save user question to ActualQuestionsList
-                //ActualQuestionsList.Add(CurrentQuestion);
-
-                //// find the index of the question in ActualQuestionsList that matches the currentquestion valuecode and display
-                //int currQuestionIndex = ActualQuestionsList.FindIndex(x => x.ValueCode == CurrentQuestion.ValueCode);
-                //if (currQuestionIndex == 0)
-                //{
-                //    return;
-                //}
-                //else
-                //{
-                //    CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
-
-                //    if (CurrentQuestion.RuleType.Equals("Single"))
-                //    {
-
-                //    }
-
-
-
-                //    var setScreenValuesReturn = await SetScreenValues();
-                //    if (setScreenValuesReturn == 1)
-                //    {
-                //        // get answers for currentQuestion
-                //        var getAnswersForCurrentQuestionReturn = GetAnswerOptionsForCurrentQuestion();
-
-                //        //if (CurrentQuestion.RuleType.Equals("Single"))
-                //        //{
-                //        //    // see which answer(s) that the user selected in Response Format
-                //        //    var tempSelectedAnswer = ActualUserSelectedAnswersList.Find(t => t.QuestionCode.Equals(CurrentQuestion.ValueCode));
-
-                //        //    // find the answer in the current question list that has been selected
-                //        //    var userSelectedOption = AnswerOptionsForCurrentQuestionList.FirstOrDefault(t => t.ValueCode == tempSelectedAnswer.AnswerCode);
-
-                //        //    // once you get the answer(s) the at the user selected, place a checkmark next to them.
-                //        //    SelectedResponse = userSelectedOption;
-                //        //}
-                //        if (CurrentQuestion.RuleType.Equals("Multiple"))
-                //        {
-                //            Debug.WriteLine("Multiple");
-
-                //        }
-                //        else if (CurrentQuestion.QuestionType.Equals("Text"))
-                //        {
-                //            Debug.WriteLine("Multiple");
-
-                //        }
-                //    }
-                //}
-            }
-        }
-
-
-      
-
+       
         [RelayCommand]
         public async Task SingleAnswerSelected()
         {
             Debug.WriteLine("Single option selected");
-            SurveyValuesModel tempAnswer = new SurveyValuesModel();
+            SurveyAnswerModel tempAnswer = new SurveyAnswerModel();
             tempAnswer = UserSelectedAnswer;
 
             // check to see if there are any questions after this answer is added
             if (tempAnswer.RuleType.ToLower().Equals("done"))
             {
-                NextQuestionRuleType = null;
-                //PrevQuestionRuleType = ?;
+                NextQCode = null;
+                //PrevQCode = ?;
             }
             else
             {
-                NextQuestionRuleType = tempAnswer.ValueCode;
-                //PrevQuestionRuleType = ?;
+                NextQCode = tempAnswer.ACode;
+                //PrevQCode = ?;
             }
             UserSelectedAnswers.Add(tempAnswer);
         }
@@ -546,24 +653,24 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             UserSelectedAnswers.Clear();
             
-            List<SurveyValuesModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyValuesModel>().ToList();
+            List<SurveyAnswerModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyAnswerModel>().ToList();
 
             // check to see if there are any questions after this answer is added
             var tempResponse = myListItems.FirstOrDefault(x => x.RuleType.ToLower().Equals("done"));
             if(tempResponse != null)
             {
-                NextQuestionRuleType = null;
-                //PrevQuestionRuleType = ?;
+                NextQCode = null;
+                //PrevQCode = ?;
             }
             else
             {
-                NextQuestionRuleType = tempResponse.ValueCode;
-                //PrevQuestionRuleType = ?;
+                NextQCode = tempResponse.ACode;
+                //PrevQCode = ?;
             }
 
 
 
-            UserSelectedAnswers = new ObservableCollection<SurveyValuesModel>(myListItems);
+            UserSelectedAnswers = new ObservableCollection<SurveyAnswerModel>(myListItems);
 
 
             Debug.WriteLine("Count of selected responses in parameter = " + UserSelectedAnswers.Count.ToString());
@@ -582,11 +689,11 @@ namespace SampleSurveyApp.Core.ViewModels
             if (CurrentQuestion.RuleType.Equals("Single"))
             {
                 SurveyResponseModel responseObj = new SurveyResponseModel();
-                responseObj.QuestionCode = CurrentQuestion.ValueCode;
-                responseObj.QuestionText = CurrentQuestion.ValueText;
-                responseObj.AnswerCode = UserSelectedAnswer.ValueCode;
+                responseObj.QCode = CurrQCode;
+                responseObj.QText = CurrentQuestion.QText;
+                responseObj.ACode = UserSelectedAnswer.ACode;
                 responseObj.Id = Id;
-                responseObj.AnswerText = UserSelectedAnswer.ValueText;
+                responseObj.AText = UserSelectedAnswer.AText;
 
                 ActualUserSelectedAnswersList.Add(responseObj);
             }
@@ -595,26 +702,27 @@ namespace SampleSurveyApp.Core.ViewModels
                 foreach (var item in UserSelectedAnswers)
                 {
                     SurveyResponseModel responseObj = new SurveyResponseModel();
-                    responseObj.QuestionCode = CurrentQuestion.ValueCode;
-                    responseObj.QuestionText = CurrentQuestion.ValueText;
+                    responseObj.QCode = CurrQCode;
+                    responseObj.QCode = CurrQCode;
+                    responseObj.QText = CurrentQuestion.QText;
                     responseObj.Id = Id;
-                    responseObj.AnswerCode = item.ValueCode;
-                    responseObj.AnswerText = item.ValueText;
+                    responseObj.ACode = item.ACode;
+                    responseObj.AText = item.AText;
 
                     ActualUserSelectedAnswersList.Add(responseObj);
                 }
             }
 
-            if (CurrentQuestion.QuestionType.Equals("Text"))
+            if (CurrentQuestion.QType.Equals("Text"))
             {
                 foreach (var item in UserSelectedAnswers)
                 {
                     SurveyResponseModel responseObj = new SurveyResponseModel();
-                    responseObj.QuestionCode = CurrentQuestion.ValueCode;
-                    responseObj.QuestionText = CurrentQuestion.ValueText;
+                    responseObj.QCode = CurrQCode;
+                    responseObj.QText = CurrentQuestion.QText;
                     responseObj.Id = Id;
-                    responseObj.AnswerCode = "Text";
-                    responseObj.AnswerText = UserTextAnswer;
+                    responseObj.ACode = "Text";
+                    responseObj.AText = UserTextAnswer;
 
                     ActualUserSelectedAnswersList.Add(responseObj);
                 }
@@ -632,7 +740,7 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             UserResponseGroups.Clear();
 
-            var dict = ActualUserSelectedAnswersList.GroupBy(o => o.QuestionText)
+            var dict = ActualUserSelectedAnswersList.GroupBy(o => o.QText)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
             foreach (KeyValuePair<string, List<SurveyResponseModel>> item in dict)
@@ -666,13 +774,14 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public class ResponseGroup : List<SurveyResponseModel>
         {
-            public string QuestionText { get; private set; }
+            public string QText { get; private set; }
 
-            public ResponseGroup(string questionText, List<SurveyResponseModel> userResponses) : base(userResponses)
+            public ResponseGroup(string QText, List<SurveyResponseModel> userResponses) : base(userResponses)
             {
-                QuestionText = questionText;
+                QText = QText;
             }
         }
+       
     }
 }
 

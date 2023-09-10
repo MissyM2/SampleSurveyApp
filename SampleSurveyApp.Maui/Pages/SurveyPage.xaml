@@ -116,13 +116,13 @@
                             </Trigger>
                     </CollectionView.Triggers>
                     <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:SurveyValuesModel">
+                            <DataTemplate x:DataType="models:SurveyAnswerModel">
                                         <ContentView BackgroundColor="LightGreen">
                                           <Grid x:Name="responseGrid"
                                                 ColumnDefinitions="*, 40"
                                                 RowDefinitions="40, 20">
                                                 <VerticalStackLayout >
-                                                    <Label Text="{Binding ValueText}" Margin="10,4,4,4" />
+                                                    <Label Text="{Binding AText}" Margin="10,4,4,4" />
                                                 </VerticalStackLayout>
                                                 <VerticalStackLayout Grid.Column="1"
                                                                      Grid.Row="0">
@@ -168,13 +168,13 @@
                             </Trigger>
                     </CollectionView.Triggers>
                 <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:SurveyValuesModel">
+                        <DataTemplate x:DataType="models:SurveyAnswerModel">
                                     <ContentView BackgroundColor="green">
                                       <Grid x:Name="responseGrid"
                                             ColumnDefinitions="*, 40"
                                             RowDefinitions="40, 20">
                                             <VerticalStackLayout >
-                                                <Label Text="{Binding ValueText}" Margin="10,4,4,4" />
+                                                <Label Text="{Binding AText}" Margin="10,4,4,4" />
                                             </VerticalStackLayout>
                                             <VerticalStackLayout Grid.Column="1"
                                                                  Grid.Row="0">
@@ -271,7 +271,7 @@
                             <StackLayout BackgroundColor="PeachPuff"
                                          Padding="5,10,5,9"
                                          VerticalOptions="CenterAndExpand">
-                                <Label Text="{Binding QuestionText}"
+                                <Label Text="{Binding QText}"
                                        TextColor="Black"
                                        FontAttributes="Bold"/>
                             </StackLayout>
@@ -284,7 +284,7 @@
                     <DataTemplate>
                         <ContentView BackgroundColor="White">
                             <VerticalStackLayout>
-                                    <Label Text="{Binding AnswerText}" Padding="5,10,5,10"/>
+                                    <Label Text="{Binding AText}" Padding="5,10,5,10"/>
                                     <BoxView BackgroundColor="LightBlue"
                                              HeightRequest="1"/>
                             </VerticalStackLayout>

@@ -16,7 +16,8 @@ public partial class MainPage : ContentPage
           new NavigationService(),
           new MessageService(),
           new UserPreferences(),
-          new AsyncRepository<SurveyValuesModel>(),
+          new AsyncRepository<SurveyQuestionModel>(),
+          new AsyncRepository<SurveyAnswerModel>(),
           new AsyncRepository<SurveyModel>(),
           new AsyncRepository<SurveyResponseModel>());
     }
