@@ -45,7 +45,7 @@
     </ContentPage.Resources>
 <Shell.TitleView>
     <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*" BackgroundColor="Black">
-      <Button Text="Back"
+      <Button Text="{Binding LeftBtnLbl}"
               BackgroundColor="Black"
               TextColor="Blue"
               FontSize="18"
@@ -56,7 +56,7 @@
                    Text="{Binding ScreenNameLbl}"
                    HorizontalTextAlignment="Center"
                    BackgroundColor="Black" TextColor="White" Grid.Column="1" />
-       <Button Text="Next"
+       <Button Text="{Binding RightBtnLbl}"
                BackgroundColor="Black"
                TextColor="CornflowerBlue"
                Grid.Column="2" FontSize="18"

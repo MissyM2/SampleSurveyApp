@@ -184,8 +184,15 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     // get the current Question
                     CurrentQuestion = AllPossibleQuestionsList[0];
+
+                    ActualQuestionsList.Add(new SurveyQuestionModel
+                    {
+                        QText = CurrentQuestion.QText,
+                        QCode = CurrentQuestion.QCode,
+                        RuleType = CurrentQuestion.RuleType,
+                        QType = CurrentQuestion.QType
+                    });
                     CurrQCode = CurrentQuestion.QCode;
-                    PrevQCode = "";
 
                     // get answers for the current question
                     var rtn = GetAnswerOptionsForCurrentQuestion();
@@ -212,17 +219,28 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             Console.WriteLine("NextButtonClicked");
 
+
+            // find index of currentquestion and update with proper nextQCode
+
+           
             // Save selected answer(s)
             await SaveUserSelectedAnswers();
 
-            
+            // find the index of the current q
+            int findIndex = ActualQuestionsList.FindIndex(v => v.QCode.Equals(CurrQCode));
 
+            // update currIndex with index of currentquestion
+            CurrQuestionIndex = findIndex;
+
+            // update current q with nextq and update nextq property
+            NextQCode = UserSelectedAnswer.RuleType;
+            ActualQuestionsList[findIndex].nextQCode = NextQCode;
 
             // after confirming save of userSelectedAnswer(s), Save currentQ to ActualQuestionsList
 
             // determine what screen comes next
 
-            if (PrevQCode == "")  // this is the first q
+            if (CurrQuestionIndex == 0)  // this is the first q
             {
                 if (UserSelectedAnswer.ACode == "DONE") // this is the first q and the last q.  there is no prevQ and no nextQ
                 {
@@ -230,29 +248,32 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
                 else // this is the first question.  there is no prevQ but there is a nextQ
                 {
-                    // save current q,using existing Rules
-
-                    ActualQuestionsList.Add(new SurveyQuestionModel
-                    {
-                        QText = CurrentQuestion.QText,
-                        QCode = CurrentQuestion.QCode,
-                        prevQCode = "",
-                        nextQCode = UserSelectedAnswer.RuleType,
-                        RuleType = CurrentQuestion.RuleType,
-                        QType = CurrentQuestion.QType
-                    });
-                    CurrQCode = CurrentQuestion.QCode;
-                    NextQCode = UserSelectedAnswer.RuleType;
                     PrevQCode = "";
+                    ActualQuestionsList[CurrQuestionIndex].prevQCode = PrevQCode;
 
-                    // get the next question and assign to currentQ
-                    CurrentQuestion = AssignCurrentQuestion(NextQCode);
+                    // check to see if CurrQCode already exists
 
-                    // assign currQCode and prevQCode.  You cannot assign next because it comes from next user's answer
-                    PrevQCode = CurrQCode;
+                    bool alreadyContainsQ = ActualQuestionsList.Any(item => item.QCode == CurrQCode);
+
+                    
+                        // get the next question and assign to currentQ
+                        CurrentQuestion = AssignCurrentQuestion(NextQCode);
+
+                        // assign currQCode and prevQCode.  You cannot assign next because it comes from next user's answer
+                        PrevQCode = CurrQCode;
+                        CurrQCode = CurrentQuestion.QCode;
+
+                   
+                        ActualQuestionsList.Add(new SurveyQuestionModel
+                        {
+                            QText = CurrentQuestion.QText,
+                            QCode = CurrentQuestion.QCode,
+                            RuleType = CurrentQuestion.RuleType,
+                            QType = CurrentQuestion.QType
+                        });
                     CurrQCode = CurrentQuestion.QCode;
-                    
-                    
+
+
 
                     // get answers for the current question
                     var rtn = GetAnswerOptionsForCurrentQuestion();
@@ -265,22 +286,29 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (UserSelectedAnswer.ACode == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
                 {
+                    // only add question to list if it does not exist
+                    bool alreadyContainsQ = ActualQuestionsList.Any(item => item.QCode == CurrQCode);
 
-                    // save current q,using existing Rules
-                    ActualQuestionsList.Add(new SurveyQuestionModel
+                   
+                        // get the next question and assign to currentQ
+                        CurrentQuestion = AssignCurrentQuestion(NextQCode);
+
+                        // assign currQCode and prevQCode.  You cannot assign next because it comes from next user's answer
+                        PrevQCode = CurrQCode;
+                        CurrQCode = CurrentQuestion.QCode;
+                    if (alreadyContainsQ == false)
                     {
-                        QText = CurrentQuestion.QText,
-                        QCode = CurrentQuestion.QCode,
-                        prevQCode = CurrentQuestion.prevQCode,
-                        nextQCode = "",
-                        RuleType = CurrentQuestion.RuleType,
-                        QType = CurrentQuestion.QType
-                    });
+                        ActualQuestionsList.Add(new SurveyQuestionModel
+                        {
+                            QText = CurrentQuestion.QText,
+                            QCode = CurrentQuestion.QCode,
+                            RuleType = CurrentQuestion.RuleType,
+                            QType = CurrentQuestion.QType
+                        });
+                        
 
-                    // assign currQCode and prevQCode.  You cannot assign next because there are no more questions.
+                    }
                     CurrQCode = CurrentQuestion.QCode;
-                    NextQCode = "";
-                    PrevQCode = CurrentQuestion.prevQCode;
 
 
                     Debug.WriteLine("Go to review");
@@ -288,25 +316,43 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
                 else  // this is not the first q and not the last q.  there is a prevQ and a nextQ
                 {
+                    ActualQuestionsList[CurrQuestionIndex].prevQCode = PrevQCode;
 
-                    // save current q,using existing Rules
-                    ActualQuestionsList.Add(new SurveyQuestionModel
-                    {
-                        QText = CurrentQuestion.QText,
-                        QCode = CurrentQuestion.QCode,
-                        prevQCode = CurrentQuestion.prevQCode,
-                        nextQCode = UserSelectedAnswer.RuleType,
-                        RuleType = CurrentQuestion.RuleType,
-                        QType = CurrentQuestion.QType
-                    });
-                    // set rule types
-                    currQCode = CurrentQuestion.QCode;
+                    // get the next question and assign to currentQ
+                    CurrentQuestion = AssignCurrentQuestion(NextQCode);
+
                     PrevQCode = CurrQCode;
-                    NextQCode = UserSelectedAnswer.RuleType;
+                    CurrQCode = CurrentQuestion.QCode;
 
-                    // get the next question and assign to current
-                    CurrentQuestion = AssignCurrentQuestion(UserSelectedAnswer.RuleType);
-                    CurrQCode = UserSelectedAnswer.RuleType;
+                    bool alreadyContainsQ = ActualQuestionsList.Any(item => item.QCode == CurrQCode);
+
+                    if (alreadyContainsQ == false)
+                    {
+                        // get the next question and assign to currentQ
+                        CurrentQuestion = AssignCurrentQuestion(NextQCode);
+
+                        // assign currQCode and prevQCode.  You cannot assign next because it comes from next user's answer
+                        //PrevQCode = CurrQCode;
+                        CurrQCode = CurrentQuestion.QCode;
+
+                        ActualQuestionsList.Add(new SurveyQuestionModel
+                        {
+                            QText = CurrentQuestion.QText,
+                            QCode = CurrentQuestion.QCode,
+                            RuleType = CurrentQuestion.RuleType,
+                            QType = CurrentQuestion.QType
+                        });
+                        CurrQCode = CurrentQuestion.QCode;
+
+                    }
+                    else
+                    {
+
+                        // get current q from actual questions list if the question already exists (i.e. next button after prev button)
+                        CurrentQuestion = ActualQuestionsList.Find(x => x.QCode == NextQCode);
+                    }
+
+                    //return AllPossibleQuestionsList.Find(x => x.QCode.Equals(ruleType));
 
                     // get answers for the current question
                     var rtn = GetAnswerOptionsForCurrentQuestion();
@@ -325,137 +371,13 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             Console.WriteLine("BackButtonClicked");
 
-            // Save selected answer(s)
-            await SaveUserSelectedAnswers();
+            CurrentQuestion = ActualQuestionsList[CurrQuestionIndex];
+            
+            var rtn = GetAnswerOptionsForCurrentQuestion();
+            var rtn1 = SetScreenValues();
 
-            // after confirming save of userSelectedAnswer(s), Save currentQ to ActualQuestionsList
-            ActualQuestionsList.Add(CurrentQuestion);
+            CurrQuestionIndex = CurrQuestionIndex - 1;
 
-            // determine what screen comes next
-
-            if (PrevQCode == null)  // this is the first q
-            {
-                if (UserSelectedAnswer.ACode == "DONE") // this is the first q and the last q.  there is no prevQ and no nextQ
-                {
-                    // go to review
-                }
-                else // this is the first question.  there is no prevQ but there is a nextQ
-                {
-                    PrevQCode = "";
-                    NextQCode = UserSelectedAnswer.RuleType;
-
-                    // get the next question and assign to currentQ
-                    CurrentQuestion = AssignCurrentQuestion(PrevQCode);
-
-                    // get answers for the current question
-                    var rtn = GetAnswerOptionsForCurrentQuestion();
-
-                    //FOR BACK BUTTON NEED THIS
-                    // get the answers selected for that question
-                    var tempAnswers = ActualUserSelectedAnswersList.FindAll(x => x.QCode.Equals(CurrentQuestion.ValueType));
-
-                    if (tempAnswers.Count > 0)  // if so go to prev..this assumes that they have decided not to change the answers
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
-
-                    // set screen values based on properties in CurrentQuestion
-                    var rtn1 = SetScreenValues();
-                }
-            }
-            else // this is not the first q
-            {
-                if (UserSelectedAnswer.ACode == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
-                {
-                    PrevQCode = NextQCode;
-                    NextQCode = null;
-                    Debug.WriteLine("Go to review");
-                    // go to review
-                }
-                else  // this is not the first q and not the last q.  there is a prevQ and a nextQ
-                {
-                    CurrentQuestion = AssignCurrentQuestion(PrevQCode);
-                    PrevQCode = NextQCode;
-                    NextQCode = UserSelectedAnswer.RuleType;
-
-                    // get the next question and assign to current
-                    //CurrentQuestion = AssignCurrentQuestion(PrevQCode);
-
-                    // get answers for the current question
-                    var rtn = GetAnswerOptionsForCurrentQuestion();
-
-                    //FOR BACK BUTTON NEED THIS
-                    // get the answers selected for that question
-                    var tempAnswers = ActualUserSelectedAnswersList.FindAll(x => x.QCode.Equals(CurrentQuestion.ValueType));
-
-                    if (tempAnswers.Count > 0)  // if so go to prev..this assumes that they have decided not to change the answers
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
-
-                    // set screen values based on properties in CurrentQuestion
-                    var rtn1 = SetScreenValues();
-                }
-
-
-                //// Save user question to ActualQuestionsList
-                //ActualQuestionsList.Add(CurrentQuestion);
-
-                //// find the index of the question in ActualQuestionsList that matches the currentquestion valuecode and display
-                //int currQuestionIndex = ActualQuestionsList.FindIndex(x => x.QCode == CurrentQuestion.QCode);
-                //if (currQuestionIndex == 0)
-                //{
-                //    return;
-                //}
-                //else
-                //{
-                //    CurrentQuestion = ActualQuestionsList[currQuestionIndex - 1];
-
-                //    if (CurrentQuestion.RuleType.Equals("Single"))
-                //    {
-
-                //    }
-
-
-
-                //    var setScreenValuesReturn = await SetScreenValues();
-                //    if (setScreenValuesReturn == 1)
-                //    {
-                //        // get answers for currentQuestion
-                //        var getAnswersForCurrentQuestionReturn = GetAnswerOptionsForCurrentQuestion();
-
-                //        //if (CurrentQuestion.RuleType.Equals("Single"))
-                //        //{
-                //        //    // see which answer(s) that the user selected in Response Format
-                //        //    var tempSelectedAnswer = ActualUserSelectedAnswersList.Find(t => t.QCode.Equals(CurrentQuestion.QCode));
-
-                //        //    // find the answer in the current question list that has been selected
-                //        //    var userSelectedOption = AnswerOptionsForCurrentQuestionList.FirstOrDefault(t => t.ACode == tempSelectedAnswer.ACode);
-
-                //        //    // once you get the answer(s) the at the user selected, place a checkmark next to them.
-                //        //    SelectedResponse = userSelectedOption;
-                //        //}
-                //        if (CurrentQuestion.RuleType.Equals("Multiple"))
-                //        {
-                //            Debug.WriteLine("Multiple");
-
-                //        }
-                //        else if (CurrentQuestion.QuestionType.Equals("Text"))
-                //        {
-                //            Debug.WriteLine("Multiple");
-
-                //        }
-                //    }
-                //}
-            }
         }
 
 
@@ -575,12 +497,12 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             SPID = "987654";
 
-            if (CurrentQuestion != null)
+            if (CurrentQuestion != null)  
             {
                 ScreenNameLbl = CurrentQuestion.QCode;
                 CurrentQuestionLbl = CurrentQuestion.QText;
 
-                if (CurrQuestionIndex==0)
+                if (CurrQuestionIndex == 0) // this is the first q
                 {
                     LeftBtnLbl = "";
                 }
@@ -589,8 +511,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     LeftBtnLbl = "Back";
                 }
 
-                // not right.. first question will not have a nextqvaluecode
-                if (NextQCode == null)
+                if (NextQCode == "")  // this is the last question
                 {
                     RightBtnLbl = "Review";
                 }
