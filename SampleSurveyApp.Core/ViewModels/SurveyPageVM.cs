@@ -53,6 +53,7 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isFinalQuestion;
 
         public ObservableCollection<SurveyValuesModel> AnswerOptionsForCurrentQuestionList { get; set; } = new();
+        public ObservableCollection<SurveyValuesModel> AnswerOptionsForCurrentQuestionList2 { get; set; } = new();
 
         #endregion
 
@@ -80,13 +81,13 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isVisibleQuestionTypeText;
 
         [ObservableProperty]
-        bool isVisibleQuestionTypeList;
+        bool isVisibleRuleTypeSingle;
+
+        [ObservableProperty]
+        bool isVisibleRuleTypeMultiple;
 
         [ObservableProperty]
         bool isVisibleAnswerReview;
-
-        [ObservableProperty]
-        Microsoft.Maui.Controls.SelectionMode cvSelectionMode;
 
         #endregion
 
@@ -104,7 +105,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
         // these two properties (1 object, 1 list of objects are for answers selected by user - either single or multiselecct
         [ObservableProperty]
-        public SurveyValuesModel selectedResponse;
+        public SurveyValuesModel userSelectedAnswer;
 
         public ObservableCollection<SurveyValuesModel> SelectedResponses { get; set; } = new();
 
@@ -226,24 +227,28 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 if (CurrentQuestion.QuestionType == "List")
                 {
-                    IsVisibleQuestionTypeList = true;
-                    IsVisibleQuestionTypeText = false;
-                    IsVisibleAnswerReview = false;
 
                     if (CurrentQuestion.RuleType == "Multiple")
                     {
+                        IsVisibleRuleTypeSingle = false;
+                        IsVisibleRuleTypeMultiple = true;
+                        IsVisibleQuestionTypeText = false;
+                        IsVisibleAnswerReview = false;
                         InstructionLbl = "Select all that apply.";
-                        CvSelectionMode = SelectionMode.Multiple;
                     }
                     else
                     {
+                        IsVisibleRuleTypeSingle = true;
+                        IsVisibleRuleTypeMultiple = false;
+                        IsVisibleQuestionTypeText = false;
+                        IsVisibleAnswerReview = false;
                         InstructionLbl = "Select one of the following options.";
-                        CvSelectionMode = SelectionMode.Single;
                     }
                 }
                 else if (CurrentQuestion.QuestionType == "Text")
                 {
-                    IsVisibleQuestionTypeList = false;
+                    IsVisibleRuleTypeSingle = false;
+                    IsVisibleRuleTypeMultiple = false;
                     IsVisibleQuestionTypeText = true;
                     IsVisibleAnswerReview = false;
                 }
@@ -253,7 +258,8 @@ namespace SampleSurveyApp.Core.ViewModels
                 ScreenNameLbl = "Review Page";
                 CurrentQuestionLbl = "Please review your answers here.";
                 LeftBtnLbl = "Back";
-                IsVisibleQuestionTypeList = false;
+                IsVisibleRuleTypeSingle = false;
+                IsVisibleRuleTypeMultiple = false;
                 IsVisibleQuestionTypeText = false;
                 IsVisibleAnswerReview = true;
                 ScreenNameLbl = "Review Page";
@@ -304,18 +310,18 @@ namespace SampleSurveyApp.Core.ViewModels
                         // get answers for currentQuestion
                         var getAnswersForCurrentQuestionReturn = await GetAnswerOptionsForCurrentQuestion();
 
-                        if (CurrentQuestion.RuleType.Equals("Single"))
-                        {
-                            // see which answer(s) that the user selected in Response Format
-                            var tempSelectedAnswer = ActualUserSelectedAnswersList.Find(t => t.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                        //if (CurrentQuestion.RuleType.Equals("Single"))
+                        //{
+                        //    // see which answer(s) that the user selected in Response Format
+                        //    var tempSelectedAnswer = ActualUserSelectedAnswersList.Find(t => t.QuestionCode.Equals(CurrentQuestion.ValueCode));
 
-                            // find the answer in the current question list that has been selected
-                            var userSelectedOption = AnswerOptionsForCurrentQuestionList.FirstOrDefault(t => t.ValueCode == tempSelectedAnswer.AnswerCode);
+                        //    // find the answer in the current question list that has been selected
+                        //    var userSelectedOption = AnswerOptionsForCurrentQuestionList.FirstOrDefault(t => t.ValueCode == tempSelectedAnswer.AnswerCode);
 
-                            // once you get the answer(s) the at the user selected, place a checkmark next to them.
-                            SelectedResponse = userSelectedOption;
-                        }
-                        else if (CurrentQuestion.RuleType.Equals("Multiple"))
+                        //    // once you get the answer(s) the at the user selected, place a checkmark next to them.
+                        //    SelectedResponse = userSelectedOption;
+                        //}
+                        if (CurrentQuestion.RuleType.Equals("Multiple"))
                         {
                             Debug.WriteLine("Multiple");
 
@@ -344,21 +350,21 @@ namespace SampleSurveyApp.Core.ViewModels
                 // Save user answer to ActualUserSelectedAnswersList
                 if (CurrentQuestion.RuleType.Equals("Single"))
                 {
-                    if (SelectedResponse == null)
-                    {
-                        await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
-                    }
-                    else
-                    {
-                        int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                        if (findIndex < 0)
-                            await SaveSelected();
-                        else
-                        {
-                            responseList.RemoveAt(findIndex);
-                            await SaveSelected();
-                        }
-                    }
+                    //if (SelectedResponse == null)
+                    //{
+                    //    await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
+                    //}
+                    //else
+                    //{
+                    //    int findIndex = ActualUserSelectedAnswersList.FindIndex(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                    //    if (findIndex < 0)
+                    //        await SaveSelected();
+                    //    else
+                    //    {
+                    //        responseList.RemoveAt(findIndex);
+                    //        await SaveSelected();
+                    //    }
+                    //}
                 }
                 else if (CurrentQuestion.RuleType.Equals("Multiple"))
                 {
@@ -368,18 +374,18 @@ namespace SampleSurveyApp.Core.ViewModels
                     }
                     else
                     {
-                        SelectedResponse = SelectedResponses[0]; //Getting a value to pull next question
+                        //SelectedResponse = SelectedResponses[0]; //Getting a value to pull next question
 
-                        var findAllList = ActualUserSelectedAnswersList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                        if (findAllList.Count == 0)
-                        {
-                            await SaveSelected();
-                        }
-                        else
-                        {
-                            responseList.RemoveAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
-                            await SaveSelected();
-                        }
+                        //var findAllList = ActualUserSelectedAnswersList.FindAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                        //if (findAllList.Count == 0)
+                        //{
+                        //    await SaveSelected();
+                        //}
+                        //else
+                        //{
+                        //    responseList.RemoveAll(v => v.QuestionCode.Equals(CurrentQuestion.ValueCode));
+                        //    await SaveSelected();
+                        //}
                     }
 
                 }
@@ -441,57 +447,57 @@ namespace SampleSurveyApp.Core.ViewModels
 
         private async Task<int> GetCurrentQuestion()
         {
-            CurrentQuestion = AllPossibleQuestionsList.Find(x => x.ValueCode.Equals(SelectedResponse.RuleType));
+            CurrentQuestion = AllPossibleQuestionsList.Find(x => x.ValueCode.Equals(UserSelectedAnswer.RuleType));
 
             return 1;
 
         }
 
         [RelayCommand]
+        public async Task SingleAnswerSelected()
+        {
+            Debug.WriteLine("Single option selected");
+            SurveyValuesModel tempResponse = new SurveyValuesModel();
+            tempResponse = UserSelectedAnswer;
+
+            // check to see if there are any questions after this answer is added
+            if (tempResponse.RuleType.ToLower().Equals("done"))
+            {
+                IsFinalQuestion = true;
+            }
+            else
+            {
+                IsFinalQuestion = false;
+            }
+            SelectedResponses.Add(tempResponse);
+        }
+
+            [RelayCommand]
         public async Task ResponseChanged(object responseParams)
         {
             SelectedResponses.Clear();
-            if (CurrentQuestion.RuleType.Equals("Single"))
+            
+            List<SurveyValuesModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyValuesModel>().ToList();
+
+            // check to see if there are any questions after this answer is added
+            var tempResponse = myListItems.FirstOrDefault(x => x.RuleType.ToLower().Equals("done"));
+            if(tempResponse != null)
             {
-                SurveyValuesModel tempResponse = new SurveyValuesModel();
-                tempResponse = SelectedResponse;
-
-                // check to see if there are any questions after this answer is added
-                if (tempResponse.RuleType.ToLower().Equals("done"))
-                {
-                    IsFinalQuestion = true;
-                }
-                else
-                {
-                    IsFinalQuestion = false;
-                }
-                SelectedResponses.Add(tempResponse);
-
+                IsFinalQuestion = true;
             }
-            //else (CurrentQuestion.RuleType.Equals("Multiple"))
             else
             {
-                List<SurveyValuesModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyValuesModel>().ToList();
-
-                // check to see if there are any questions after this answer is added
-                var tempResponse = myListItems.FirstOrDefault(x => x.RuleType.ToLower().Equals("done"));
-                if(tempResponse != null)
-                {
-                    IsFinalQuestion = true;
-                }
-                else
-                {
-                    IsFinalQuestion = false;
-                }
+                IsFinalQuestion = false;
+            }
                 
 
 
-                SelectedResponses = new ObservableCollection<SurveyValuesModel>(myListItems);
+            SelectedResponses = new ObservableCollection<SurveyValuesModel>(myListItems);
 
 
-                Debug.WriteLine("Count of selected responses in parameter = " + SelectedResponses.Count.ToString());
+            Debug.WriteLine("Count of selected responses in parameter = " + SelectedResponses.Count.ToString());
 
-            }
+            
             //else if (CurrentQuestion.RuleType.Equals("Text"))
             //{
             //    await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
@@ -507,9 +513,9 @@ namespace SampleSurveyApp.Core.ViewModels
                 SurveyResponseModel responseObj = new SurveyResponseModel();
                 responseObj.QuestionCode = CurrentQuestion.ValueCode;
                 responseObj.QuestionText = CurrentQuestion.ValueText;
-                responseObj.AnswerCode = SelectedResponse.ValueCode;
+                responseObj.AnswerCode = UserSelectedAnswer.ValueCode;
                 responseObj.Id = Id;
-                responseObj.AnswerText = SelectedResponse.ValueText;
+                responseObj.AnswerText = UserSelectedAnswer.ValueText;
 
                 ActualUserSelectedAnswersList.Add(responseObj);
             }
