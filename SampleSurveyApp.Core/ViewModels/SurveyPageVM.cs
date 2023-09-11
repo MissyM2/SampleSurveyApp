@@ -284,18 +284,20 @@ namespace SampleSurveyApp.Core.ViewModels
             }
             else // this is not the first q
             {
-                if (UserSelectedAnswer.ACode == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
+                if (UserSelectedAnswer.RuleType == "DONE")  // this is the last question.  there is a prevQ but no next q.  go to reveiw
                 {
+                    ActualQuestionsList[CurrQuestionIndex].prevQCode = PrevQCode;
+
                     // only add question to list if it does not exist
                     bool alreadyContainsQ = ActualQuestionsList.Any(item => item.QCode == CurrQCode);
 
                    
                         // get the next question and assign to currentQ
-                        CurrentQuestion = AssignCurrentQuestion(NextQCode);
+                        //CurrentQuestion = AssignCurrentQuestion(NextQCode);
 
                         // assign currQCode and prevQCode.  You cannot assign next because it comes from next user's answer
-                        PrevQCode = CurrQCode;
-                        CurrQCode = CurrentQuestion.QCode;
+                       // PrevQCode = CurrQCode;
+                        ///CurrQCode = CurrentQuestion.QCode;
                     if (alreadyContainsQ == false)
                     {
                         ActualQuestionsList.Add(new SurveyQuestionModel
@@ -303,16 +305,24 @@ namespace SampleSurveyApp.Core.ViewModels
                             QText = CurrentQuestion.QText,
                             QCode = CurrentQuestion.QCode,
                             RuleType = CurrentQuestion.RuleType,
+                            prevQCode = CurrQCode,
+                            nextQCode = "",
                             QType = CurrentQuestion.QType
                         });
-                        
 
+                        CurrQCode = CurrentQuestion.QCode;
                     }
                     CurrQCode = CurrentQuestion.QCode;
+                    NextQCode = "";
+
+                    CurrentQuestion = null;
 
 
                     Debug.WriteLine("Go to review");
                     // go to review
+                    LoadResponseCollection();
+
+                    var rtn3 = SetScreenValues();
                 }
                 else  // this is not the first q and not the last q.  there is a prevQ and a nextQ
                 {
@@ -558,8 +568,6 @@ namespace SampleSurveyApp.Core.ViewModels
                 IsVisibleRuleTypeMultiple = false;
                 IsVisibleQuestionTypeText = false;
                 IsVisibleAnswerReview = true;
-                ScreenNameLbl = "Review Page";
-
             }
 
             return 1;
@@ -690,6 +698,17 @@ namespace SampleSurveyApp.Core.ViewModels
             //}
         }
 
+        [RelayCommand]
+        public void LoadResponseCollection()
+        {
+            foreach (var item in ActualUserSelectedAnswersList)
+            {
+                ResponseCollection.Add(item);
+            }
+
+            CreateUserResponsesCollection();
+        }
+
         private void CreateUserResponsesCollection()
         {
             UserResponseGroups.Clear();
@@ -730,9 +749,9 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             public string QText { get; private set; }
 
-            public ResponseGroup(string QText, List<SurveyResponseModel> userResponses) : base(userResponses)
+            public ResponseGroup(string qText, List<SurveyResponseModel> userResponses) : base(userResponses)
             {
-                QText = QText;
+                QText = qText;
             }
         }
        

@@ -43,28 +43,28 @@
             <Setter Property="TextColor" Value="Green"/>
         </Style>
     </ContentPage.Resources>
-<Shell.TitleView>
-    <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*" BackgroundColor="Black">
-      <Button Text="{Binding LeftBtnLbl}"
-              BackgroundColor="Black"
-              TextColor="Blue"
-              FontSize="18"
-              Grid.Column="0"
-              HorizontalOptions="Start"
-              Command="{Binding BackButtonClickedCommand}"/>
-            <Label x:Name="titleLabel" FontSize="20" FontAttributes="Bold"
-                   Text="{Binding ScreenNameLbl}"
-                   HorizontalTextAlignment="Center"
-                   BackgroundColor="Black" TextColor="White" Grid.Column="1" />
-       <Button Text="{Binding RightBtnLbl}"
-               BackgroundColor="Black"
-               TextColor="CornflowerBlue"
-               Grid.Column="2" FontSize="18"
-               HorizontalOptions="End"
-               Command="{Binding NextButtonClickedCommand}"/>
+    <Shell.TitleView>
+        <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*" BackgroundColor="Black">
+          <Button Text="{Binding LeftBtnLbl}"
+                  BackgroundColor="Black"
+                  TextColor="Blue"
+                  FontSize="18"
+                  Grid.Column="0"
+                  HorizontalOptions="Start"
+                  Command="{Binding BackButtonClickedCommand}"/>
+                <Label x:Name="titleLabel" FontSize="20" FontAttributes="Bold"
+                       Text="{Binding ScreenNameLbl}"
+                       HorizontalTextAlignment="Center"
+                       BackgroundColor="Black" TextColor="White" Grid.Column="1" />
+           <Button Text="{Binding RightBtnLbl}"
+                   BackgroundColor="Black"
+                   TextColor="CornflowerBlue"
+                   Grid.Column="2" FontSize="18"
+                   HorizontalOptions="End"
+                   Command="{Binding NextButtonClickedCommand}"/>
 
-        </Grid>
-</Shell.TitleView>
+            </Grid>
+    </Shell.TitleView>
 
 <Grid RowDefinitions="40,100,30, *">
         <VerticalStackLayout Grid.Row="0"
@@ -91,7 +91,7 @@
         <StackLayout Grid.Row="3" BackgroundColor="White">
 
         <!-- QuestionType is List, RuleType is Single-->
-             <VerticalStackLayout BackgroundColor="lightBlue">
+             <VerticalStackLayout >
                
                 <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionList}"
                             SelectionMode="Single"
@@ -144,7 +144,7 @@
             </VerticalStackLayout>
 
             <!-- QuestionType is List, RuleType is Multiple-->
-            <VerticalStackLayout BackgroundColor="DarkBlue">
+            <VerticalStackLayout>
                
                 <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionList}"
                             SelectionMode="Multiple"
@@ -196,7 +196,7 @@
             </VerticalStackLayout>
 
         <!-- QuestionType is Text-->
-        <VerticalStackLayout BackgroundColor="Pink">
+        <VerticalStackLayout>
              
             <Frame HeightRequest="200"
                    BorderColor="LightGray"
@@ -243,15 +243,15 @@
         </VerticalStackLayout>
 
          <!-- REVIEW ANSWERS-->
-        <VerticalStackLayout BackgroundColor="Red">
-            <CollectionView x:Name="responseCV"
+        <VerticalStackLayout>
+           <CollectionView x:Name="responseCV"
                             HeightRequest="300"
                             ItemsSource="{Binding UserResponseGroups}"
                             SelectionMode="None"
                             Margin="0,8,0,0"
                             IsGrouped="True"
                             IsVisible="{Binding IsVisibleAnswerReview}">
-                <CollectionView.Triggers>
+                 <CollectionView.Triggers>
                     <Trigger TargetType="CollectionView"
                                 Property="IsVisible"
                                 Value="False">
@@ -282,13 +282,12 @@
                 </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ContentView BackgroundColor="White">
-                            <VerticalStackLayout>
+                        <VerticalStackLayout>
                                     <Label Text="{Binding AText}" Padding="5,10,5,10"/>
                                     <BoxView BackgroundColor="LightBlue"
                                              HeightRequest="1"/>
                             </VerticalStackLayout>
-                        </ContentView>
+
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
