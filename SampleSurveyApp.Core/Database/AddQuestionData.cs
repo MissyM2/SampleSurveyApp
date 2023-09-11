@@ -16,20 +16,20 @@ namespace SampleSurveyApp.Core.Database
 
             SurveyQuestionList = new List<SurveyQuestionModel>()
             {
-                new SurveyQuestionModel () { QText = "Have you confirmed the SP is still living at this address?", QCode = "Q1", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Is the SP alive?", QCode  = "Q2", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Is the SP residing in a nursing home or nursing home unit?", QCode  = "Q3", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Select contact type:", QCode  = "Q4", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, and looking around in every direction, how much of the following do you see? ", QType = "List", QCode  = "Q5a", RuleType = "Multiple", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, and looking around in every direction, how much of the following do you see? - Graffiti on buildings and walls?", QType = "List", QCode  = "Q5b", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, and looking around in every direction, how much of the following do you see? - Vacant or deserted houses or storefronts?", QType = "List", QCode  = "Q5c", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, does it have... - Any broken or boarded up windows?", QType = "List", QCode  = "Q6a", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, does it have... - A crumbling foundation or open holes?", QType = "List", QCode  = "Q6b", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, does it have... - Missing bricks, siding, or other outside materials?", QType = "List", QCode  = "Q6c", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, does it have... - Roof problems (e.g. missing material, sagging or a hole in the roof?", QType = "List", QCode  = "Q6d", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, does it have... - Uneven walking surfaces or broken steps in the area leading to the home/building?", QType = "List", QCode  = "Q6e", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Standing in front of the SP's home/building, does it have... - Continuous sidewalks in both directions?", QType = "List", QCode  = "Q6f", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
-                new SurveyQuestionModel () { QText = "Any additional comments", QType = "Text", QCode  = "Q7", ValueType = "", RuleType = "", Version = "1", Timestamp = DateTime.Now }
+                new SurveyQuestionModel () { QCode = "Q1", QText = "Question 1", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q2", QText = "Question 2", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q3", QText = "Question 3", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q4", QText = "Question 4", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q5a", QText = "Question 5", QType = "List", RuleType = "Multiple", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q5b", QText = "Question 6", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q5c", QText = "Question 7", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q6a", QText = "Question 8", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q6b", QText = "Question 9", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q6c", QText = "Question 10", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q6d", QText = "Question 11", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q6e", QText = "Question 12", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q6f", QText = "Question 13", QType = "List", RuleType = "Single", Version = "1", Timestamp = DateTime.Now },
+                new SurveyQuestionModel () { QCode  = "Q7", QText = "Question 14", QType = "Text", ValueType = "", RuleType = "", Version = "1", Timestamp = DateTime.Now }
             };
         }
 

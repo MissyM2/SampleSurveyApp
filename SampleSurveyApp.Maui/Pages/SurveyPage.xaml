@@ -245,10 +245,7 @@
          <!-- REVIEW ANSWERS-->
         <VerticalStackLayout>
            <CollectionView x:Name="responseCV"
-                            HeightRequest="300"
-                            ItemsSource="{Binding UserResponseGroups}"
-                            SelectionMode="None"
-                            Margin="0,8,0,0"
+                            ItemsSource="{Binding UserAnswerGroups}"
                             IsGrouped="True"
                             IsVisible="{Binding IsVisibleAnswerReview}">
                  <CollectionView.Triggers>
@@ -282,12 +279,11 @@
                 </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <VerticalStackLayout>
+                         <VerticalStackLayout>
                                     <Label Text="{Binding AText}" Padding="5,10,5,10"/>
                                     <BoxView BackgroundColor="LightBlue"
                                              HeightRequest="1"/>
                             </VerticalStackLayout>
-
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

@@ -111,7 +111,6 @@ namespace SampleSurveyApp.Core.ViewModels
         // these two properties (1 object, 1 list of objects are for answers selected by user - either single or multiselecct
         [ObservableProperty]
         public SurveyAnswerModel userSelectedAnswer;
-
         public ObservableCollection<SurveyAnswerModel> UserSelectedAnswers { get; set; } = new();
 
         [ObservableProperty]
@@ -120,22 +119,20 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         int textLen = 0;
 
-
-        // this  list is for all responses available to user
-        public List<SurveyResponseModel> responseList { get; set; } = new();
-
         [ObservableProperty]
         string questionType;
 
         [ObservableProperty]
         string ruleType;
 
-        public List<ResponseGroup> UserResponseGroups { get; private set; } = new List<ResponseGroup>();
-        public ObservableCollection<SurveyResponseModel> ResponseCollection { get; set; } = new();
-        public List<SurveyResponseModel> UserResponseList { get; set; } = new();
+        public List<AnswerGroup> UserAnswerGroups { get; private set; } = new List<AnswerGroup>();
+        //public ObservableCollection<SurveyResponseModel> AnswerCollection { get; set; } = new();
 
         [ObservableProperty]
         string qText;
+
+        [ObservableProperty]
+        string qCode;
 
         [ObservableProperty]
         string aText;
@@ -320,7 +317,8 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     Debug.WriteLine("Go to review");
                     // go to review
-                    LoadResponseCollection();
+                    //LoadAnswerCollection();
+                    CreateUserResponsesCollection();
 
                     var rtn3 = SetScreenValues();
                 }
@@ -698,27 +696,28 @@ namespace SampleSurveyApp.Core.ViewModels
             //}
         }
 
-        [RelayCommand]
-        public void LoadResponseCollection()
-        {
-            foreach (var item in ActualUserSelectedAnswersList)
-            {
-                ResponseCollection.Add(item);
-            }
+        //[RelayCommand]
+        //public void LoadAnswerCollection()
+        //{
+        //    foreach (var item in ActualUserSelectedAnswersList)
+        //    {
+        //        AnswerCollection.Add(item);
+        //    }
 
-            CreateUserResponsesCollection();
-        }
+        //    CreateUserResponsesCollection();
+        //}
 
         private void CreateUserResponsesCollection()
         {
-            UserResponseGroups.Clear();
+            UserAnswerGroups.Clear();
 
-            var dict = ActualUserSelectedAnswersList.GroupBy(o => o.QText)
+            var dict = ActualUserSelectedAnswersList.GroupBy(o => o.QCode)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
             foreach (KeyValuePair<string, List<SurveyResponseModel>> item in dict)
             {
-                UserResponseGroups.Add(new ResponseGroup(item.Key, new List<SurveyResponseModel>(item.Value)));
+                var q = ActualQuestionsList.Find(x => x.QCode == item.Key);
+                UserAnswerGroups.Add(new AnswerGroup(item.Key, q.QText, new List<SurveyResponseModel>(item.Value)));
             }
         }
 
@@ -745,14 +744,19 @@ namespace SampleSurveyApp.Core.ViewModels
         //    }
         //}
 
-        public class ResponseGroup : List<SurveyResponseModel>
+        public class AnswerGroup : List<SurveyResponseModel>
         {
-            public string QText { get; private set; }
+            public string QCode { get; set; }
+            public string QText { get; set; }
 
-            public ResponseGroup(string qText, List<SurveyResponseModel> userResponses) : base(userResponses)
+            //public AnswerGroup(string qCode, string qText, List<SurveyResponseModel> userResponses) : base(userResponses)
+            public AnswerGroup(string qCode, string qText, List<SurveyResponseModel> userResponses) : base(userResponses)
             {
+                QCode = qCode;
                 QText = qText;
             }
+
+
         }
        
     }
