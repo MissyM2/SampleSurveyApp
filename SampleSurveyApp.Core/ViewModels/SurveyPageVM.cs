@@ -471,37 +471,36 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         private async void BackButtonClicked()
         {
-        //    Console.WriteLine("BackButtonClicked");
+            Console.WriteLine("BackButtonClicked");
 
-        //    //get the next question and assign to currentQ
-        //    CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrQCode));
+            //get new curr q from prev q
+            CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.prevQCode));
 
-        //    // get answers for current q
-        //    AnswerOptionsForCurrentQuestionCollection = new ObservableCollection<SurveyAnswerModel>(answerSource.Where(x => x.QType.Equals(CurrentQuestion.QCode)));
+            // update question in q collection
+            var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.QCode));
+            foundQ.IsSelected = true;
+            foundQ.prevQCode = "";
 
-
-        //    if (CurrentQuestion.QType == "List")
-        //    {
-        //        if (CurrentQuestion.RuleType == "Single")
-        //        {
-        //            var selectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QType == CurrentQuestion.QCode && x.IsSelected == true);
-        //        }
-        //        else if (CurrentQuestion.RuleType == "Multiple")
-        //        {
-        //            var selectedAnswerss = AllPossibleAnswerOptionsCollection.Where(t => t.QType == CurrentQuestion.QCode && t.IsSelected == true);
-        //        }
-        //    }
-
-        //    else  // q type must be text
-        //    {
-        //        Debug.WriteLine("Get existing text for back button");
-        //    }
-
-        //    SetScreenValues();
-
-        //        CurrQuestionIndex = CurrQuestionIndex - 1;
-
+            if (CurrentQuestion.QType == "List")
+            {
+                if (CurrentQuestion.RuleType == "Single")
+                {
+                    var selectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QType == CurrentQuestion.QCode && x.IsSelected == true);
+                }
+                else if (CurrentQuestion.RuleType == "Multiple")
+                {
+                    var selectedAnswers = AllPossibleAnswerOptionsCollection.Where(t => t.QType == CurrentQuestion.QCode && t.IsSelected == true);
+                }
             }
+
+            else  // q type must be text
+            {
+                Debug.WriteLine("Get existing text for back button");
+            }
+
+            SetScreenValuesOnOpen();
+
+        }
 
 
 
@@ -531,7 +530,15 @@ namespace SampleSurveyApp.Core.ViewModels
                 
                     ScreenNameLbl = CurrentQuestion.QCode;
                     CurrentQuestionLbl = CurrentQuestion.QText;
-                    LeftBtnLbl = "";
+                    if (CurrentQuestion.prevQCode != "")
+                    {
+                        LeftBtnLbl = "Back";
+                    }
+                    else
+                    {
+                        LeftBtnLbl = "";
+
+                    }
                     RightBtnLbl = "Next";
                     IsVisibleRuleTypeSingle = true;
                     IsVisibleRuleTypeMultiple = false;
