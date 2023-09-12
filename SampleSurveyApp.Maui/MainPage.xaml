@@ -9,13 +9,13 @@
     <Grid RowDefinitions="40, *"
           Margin="15">
         <FlexLayout Grid.Row="0" JustifyContent="SpaceAround">
-            <Button Text="New survey"
+            <Button Text="Survey"
                         WidthRequest="110"
                         HeightRequest="30"
                         FontSize="Micro"
-                        Command="{Binding CreateSurveyCommand}"
+                        Command="{Binding GoToSurveyCommand}"
                         BackgroundColor="green"/>
-             <Button Text="Del Surveys"
+             <!--<Button Text="Del Surveys"
                         BackgroundColor="red"
                         WidthRequest="110"
                         HeightRequest="30"
@@ -24,7 +24,7 @@
                         WidthRequest="110"
                         HeightRequest="30"
                     BackgroundColor="red"
-                    Command="{Binding DeleteAllResponsesCommand}"/>
+                    Command="{Binding DeleteAllResponsesCommand}"/>-->
 
         </FlexLayout>
 

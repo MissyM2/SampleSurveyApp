@@ -22,12 +22,12 @@ public partial class MainPage : ContentPage
           new AsyncRepository<SurveyResponseModel>());
     }
 
-    protected async override void OnAppearing()
-    {
-        base.OnAppearing();
-        var vm = (MainPageVM)BindingContext;
-        await vm.RefreshCommand.ExecuteAsync(null);
-    }
+    //protected async override void OnAppearing()
+    //{
+    //    base.OnAppearing();
+    //    var vm = (MainPageVM)BindingContext;
+    //    await vm.RefreshCommand.ExecuteAsync(null);
+    //}
 
 
 }

@@ -9,13 +9,15 @@ namespace SampleSurveyApp.Core.Domain
 
         public string ACode { get; set; }
 
-        public string ValueType { get; set; }
+        public string QType { get; set; }
 
         public string RuleType { get; set; }
 
-        public string QType { get; set; }
+        public string NotSureWhatThisIs { get; set; }
 
         public string Version { get; set; }
+
+        public bool IsSelected { get; set; }
 
         public DateTime Timestamp { get; set; }
     }

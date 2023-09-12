@@ -5,17 +5,11 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:SampleSurveyApp.Core.ViewModels;assembly=SampleSurveyApp.Core"
              xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
-             Title="Survey Page"
+             x:Name="Root"
              x:DataType="vm:SurveyPageVM">
-
-    <!--<ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior
-            EventName="Appearing"
-            Command="{Binding LoadInitialQuestionCommand}"/>
-    </ContentPage.Behaviors>-->
-
     <ContentPage.Resources>
-        <Style TargetType="ContentView">
+
+    <Style TargetType="ContentView">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
@@ -62,91 +56,122 @@
                    Grid.Column="2" FontSize="18"
                    HorizontalOptions="End"
                    Command="{Binding NextButtonClickedCommand}"/>
-
             </Grid>
     </Shell.TitleView>
 
-<Grid RowDefinitions="40,100,30, *">
-        <VerticalStackLayout Grid.Row="0"
-                             BackgroundColor="CornflowerBlue"
-                             Padding="5">
-           
-            <Label Text="{Binding SPID}" HorizontalTextAlignment="Center"
-                   VerticalTextAlignment="Center"/>
+    <StackLayout>
+        <FlexLayout Grid.Row="0" JustifyContent="SpaceAround"
+                    IsVisible="{Binding IsVisibleSurveyHeader}">
+            <Button Text="New survey"
+                        WidthRequest="110"
+                        HeightRequest="30"
+                        FontSize="Micro"
+                        Command="{Binding CreateSurveyCommand}"
+                        BackgroundColor="green"/>
+            <Button Text="Del Surveys"
+                        BackgroundColor="red"
+                        WidthRequest="110"
+                        HeightRequest="30"
+                        Command="{Binding DeleteAllSurveysCommand}"/>
+                <Button Text="Del Answers"
+                        WidthRequest="110"
+                        HeightRequest="30"
+                    BackgroundColor="red"
+                    Command="{Binding DeleteAllResponsesCommand}"/>
 
+        </FlexLayout>
+
+          
+   <!-- Survey--> 
+        <VerticalStackLayout Grid.Row="0"
+                            BackgroundColor="CornflowerBlue"
+                            Padding="5">
+            <Label Text="{Binding SPID}" HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"/>
         </VerticalStackLayout>
-        <FlexLayout Grid.Row="1"
-                    BackgroundColor="PeachPuff">
-           
+
+        <FlexLayout BackgroundColor="PeachPuff">
             <Label Text="{Binding CurrentQuestionLbl}"
                    VerticalOptions="Center"
                    Margin="10,0,10,0"/>
         </FlexLayout>
+
         <VerticalStackLayout Grid.Row="2"
                              Padding="5">
             <Label Text="{Binding InstructionLbl}" Margin="10,0,0,0"
                    TextColor="Blue"/>
         </VerticalStackLayout>
 
-        <StackLayout Grid.Row="3" BackgroundColor="White">
-
-        <!-- QuestionType is List, RuleType is Single-->
-             <VerticalStackLayout >
-               
-                <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionList}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding UserSelectedAnswer}"
-                            SelectionChangedCommand="{Binding SingleAnswerSelectedCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
-                            BackgroundColor="pink"
-                            Margin="12,8,12,0"
-                            IsVisible="{Binding IsVisibleRuleTypeSingle}">
-                    <CollectionView.Triggers>
-                        <Trigger TargetType="CollectionView"
-                                 Property="IsVisible"
-                                 Value="False">
-                            <Setter Property="HeightRequest"
-                                    Value="0"/>
-                        </Trigger>
-                        <Trigger TargetType="CollectionView"
-                                 Property="IsVisible"
-                                 Value="True">
-                            <Setter Property="HeightRequest"
-                                    Value="450"/>
+        <!--QuestionType is List, RuleType is Single-->
+        <StackLayout>
+         <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding UserSelectedAnswer}"
+                                SelectionChangedCommand="{Binding SingleAnswerSelectedCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                                BackgroundColor="Transparent"
+                                Margin="12,8,12,0"
+                                IsVisible="true">
+                 <CollectionView.Triggers>
+                            <Trigger TargetType="CollectionView"
+                                     Property="IsVisible"
+                                     Value="False">
+                                <Setter Property="HeightRequest"
+                                        Value="0"/>
                             </Trigger>
-                    </CollectionView.Triggers>
+                            <Trigger TargetType="CollectionView"
+                                     Property="IsVisible"
+                                     Value="True">
+                                <Setter Property="HeightRequest"
+                                        Value="450"/>
+                                </Trigger>
+                        </CollectionView.Triggers>
                     <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:SurveyAnswerModel">
-                                        <ContentView BackgroundColor="LightGreen">
-                                          <Grid x:Name="responseGrid"
-                                                ColumnDefinitions="*, 40"
-                                                RowDefinitions="40, 20">
-                                                <VerticalStackLayout >
-                                                    <Label Text="{Binding AText}" Margin="10,4,4,4" />
-                                                </VerticalStackLayout>
-                                                <VerticalStackLayout Grid.Column="1"
-                                                                     Grid.Row="0">
-                                                    <Image x:Name="checkImage"
-                                                           Source="check.png" Margin="0,5,0,0"
-                                                           HeightRequest="20">
-                                                    </Image>
-                                                </VerticalStackLayout>
-                                                <BoxView Grid.Column="0"
-                                                         Grid.ColumnSpan="2"
-                                                         Grid.Row="1"
-                                                         BackgroundColor="LightBlue"
-                                                         HeightRequest="1"/>
-                                            </Grid>                  
-                                        </ContentView>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
+                        <DataTemplate>
+                        <ContentView>
+                            <StackLayout>
+                                <Grid x:Name="responseGrid"
+                                    ColumnDefinitions="*, 40,40"
+                                    RowDefinitions="40, 20">
+                                     <VerticalStackLayout >
+                                        <Label Text="{Binding AText}" Margin="10,4,4,4" />
+                                    </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                            Grid.Row="0">
+                                        <Label Text="{Binding AnswerIsSelected}"/>
+                                                        
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="2"
+                                                            Grid.Row="0">
+                                        <Image x:Name="checkImage"
+                                                Source="check.png" Margin="0,5,0,0"
+                                                HeightRequest="20">
+                                                        
+                                        </Image>
+                                    </VerticalStackLayout>
+                                    <BoxView Grid.Column="0"
+                                                Grid.ColumnSpan="3"
+                                                Grid.Row="1"
+                                                BackgroundColor="LightBlue"
+                                                HeightRequest="1"/>
+                                </Grid>
+                            </StackLayout>
+                            </ContentView>
+                        </DataTemplate>
 
-            <!-- QuestionType is List, RuleType is Multiple-->
-            <VerticalStackLayout>
-               
-                <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionList}"
+                    </CollectionView.ItemTemplate>
+
+
+                </CollectionView>
+            </StackLayout>
+
+       
+
+         <!--QuestionType is List, RuleType is Multiple-->
+        <!--<VerticalStackLayout>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"
+             Command="{Binding DummyCommand}">
+                <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                             SelectionMode="Multiple"
                             SelectionChangedCommand="{Binding ResponseChangedCommand}"
                             SelectionChangedCommandParameter="{Binding SelectedItems, Source={RelativeSource Self}}"
@@ -193,15 +218,15 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </VerticalStackLayout>
+                </RefreshView>
+        </VerticalStackLayout>-->
 
-        <!-- QuestionType is Text-->
-        <VerticalStackLayout>
-             
+         <!--QuestionType is Text-->
+        <!--<VerticalStackLayout>
             <Frame HeightRequest="200"
                    BorderColor="LightGray"
                    Padding="0"
-                   IsVisible="{Binding IsVisibleQuestionTypeText}">
+                   IsVisible="{Binding IsVisibleQTypeText}">
                 <Frame.Triggers>
                     <Trigger TargetType="Frame"
                                 Property="IsVisible"
@@ -220,7 +245,7 @@
                     <Editor x:Name="txtEditor"
                             Placeholder="Text goes here"
                             HeightRequest="250"
-                            IsEnabled="{Binding IsVisibleQuestionTypeText}"
+                            IsEnabled="{Binding IsVisibleQTypeText}"
                             Text="{Binding UserTextAnswer, Mode=TwoWay}">
                         <Editor.Behaviors>
                             <toolkit:EventToCommandBehavior
@@ -240,10 +265,11 @@
                     </Editor>
                     </StackLayout>
             </Frame>
-        </VerticalStackLayout>
+        </VerticalStackLayout>-->
 
-         <!-- REVIEW ANSWERS-->
-        <VerticalStackLayout>
+          <!--REVIEW ANSWERS-->
+        <!--<VerticalStackLayout>
+            <RefreshView IsRefreshing="{Binding DummyCommand}">
            <CollectionView x:Name="responseCV"
                             ItemsSource="{Binding UserAnswerGroups}"
                             IsGrouped="True"
@@ -287,7 +313,14 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </VerticalStackLayout>
-        </StackLayout>
-    </Grid>
+                </RefreshView>
+        </VerticalStackLayout>-->
+        
+
+        
+        
+        <!--<ActivityIndicator IsRunning="{Binding IsBusy}"/>-->
+       
+</StackLayout>
+      
 </ContentPage>

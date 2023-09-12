@@ -53,154 +53,160 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
         [RelayCommand]
-        public async Task Refresh()
+        public async Task GoToSurvey()
         {
-            IsBusy = true;
-
-
-#if DEBUG
-            await Task.Delay(500);
-#endif
-
-            var aqd = new AddQuestionData(_surveyQuestionModelRepository);
-            await aqd.AddQuestionsAsync();
-
-            var aad = new AddAnswerData(_surveyAnswerModelRepository);
-            await aad.AddAnswersAsync();
-
-
-            IsBusy = false;
-
-            //toaster?.MakeToast("Refreshed!");
+            await _navigationService.GoToSurveyPageAsync();
         }
 
-        [RelayCommand]
-        public async Task CreateSurvey()
-        {
-            if (IsBusy) return;
-
-            //try
-            //{
-                IsBusy = true;
-                NewSurvey = new SurveyModel();
-                NewSurvey.SurveyDate = DateTime.Now;
-                NewSurvey.SurveyStatus = "I";
-                NewSurvey.SyncStatus = "I";
+//        [RelayCommand]
+//        public async Task Refresh()
+//        {
+//            IsBusy = true;
 
 
-                    // insert a new record
-                await _surveyModelRepository.InsertAsync(NewSurvey);
-                InsertedSurvey = NewSurvey;
+//#if DEBUG
+//            await Task.Delay(500);
+//#endif
 
-                //await _navigationService.GoToSurveyPageAsync<SurveyPageVM>($"itemID={InsertedSurvey.Id");
-                await _navigationService.GoToSurveyPageAsync(InsertedSurvey.Id);
+//            var aqd = new AddQuestionData(_surveyQuestionModelRepository);
+//            await aqd.AddQuestionsAsync();
+
+//            var aad = new AddAnswerData(_surveyAnswerModelRepository);
+//            await aad.AddAnswersAsync();
 
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"Unable to insert a survey: {ex.Message}");
-            //    await _messageService.DisplayAlert("Error", "Failed to insert a surveys", "OK", null);
+//            IsBusy = false;
 
-            //}
-            //finally
-            //{
-            IsBusy = false;
-            //}
+//            //toaster?.MakeToast("Refreshed!");
+//        }
 
-        }
+        //[RelayCommand]
+        //public async Task CreateSurvey()
+        //{
+        //    if (IsBusy) return;
 
-        [RelayCommand]
-        public async Task DeleteAllSurveys()
-        {
-            if (IsBusy) return;
+        //    //try
+        //    //{
+        //        IsBusy = true;
+        //        NewSurvey = new SurveyModel();
+        //        NewSurvey.SurveyDate = DateTime.Now;
+        //        NewSurvey.SurveyStatus = "I";
+        //        NewSurvey.SyncStatus = "I";
 
-            try
-            {
-                IsBusy = true;
-                if (SurveyList.Any()) SurveyList.Clear();
-                var surveys = new List<SurveyModel>();
 
-                surveys = await _surveyModelRepository.GetAllAsync();
-                foreach (var survey in surveys)
-                {
-                    await _surveyModelRepository.DeleteAsync(survey);
-                }
+        //            // insert a new record
+        //        await _surveyModelRepository.InsertAsync(NewSurvey);
+        //        InsertedSurvey = NewSurvey;
 
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", "Cancel");
+        //        //await _navigationService.GoToSurveyPageAsync<SurveyPageVM>($"itemID={InsertedSurvey.Id");
+        //        await _navigationService.GoToSurveyPageAsync(InsertedSurvey.Id);
 
-            }
-            finally
-            {
-                IsBusy = false;
-            }
 
-        }
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    Debug.WriteLine($"Unable to insert a survey: {ex.Message}");
+        //    //    await _messageService.DisplayAlert("Error", "Failed to insert a surveys", "OK", null);
 
-        [RelayCommand]
-        public async Task DeleteAllResponses()
-        {
-            if (IsBusy) return;
+        //    //}
+        //    //finally
+        //    //{
+        //    IsBusy = false;
+        //    //}
 
-            //try
-            //{
-            //    IsBusy = true;
-            //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
-            //    var responses = new List<SurveyResponseModel>();
-            //    responses = await _surveyResponseModelRepository.GetAllAsync();
-            //    foreach (var response in responses)
-            //    {
-            //        await _surveyResponseModelRepository.DeleteAsync(response);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"Unable to delete all responses: {ex.Message}");
-            //    await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", null);
+        //}
 
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //}
+        //[RelayCommand]
+        //public async Task DeleteAllSurveys()
+        //{
+        //    if (IsBusy) return;
 
-        }
+        //    try
+        //    {
+        //        IsBusy = true;
+        //        if (SurveyList.Any()) SurveyList.Clear();
+        //        var surveys = new List<SurveyModel>();
 
-        [RelayCommand]
-        public async Task ViewSurveyList()
-        {
-            if (IsBusy) return;
-            //try
-            //{
-            //    IsBusy = true;
-            //    if (SurveyList.Any()) SurveyList.Clear();
-            //    var surveys = new List<SurveyModel>();
+        //        surveys = await _surveyModelRepository.GetAllAsync();
+        //        foreach (var survey in surveys)
+        //        {
+        //            await _surveyModelRepository.DeleteAsync(survey);
+        //        }
 
-            //    surveys = await _surveyModelRepository.GetAllAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
+        //        await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", "Cancel");
 
-            //    foreach (var survey in surveys) SurveyList.Add(survey);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"Unable to get cars: {ex.Message}");
-            //    await _messageService.DisplayAlert("Error", "Failed to retrieve surveys", "OK", null);
+        //    }
+        //    finally
+        //    {
+        //        IsBusy = false;
+        //    }
 
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //}
+        //}
 
-        }
+        //[RelayCommand]
+        //public async Task DeleteAllResponses()
+        //{
+        //    if (IsBusy) return;
 
-        [RelayCommand]
-        public async Task ViewResponseList()
-        {
-            if (IsBusy) return;
+        //    //try
+        //    //{
+        //    //    IsBusy = true;
+        //    //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
+        //    //    var responses = new List<SurveyResponseModel>();
+        //    //    responses = await _surveyResponseModelRepository.GetAllAsync();
+        //    //    foreach (var response in responses)
+        //    //    {
+        //    //        await _surveyResponseModelRepository.DeleteAsync(response);
+        //    //    }
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    Debug.WriteLine($"Unable to delete all responses: {ex.Message}");
+        //    //    await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", null);
+
+        //    //}
+        //    //finally
+        //    //{
+        //    //    IsBusy = false;
+        //    //}
+
+        //}
+
+        //[RelayCommand]
+        //public async Task ViewSurveyList()
+        //{
+        //    if (IsBusy) return;
+        //    //try
+        //    //{
+        //    //    IsBusy = true;
+        //    //    if (SurveyList.Any()) SurveyList.Clear();
+        //    //    var surveys = new List<SurveyModel>();
+
+        //    //    surveys = await _surveyModelRepository.GetAllAsync();
+
+        //    //    foreach (var survey in surveys) SurveyList.Add(survey);
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    Debug.WriteLine($"Unable to get cars: {ex.Message}");
+        //    //    await _messageService.DisplayAlert("Error", "Failed to retrieve surveys", "OK", null);
+
+        //    //}
+        //    //finally
+        //    //{
+        //    //    IsBusy = false;
+        //    //}
+
+        //}
+
+        //[RelayCommand]
+        //public async Task ViewResponseList()
+        //{
+        //    if (IsBusy) return;
             //try
             //{
             //    IsBusy = true;
@@ -221,7 +227,7 @@ namespace SampleSurveyApp.Core.ViewModels
             //    IsBusy = false;
             //}
 
-        }
+        //}
     }
 }
 

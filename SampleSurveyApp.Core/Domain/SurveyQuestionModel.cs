@@ -19,9 +19,7 @@ namespace SampleSurveyApp.Core.Domain
 
         public string QType { get; set; }
 
-        public string Version { get; set; }
-
-        public DateTime Timestamp { get; set; }
+        public bool IsSelected { get; set; }
     }
 }
 
