@@ -111,7 +111,7 @@
                                 SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
                                 BackgroundColor="Transparent"
                                 Margin="12,8,12,0"
-                                IsVisible="true">
+                                IsVisible="{Binding IsVisibleRuleTypeSingle}">
                  <CollectionView.Triggers>
                             <Trigger TargetType="CollectionView"
                                      Property="IsVisible"
@@ -163,7 +163,7 @@
 
 
                 </CollectionView>
-            </StackLayout>
+            
 
        
 
@@ -268,8 +268,6 @@
         </VerticalStackLayout>-->
 
           <!--REVIEW ANSWERS-->
-        <!--<VerticalStackLayout>
-            <RefreshView IsRefreshing="{Binding DummyCommand}">
            <CollectionView x:Name="responseCV"
                             ItemsSource="{Binding UserAnswerGroups}"
                             IsGrouped="True"
@@ -313,8 +311,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-                </RefreshView>
-        </VerticalStackLayout>-->
+        </StackLayout>
         
 
         
