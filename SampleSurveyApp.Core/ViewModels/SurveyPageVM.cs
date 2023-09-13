@@ -113,6 +113,12 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isVisibleSurveyHeader = true;
 
         [ObservableProperty]
+        bool isWorkingLeftBtn = true;
+
+        [ObservableProperty]
+        bool isWorkingRightBtn = true;
+
+        [ObservableProperty]
         string qText;
 
         [ObservableProperty]
@@ -220,66 +226,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-        [RelayCommand]
-        public async Task DeleteAllSurveys()
-        {
-            if (IsBusy) return;
-
-            try
-            {
-                IsBusy = true;
-                if (SurveyList.Any()) SurveyList.Clear();
-                var surveys = new List<SurveyModel>();
-
-                surveys = await _surveyModelRepository.GetAllAsync();
-                foreach (var survey in surveys)
-                {
-                    await _surveyModelRepository.DeleteAsync(survey);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", "Cancel");
-
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-
-        }
-
-        [RelayCommand]
-        public async Task DeleteAllResponses()
-        {
-            if (IsBusy) return;
-
-            //try
-            //{
-            //    IsBusy = true;
-            //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
-            //    var responses = new List<SurveyResponseModel>();
-            //    responses = await _surveyResponseModelRepository.GetAllAsync();
-            //    foreach (var response in responses)
-            //    {
-            //        await _surveyResponseModelRepository.DeleteAsync(response);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"Unable to delete all responses: {ex.Message}");
-            //    await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", null);
-
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //}
-
-        }
-
 
 
         #region Navigation
@@ -346,8 +292,13 @@ namespace SampleSurveyApp.Core.ViewModels
         public async Task NextButtonClicked()
         {
             Console.WriteLine("NextButtonClicked");
-
-            // determine which kind of answer it is and mark it as selected
+            if (CurrentQuestion.nextQCode == "")
+            {
+                // this must be review page
+             }
+            else
+            {
+                // determine which kind of answer it is and mark it as selected
 
                 if (CurrentQuestion.QType == "List")
                 {
@@ -458,7 +409,6 @@ namespace SampleSurveyApp.Core.ViewModels
                     // update question in q collection
                     foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.QCode));
                     foundCurrQ.IsSelected = true;
-                    //found.prevQCode = CurrQCode;
 
                     // get answers for current q
                     AnswerOptionsForCurrentQuestionCollection.Clear();
@@ -471,8 +421,11 @@ namespace SampleSurveyApp.Core.ViewModels
                     }
                 }
 
-                // set screen values based on properties in CurrentQuestion
-                SetScreenValuesOnOpen();
+            }
+
+
+            // set screen values based on properties in CurrentQuestion
+            SetScreenValuesOnOpen();
             
 
 
@@ -484,8 +437,18 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             Console.WriteLine("BackButtonClicked");
 
-            //get new curr q from prev q
-            CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.prevQCode));
+            // see if it is review page
+            if (CurrentQuestion == null)
+            {
+                var foundQs = AllPossibleQuestionsCollection.Where(x => x.IsSelected.Equals(true));
+                CurrentQuestion = foundQs.Last();
+            }
+            else
+            {
+                //get new curr q from prev q
+                CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.prevQCode));
+
+            }
 
             // get answers for curr q
             AnswerOptionsForCurrentQuestionCollection.Clear();
@@ -523,15 +486,6 @@ namespace SampleSurveyApp.Core.ViewModels
         #endregion
 
 
-        #region Questions
-
-        //private SurveyQuestionModel AssignCurrentQuestion(string ruleType)
-        //{
-        //    return AllPossibleQuestionsList.Find(x => x.QCode.Equals(ruleType));
-        //}
-
-        #endregion
-
         #region UI
 
         public void SetScreenValuesOnOpen()
@@ -542,17 +496,19 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (RightBtnLbl != "Review")
                 {
+                    IsWorkingRightBtn = true;
 
-                
                     ScreenNameLbl = CurrentQuestion.QCode;
                     CurrentQuestionLbl = CurrentQuestion.QText;
                     if (CurrentQuestion.prevQCode != "")
                     {
                         LeftBtnLbl = "Back";
+                        IsWorkingLeftBtn = true;
                     }
                     else
                     {
                         LeftBtnLbl = "";
+                        IsWorkingLeftBtn = false;
 
                     }
                     RightBtnLbl = "Next";
@@ -596,6 +552,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     CurrentQuestionLbl = "Please review your answers here.";
                     LeftBtnLbl = "Back";
                     RightBtnLbl = "";
+                    IsWorkingRightBtn = false;
                     InstructionLbl = "";
                     IsVisibleRuleTypeSingle = false;
                     IsVisibleRuleTypeMultiple = false;
@@ -622,34 +579,32 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
-        [RelayCommand]
-        public async Task ChangeStatus()
-        {
-            var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
+        //[RelayCommand]
+        //public async Task ChangeStatus()
+        //{
+        //    var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
 
-            if (filteredList.Count() == 1)
-            {
-                if (filteredList.First().IsSelected == true)
-                {
-                    filteredList.First().IsSelected = false;
-                    IsSelected = false;
-                }
-                else
-                {
-                    filteredList.First().IsSelected = true;
-                    IsSelected = true;
-                }
-            }
+        //    if (filteredList.Count() == 1)
+        //    {
+        //        if (filteredList.First().IsSelected == true)
+        //        {
+        //            filteredList.First().IsSelected = false;
+        //            IsSelected = false;
+        //        }
+        //        else
+        //        {
+        //            filteredList.First().IsSelected = true;
+        //            IsSelected = true;
+        //        }
+        //    }
            
-        }
+        //}
 
 
 
         [RelayCommand]
-        public async Task SingleAnswerSelected(object obj)
+        public async Task SingleAnswerSelected()
         {
-
-            //var element = UserSelectedAnswer as Element;
 
             var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
 
@@ -670,24 +625,16 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
             }
 
-           
-
-            //update 
-
-
             // Check to see if this is the last question
             if (UserSelectedAnswer.RuleType.ToLower().Equals("done"))
             {
                 NextQCode = null;
                 RightBtnLbl = "Review";
-                //CurrentQuestion.nextQCode = "";
                 NextQCode = "";
-                //PrevQCode = ?;
             }
             else
             {
                 NextQCode = UserSelectedAnswer.RuleType;
-                //PrevQCode = ?;
             }
             
             
@@ -727,19 +674,6 @@ namespace SampleSurveyApp.Core.ViewModels
             //}
 
         }
-
-                
-
-                //[RelayCommand]
-                //public void LoadAnswerCollection()
-                //{
-                //    foreach (var item in ActualUserSelectedAnswersList)
-                //    {
-                //        AnswerCollection.Add(item);
-                //    }
-
-                //    CreateUserResponsesCollection();
-                //}
 
         private void CreateUserResponsesCollection()
         {

@@ -15,7 +15,7 @@
                         FontSize="Micro"
                         Command="{Binding GoToSurveyCommand}"
                         BackgroundColor="green"/>
-             <!--<Button Text="Del Surveys"
+             <Button Text="Del Surveys"
                         BackgroundColor="red"
                         WidthRequest="110"
                         HeightRequest="30"
@@ -24,7 +24,7 @@
                         WidthRequest="110"
                         HeightRequest="30"
                     BackgroundColor="red"
-                    Command="{Binding DeleteAllResponsesCommand}"/>-->
+                    Command="{Binding DeleteAllResponsesCommand}"/>
 
         </FlexLayout>
 

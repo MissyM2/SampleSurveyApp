@@ -30,6 +30,7 @@
          <Style x:Key="InvalidEntryStyle"
                TargetType="Entry">
             <Setter Property="TextColor" Value="IndianRed"/>
+
         </Style>
 
         <Style x:Key="ValidEntryStyle"
@@ -45,7 +46,9 @@
                   FontSize="18"
                   Grid.Column="0"
                   HorizontalOptions="Start"
-                  Command="{Binding BackButtonClickedCommand}"/>
+                  Command="{Binding BackButtonClickedCommand}"
+                  IsVisible="{Binding IsWorkingLeftBtn}"
+                  IsEnabled="{Binding IsWorkingLeftBtn}"/>
                 <Label x:Name="titleLabel" FontSize="20" FontAttributes="Bold"
                        Text="{Binding ScreenNameLbl}"
                        HorizontalTextAlignment="Center"
@@ -55,7 +58,9 @@
                    TextColor="CornflowerBlue"
                    Grid.Column="2" FontSize="18"
                    HorizontalOptions="End"
-                   Command="{Binding NextButtonClickedCommand}"/>
+                   Command="{Binding NextButtonClickedCommand}"
+                   IsVisible="{Binding IsWorkingRightBtn}"
+                   IsEnabled="{Binding IsWorkingRightBtn}"/>
             </Grid>
     </Shell.TitleView>
 
@@ -68,17 +73,7 @@
                         FontSize="Micro"
                         Command="{Binding CreateSurveyCommand}"
                         BackgroundColor="green"/>
-            <Button Text="Del Surveys"
-                        BackgroundColor="red"
-                        WidthRequest="110"
-                        HeightRequest="30"
-                        Command="{Binding DeleteAllSurveysCommand}"/>
-                <Button Text="Del Answers"
-                        WidthRequest="110"
-                        HeightRequest="30"
-                    BackgroundColor="red"
-                    Command="{Binding DeleteAllResponsesCommand}"/>
-
+            
         </FlexLayout>
 
           

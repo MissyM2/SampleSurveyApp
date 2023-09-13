@@ -58,27 +58,27 @@ namespace SampleSurveyApp.Core.ViewModels
             await _navigationService.GoToSurveyPageAsync();
         }
 
-//        [RelayCommand]
-//        public async Task Refresh()
-//        {
-//            IsBusy = true;
+        //        [RelayCommand]
+        //        public async Task Refresh()
+        //        {
+        //            IsBusy = true;
 
 
-//#if DEBUG
-//            await Task.Delay(500);
-//#endif
+        //#if DEBUG
+        //            await Task.Delay(500);
+        //#endif
 
-//            var aqd = new AddQuestionData(_surveyQuestionModelRepository);
-//            await aqd.AddQuestionsAsync();
+        //            var aqd = new AddQuestionData(_surveyQuestionModelRepository);
+        //            await aqd.AddQuestionsAsync();
 
-//            var aad = new AddAnswerData(_surveyAnswerModelRepository);
-//            await aad.AddAnswersAsync();
+        //            var aad = new AddAnswerData(_surveyAnswerModelRepository);
+        //            await aad.AddAnswersAsync();
 
 
-//            IsBusy = false;
+        //            IsBusy = false;
 
-//            //toaster?.MakeToast("Refreshed!");
-//        }
+        //            //toaster?.MakeToast("Refreshed!");
+        //        }
 
         //[RelayCommand]
         //public async Task CreateSurvey()
@@ -116,65 +116,65 @@ namespace SampleSurveyApp.Core.ViewModels
 
         //}
 
-        //[RelayCommand]
-        //public async Task DeleteAllSurveys()
-        //{
-        //    if (IsBusy) return;
+        [RelayCommand]
+        public async Task DeleteAllSurveys()
+        {
+            if (IsBusy) return;
 
-        //    try
-        //    {
-        //        IsBusy = true;
-        //        if (SurveyList.Any()) SurveyList.Clear();
-        //        var surveys = new List<SurveyModel>();
+            try
+            {
+                IsBusy = true;
+                if (SurveyList.Any()) SurveyList.Clear();
+                var surveys = new List<SurveyModel>();
 
-        //        surveys = await _surveyModelRepository.GetAllAsync();
-        //        foreach (var survey in surveys)
-        //        {
-        //            await _surveyModelRepository.DeleteAsync(survey);
-        //        }
+                surveys = await _surveyModelRepository.GetAllAsync();
+                foreach (var survey in surveys)
+                {
+                    await _surveyModelRepository.DeleteAsync(survey);
+                }
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
-        //        await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", "Cancel");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
+                await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", "Cancel");
 
-        //    }
-        //    finally
-        //    {
-        //        IsBusy = false;
-        //    }
+            }
+            finally
+            {
+                IsBusy = false;
+            }
 
-        //}
+        }
 
-        //[RelayCommand]
-        //public async Task DeleteAllResponses()
-        //{
-        //    if (IsBusy) return;
+        [RelayCommand]
+        public async Task DeleteAllResponses()
+        {
+            if (IsBusy) return;
 
-        //    //try
-        //    //{
-        //    //    IsBusy = true;
-        //    //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
-        //    //    var responses = new List<SurveyResponseModel>();
-        //    //    responses = await _surveyResponseModelRepository.GetAllAsync();
-        //    //    foreach (var response in responses)
-        //    //    {
-        //    //        await _surveyResponseModelRepository.DeleteAsync(response);
-        //    //    }
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    Debug.WriteLine($"Unable to delete all responses: {ex.Message}");
-        //    //    await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", null);
+            //try
+            //{
+            //    IsBusy = true;
+            //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
+            //    var responses = new List<SurveyResponseModel>();
+            //    responses = await _surveyResponseModelRepository.GetAllAsync();
+            //    foreach (var response in responses)
+            //    {
+            //        await _surveyResponseModelRepository.DeleteAsync(response);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"Unable to delete all responses: {ex.Message}");
+            //    await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", null);
 
-        //    //}
-        //    //finally
-        //    //{
-        //    //    IsBusy = false;
-        //    //}
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //}
 
-        //}
+        }
 
         //[RelayCommand]
         //public async Task ViewSurveyList()
@@ -207,25 +207,25 @@ namespace SampleSurveyApp.Core.ViewModels
         //public async Task ViewResponseList()
         //{
         //    if (IsBusy) return;
-            //try
-            //{
-            //    IsBusy = true;
-            //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
-            //    var surveyResponseValues = new List<SurveyResponseModel>();
-            //    surveyResponseValues = await _surveyResponseModelRepository.GetAllAsync();
+        //try
+        //{
+        //    IsBusy = true;
+        //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
+        //    var surveyResponseValues = new List<SurveyResponseModel>();
+        //    surveyResponseValues = await _surveyResponseModelRepository.GetAllAsync();
 
-            //    foreach (var surveyResponseValue in surveyResponseValues) SurveyResponseList.Add(surveyResponseValue);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"Unable to get cars: {ex.Message}");
-            //    await _messageService.DisplayAlert("Error", "Failed to retrieve survey list values", "OK", null);
+        //    foreach (var surveyResponseValue in surveyResponseValues) SurveyResponseList.Add(surveyResponseValue);
+        //}
+        //catch (Exception ex)
+        //{
+        //    Debug.WriteLine($"Unable to get cars: {ex.Message}");
+        //    await _messageService.DisplayAlert("Error", "Failed to retrieve survey list values", "OK", null);
 
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //}
+        //}
+        //finally
+        //{
+        //    IsBusy = false;
+        //}
 
         //}
     }
