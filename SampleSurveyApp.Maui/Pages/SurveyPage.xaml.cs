@@ -22,6 +22,10 @@ public partial class SurveyPage : ContentPage
         //LoadAfterConstruction();
     }
 
+    void CollectionView_SelectionChanged(System.Object sender, Microsoft.Maui.Controls.SelectionChangedEventArgs e)
+    {
+        var selectionItems = e.CurrentSelection;
+    }
     //protected override async void OnAppearing()
     //{
     //    base.OnAppearing();

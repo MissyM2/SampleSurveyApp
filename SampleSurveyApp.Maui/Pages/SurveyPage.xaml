@@ -169,13 +169,22 @@
        
 
          <!--QuestionType is List, RuleType is Multiple-->
-                <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+               <!-- <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                             SelectionMode="Multiple"
-                            SelectionChangedCommand="{Binding AnswerSelectedCommand}"
+                            SelectedItems="{Binding UserSelectedAnswers, Mode=TwoWay}"
+                            SelectionChangedCommand="{Binding AnswersSelectedCommand}"
                             SelectionChangedCommandParameter="{Binding SelectedItems, Source={RelativeSource Self}}"
                             BackgroundColor="Transparent"
                             Margin="12,8,12,0"
-                            IsVisible="{Binding IsVisibleRuleTypeMultiple}">
+                            IsVisible="{Binding IsVisibleRuleTypeMultiple}"> -->
+
+                <CollectionView x:Name="MultipleSelectionsCV"
+                                ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                SelectionMode="Multiple"
+                                SelectionChangedCommand="{Binding MultipleSelectionCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference MultipleSelectionsCV}}"
+                                IsVisible="{Binding IsVisibleRuleTypeMultiple}">
+
                     <CollectionView.Triggers>
                         <Trigger TargetType="CollectionView"
                                  Property="IsVisible"

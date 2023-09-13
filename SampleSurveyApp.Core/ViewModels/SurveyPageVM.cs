@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
 using System.Collections;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
@@ -618,6 +619,34 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
         #endregion
+        //[RelayCommand]
+        //public async Task AnswersSelected(IList<object>)
+        //{
+        //    Debug.WriteLine("Selected Item is " + UserSelectedAnswers.ToList());
+        //}
+
+        public ICommand MultipleSelectionCommand => new Command<IList<object>>((obj) =>
+        {
+           // List<SurveyAnswerModel> test = new List<SurveyAnswerModel>();
+
+            foreach (var item in obj)
+            {
+                var selectedItems = item as SurveyAnswerModel;
+                UserSelectedAnswers.Add(selectedItems);
+            }
+        });
+
+        //[RelayCommand]
+        //public void MultipleSelectionCommand => new Command<IList<object>>((obj) =>
+        //{
+        //    List<SurveyAnswerModel> test = new List<SurveyAnswerModel>();
+
+        //    foreach (var item in obj)
+        //    {
+        //        var selectedItems = item as SurveyAnswerModel;
+        //        test.Add(selectedItems);
+        //    }
+        //});
 
 
         [RelayCommand]
@@ -639,52 +668,30 @@ namespace SampleSurveyApp.Core.ViewModels
                     {
                         UserSelectedAnswer.IsSelected = true;
                         answerNotSelected.IsSelected = false;
-
-                        //var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
-                        //sa.IsSelected = true;
                         IsSelected = true;
                     }
-
-
-                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == UserSelectedAnswer.AText);
-
-                    //if (foundA != null)
-                    //{
-                    //    if (foundA.IsSelected != true)
-                    //    {
-                    //        foundA.IsSelected = true;
-                    //    }
+                    
                 }
                 else // CurrentQuestion.QType must be MultipleAnswer
                 {
 
-                    //if (UserSelectedAnswer.IsSelected == true)
-                    //{
-                    //    // switch to false
-                    //    UserSelectedAnswer.IsSelected = false;
-                    //    IsSelected = false;
-
-                    //    // find the other answer and make it true
-                    //    AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode == UserSelectedAnswer.ACode);
-                    //}
-                    //else
-                    //{
-                    //    UserSelectedAnswer.IsSelected = true;
-                    //    var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
-                    //    sa.IsSelected = true;
-                    //    IsSelected = true;
-                    //}
+                    if (CurrentQuestion.QType == "MultipleAnswer")
+                    {
+                        // switch to false
+                        if (UserSelectedAnswer.IsSelected == true)
+                        {
+                            UserSelectedAnswer.IsSelected = false;
+                            IsSelected = false;
+                        }
+                        else
+                        {
+                            UserSelectedAnswer.IsSelected = true;
+                            IsSelected = true;
+                        }
+                    }
 
                 }
-
-
             }
-
-
-
-
-
-
 
             // Check to see if this is the last question
             if (UserSelectedAnswer.RuleType != -1)
@@ -696,46 +703,10 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 NextQCode = -1;
                 RightBtnLbl = "Review";
-                
             }
-            
-            
         }
 
-        //[RelayCommand]
-        //public async Task ResponseChanged(object responseParams)
-        //{
-        //    UserSelectedAnswers.Clear();
-
-        //    List<SurveyAnswerModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyAnswerModel>().ToList();
-
-        //    // check to see if there are any questions after this answer is added
-        //    var tempResponse = myListItems.FirstOrDefault(x => x.RuleType == -1);
-        //    if (tempResponse != null)
-        //    {
-        //        NextQCode = -1;
-        //        //PrevQCode = ?;
-        //    }
-        //    else
-        //    {
-        //        //NextQCode = tempResponse.ACode;
-        //        //PrevQCode = ?;
-        //    }
-
-
-
-        //    UserSelectedAnswers = new ObservableCollection<SurveyAnswerModel>(myListItems);
-
-
-        //    Debug.WriteLine("Count of selected responses in parameter = " + UserSelectedAnswers.Count.ToString());
-
-
-        //    //else if (CurrentQuestion.RuleType.Equals("Text"))
-        //    //{
-        //    //    await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
-        //    //}
-
-        //}
+        #region Review Screen
 
         private void CreateUserResponsesCollection()
         {
@@ -743,9 +714,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
             var dict = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true)).GroupBy(o => o.QCode)
                 .ToDictionary(g => g.Key, g => g.ToList());
-
-            //var dict = ActualUserSelectedAnswersList.GroupBy(o => o.QCode)
-            //    .ToDictionary(g => g.Key, g => g.ToList());
 
             foreach (KeyValuePair<int, List<SurveyAnswerModel>> item in dict)
             {
@@ -770,6 +738,8 @@ namespace SampleSurveyApp.Core.ViewModels
                 QText = qText;
             }
         }
+
+        #endregion
 
     }
 }
