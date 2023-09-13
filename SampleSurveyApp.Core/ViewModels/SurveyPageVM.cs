@@ -295,136 +295,179 @@ namespace SampleSurveyApp.Core.ViewModels
             // FIX THIS THERE IS NO CURR QUESTION NEXT CODE.  IT IS NOT ADDED UNTIL LATER.
             // It is causing an issue when you go to review
             Console.WriteLine("NextButtonClicked");
-           
-            if (CurrentQuestion.QType.Equals("SingleAnswer"))
+
+            // see if the question has been used before
+            // if so, show their answers.
+
+            if (CurrentQuestion.NextQCode == 0)  // question has not been used yet and does not have answers associated
             {
 
 
-                if (UserSelectedAnswer == null || string.IsNullOrEmpty(UserSelectedAnswer.AText))
+                if (CurrentQuestion.QType.Equals("SingleAnswer"))
                 {
-                    await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
-                }
-                else
-                {
+                    var answerSelected = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode == UserSelectedAnswer.ACode);
+                    var answerNotSelected = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode != UserSelectedAnswer.ACode);
 
-
-                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == UserSelectedAnswer.AText);
-
-                    if (foundA != null)
+                    if (answerSelected.IsSelected == true)
                     {
-                        if (foundA.IsSelected != true)
-                        {
-                            foundA.IsSelected = true;
-                        }
-                }
-                else
-                {
-                    Debug.WriteLine("NextButtonClicked: Problem:There was no option selected.");
-                }
+                        // switch to false
 
-                }
-            }
-            else if (CurrentQuestion.QType.Equals("MultipleAnswers")) 
-            {
-                if (UserSelectedAnswers.Count <= 0)
-                {
-                    await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
-                }
-                else
-                {
-
-                    foreach (var foundA in AllPossibleAnswerOptionsCollection)
+                    }
+                    else
                     {
-                        foreach (var answerOptionSelected in UserSelectedAnswers)
+                        UserSelectedAnswer.IsSelected = true;
+                        answerNotSelected.IsSelected = false;
+
+                        //var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
+                        //sa.IsSelected = true;
+                        IsSelected = true;
+                    }
+
+
+
+                    UserSelectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == UserSelectedAnswer.AText);
+
+                    if (UserSelectedAnswer == null || string.IsNullOrEmpty(UserSelectedAnswer.AText))
+                    {
+                        await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
+                    }
+                    else
+                    {
+
+                        var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == UserSelectedAnswer.AText);
+
+                        if (foundA != null)
                         {
-                            if (foundA.QCode == answerOptionSelected.QCode && foundA.AText == answerOptionSelected.AText)
+                            if (foundA.IsSelected != true)
                             {
                                 foundA.IsSelected = true;
                             }
                         }
+                        else
+                        {
+                            Debug.WriteLine("NextButtonClicked: Problem:There was no option selected.");
+                        }
+
                     }
                 }
-            }
-            else //(CurrentQuestion.QType.Equals("Text"))
-            {
-                if (string.IsNullOrEmpty(UserTextAnswer))
+                else if (CurrentQuestion.QType.Equals("MultipleAnswers"))
                 {
-                    await _messageService.DisplayAlert("", "Please enter a response", "OK", "Cancel");
+                    if (UserSelectedAnswers.Count <= 0)
+                    {
+                        await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
+                    }
+                    else
+                    {
+
+                        foreach (var foundA in AllPossibleAnswerOptionsCollection)
+                        {
+                            foreach (var answerOptionSelected in UserSelectedAnswers)
+                            {
+                                if (foundA.QCode == answerOptionSelected.QCode && foundA.AText == answerOptionSelected.AText)
+                                {
+                                    foundA.IsSelected = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                else //(CurrentQuestion.QType.Equals("Text"))
+                {
+                    if (string.IsNullOrEmpty(UserTextAnswer))
+                    {
+                        await _messageService.DisplayAlert("", "Please enter a response", "OK", "Cancel");
+                    }
+                    else
+                    {
+                        // set the answer to IsSelected
+
+                        var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == "");
+                        foundA.IsSelected = true;
+
+                        // insert record into
+                        SurveyResponseModel responseObj = new SurveyResponseModel();
+                        responseObj.SurveyId = Int32.Parse(SPID);
+                        responseObj.QCode = CurrentQuestion.QCode;
+                        responseObj.QText = CurrentQuestion.QText;
+                        responseObj.ACode = foundA.ACode;
+                        responseObj.AText = UserTextAnswer;
+
+                        await _surveyResponseModelRepository.InsertAsync(responseObj);
+
+                    }
+                }
+
+                // update current q with nextq and update nextq property
+
+                var foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(CurrentQuestion.QCode));
+
+                if (UserSelectedAnswer.RuleType == 0 || UserSelectedAnswer.RuleType == -1)  // this is the last q
+                {
+                    Debug.WriteLine("NextButtonClicked: this is the last question, go to review");
+                    // go to review
+
+                    CurrentQuestion.NextQCode = 0;
+                    CreateUserResponsesCollection();
+
+                    SetScreenValuesOnOpen();
+                }
+                var foundNextQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(UserSelectedAnswer.RuleType));
+
+                if (foundNextQ == null)
+                {
+                    //  there are no more questions
+                    CurrentQuestion = null;
                 }
                 else
                 {
-                    // set the answer to IsSelected
 
-                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == "");
-                    foundA.IsSelected = true;
-
-                    // insert record into
-                    SurveyResponseModel responseObj = new SurveyResponseModel();
-                    responseObj.SurveyId = Int32.Parse(SPID);
-                    responseObj.QCode = CurrentQuestion.QCode;
-                    responseObj.QText = CurrentQuestion.QText;
-                    responseObj.ACode = foundA.ACode;
-                    responseObj.AText = UserTextAnswer;
-
-                    await _surveyResponseModelRepository.InsertAsync(responseObj);
-
-                }
-            }
-
-            // update current q with nextq and update nextq property
-
-            var foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(CurrentQuestion.QCode));
-
-            if (UserSelectedAnswer.RuleType == 0 || UserSelectedAnswer.RuleType == -1)  // this is the last q
-            {
-                Debug.WriteLine("NextButtonClicked: this is the last question, go to review");
-                // go to review
-                    
-                CurrentQuestion.NextQCode = 0;
-                CreateUserResponsesCollection();
-
-                SetScreenValuesOnOpen();
-            }
-            var foundNextQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(UserSelectedAnswer.RuleType));
-
-            if (foundNextQ == null)
-            {
-                //  there are no more questions
-                CurrentQuestion = null;
-            }
-            else
-            {
-
-                CurrentQuestion.NextQCode = foundNextQ.QCode;
-                // set prev q
-                if (CurrentQuestion.QCode == 1)  // this is the first q
-                {
-                    foundCurrQ.PrevQCode = 0;
-                }
-                foundNextQ.PrevQCode = foundCurrQ.QCode;
-
-                // all prev codes have been updated.
-
-                // update current question
-                CurrentQuestion = foundNextQ;
-
-                // update question in q collection
-                foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.QCode));
-                foundCurrQ.IsSelected = true;
-
-                // get answers for current q
-                AnswerOptionsForCurrentQuestionCollection.Clear();
-                foreach (var i in AllPossibleAnswerOptionsCollection)
-                {
-
-                    if (i.QCode == CurrentQuestion.QCode)
+                    CurrentQuestion.NextQCode = foundNextQ.QCode;
+                    // set prev q
+                    if (CurrentQuestion.QCode == 1)  // this is the first q
                     {
-                        AnswerOptionsForCurrentQuestionCollection.Add(i);
+                        foundCurrQ.PrevQCode = 0;
+                    }
+                    foundNextQ.PrevQCode = foundCurrQ.QCode;
+
+                    // all prev codes have been updated.
+
+                    // update current question
+                    CurrentQuestion = foundNextQ;
+
+                    // update question in q collection
+                    foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.QCode));
+                    foundCurrQ.IsSelected = true;
+
+                    // get answers for current q
+                    AnswerOptionsForCurrentQuestionCollection.Clear();
+                    foreach (var i in AllPossibleAnswerOptionsCollection)
+                    {
+
+                        if (i.QCode == CurrentQuestion.QCode)
+                        {
+                            AnswerOptionsForCurrentQuestionCollection.Add(i);
+                        }
+                    }
+                }
+
+            }
+            else  // question has already been selected and has answers associated
+            {
+                var foundCurrentQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(CurrentQuestion.NextQCode));
+
+                CurrentQuestion = foundCurrentQ;
+
+                AnswerOptionsForCurrentQuestionCollection.Clear();
+                var tempList = answerSource.Where(a => a.QCode == CurrentQuestion.QCode);
+
+                foreach (var answer in answerSource)
+                {
+                    if (answer.QCode == CurrentQuestion.QCode)
+                    {
+                        AnswerOptionsForCurrentQuestionCollection.Add(answer);
                     }
                 }
             }
-
-            //}
 
 
             // set screen values based on properties in CurrentQuestion
@@ -580,48 +623,65 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task AnswerSelected()
         {
-
-            if (CurrentQuestion.QType == "SingleAnswer")
+            if (CurrentQuestion.NextQCode == 0)  // the first time the user has selected an answer to this question
             {
-                var answerNotSelected = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode != UserSelectedAnswer.ACode);
-                if (UserSelectedAnswer.IsSelected == true)
+                if (CurrentQuestion.QType == "SingleAnswer")
                 {
-                    // switch to false
-                    UserSelectedAnswer.IsSelected = false;
-                    answerNotSelected.IsSelected = true;
-                    IsSelected = false;
+                    var answerNotSelected = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode != UserSelectedAnswer.ACode);
+                    if (UserSelectedAnswer.IsSelected == true)
+                    {
+                        // switch to false
+                        UserSelectedAnswer.IsSelected = false;
+                        answerNotSelected.IsSelected = true;
+                        IsSelected = false;
+                    }
+                    else
+                    {
+                        UserSelectedAnswer.IsSelected = true;
+                        answerNotSelected.IsSelected = false;
+
+                        //var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
+                        //sa.IsSelected = true;
+                        IsSelected = true;
+                    }
+
+
+                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == UserSelectedAnswer.AText);
+
+                    //if (foundA != null)
+                    //{
+                    //    if (foundA.IsSelected != true)
+                    //    {
+                    //        foundA.IsSelected = true;
+                    //    }
                 }
-                else
+                else // CurrentQuestion.QType must be MultipleAnswer
                 {
-                    UserSelectedAnswer.IsSelected = true;
-                    answerNotSelected.IsSelected = false;
 
-                    //var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
-                    //sa.IsSelected = true;
-                    IsSelected = true;
+                    //if (UserSelectedAnswer.IsSelected == true)
+                    //{
+                    //    // switch to false
+                    //    UserSelectedAnswer.IsSelected = false;
+                    //    IsSelected = false;
+
+                    //    // find the other answer and make it true
+                    //    AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode == UserSelectedAnswer.ACode);
+                    //}
+                    //else
+                    //{
+                    //    UserSelectedAnswer.IsSelected = true;
+                    //    var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
+                    //    sa.IsSelected = true;
+                    //    IsSelected = true;
+                    //}
+
                 }
-            }
-            else // CurrentQuestion.QType must be MultipleAnswer
-            {
 
-                //if (UserSelectedAnswer.IsSelected == true)
-                //{
-                //    // switch to false
-                //    UserSelectedAnswer.IsSelected = false;
-                //    IsSelected = false;
-
-                //    // find the other answer and make it true
-                //    AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode == UserSelectedAnswer.ACode);
-                //}
-                //else
-                //{
-                //    UserSelectedAnswer.IsSelected = true;
-                //    var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
-                //    sa.IsSelected = true;
-                //    IsSelected = true;
-                //}
 
             }
+
+
+
 
 
 
