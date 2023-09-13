@@ -268,7 +268,7 @@ namespace SampleSurveyApp.Core.ViewModels
             AnswerOptionsForCurrentQuestionCollection.Clear();
             foreach (var answer in answerSource)
             {
-                if (answer.QType == CurrentQuestion.QCode)
+                if (answer.QCode == CurrentQuestion.QCode)
                 {
                     AnswerOptionsForCurrentQuestionCollection.Add(answer);
                 }
@@ -308,7 +308,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
 
 
-                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QType == CurrentQuestion.QCode && x.AText == UserSelectedAnswer.AText);
+                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == UserSelectedAnswer.AText);
 
                     if (foundA != null)
                     {
@@ -324,7 +324,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 }
             }
-            else if (CurrentQuestion.QType.Equals("MultipleAnswers"))  // (CurrentQuestion.QType.Equals("MultipleAnswers"))
+            else if (CurrentQuestion.QType.Equals("MultipleAnswers")) 
             {
                 if (UserSelectedAnswers.Count <= 0)
                 {
@@ -337,7 +337,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     {
                         foreach (var answerOptionSelected in UserSelectedAnswers)
                         {
-                            if (foundA.QType == answerOptionSelected.QType && foundA.AText == answerOptionSelected.AText)
+                            if (foundA.QCode == answerOptionSelected.QCode && foundA.AText == answerOptionSelected.AText)
                             {
                                 foundA.IsSelected = true;
                             }
@@ -355,7 +355,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
                     // set the answer to IsSelected
 
-                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QType == CurrentQuestion.QCode && x.AText == "");
+                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == "");
                     foundA.IsSelected = true;
 
                     // insert record into
@@ -417,7 +417,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 foreach (var i in AllPossibleAnswerOptionsCollection)
                 {
 
-                    if (i.QType == CurrentQuestion.QCode)
+                    if (i.QCode == CurrentQuestion.QCode)
                     {
                         AnswerOptionsForCurrentQuestionCollection.Add(i);
                     }
@@ -457,7 +457,7 @@ namespace SampleSurveyApp.Core.ViewModels
             AnswerOptionsForCurrentQuestionCollection.Clear();
             foreach (var answer in answerSource)
             {
-                if (answer.QType == CurrentQuestion.QCode)
+                if (answer.QCode == CurrentQuestion.QCode)
                 {
                     AnswerOptionsForCurrentQuestionCollection.Add(answer);
                 }
@@ -466,12 +466,12 @@ namespace SampleSurveyApp.Core.ViewModels
             
             if (CurrentQuestion.QType == "SingleAnswer")
             {
-                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QType == CurrentQuestion.QCode && x.IsSelected == true);
+                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.IsSelected == true);
                 UserSelectedAnswer = selectedAnswer;
             }
             else if (CurrentQuestion.QType == "MultipleAnswers")
             {
-                var selectedAnswers = AnswerOptionsForCurrentQuestionCollection.Where(t => t.QType == CurrentQuestion.QCode && t.IsSelected == true);
+                var selectedAnswers = AnswerOptionsForCurrentQuestionCollection.Where(t => t.QCode == CurrentQuestion.QCode && t.IsSelected == true);
             }
             else  // q type must be text
             {
@@ -566,7 +566,7 @@ namespace SampleSurveyApp.Core.ViewModels
         private int GetAnswerOptionsForCurrentQuestion()
         {
             AnswerOptionsForCurrentQuestionCollection.Clear();
-            var filteredList = AllPossibleAnswerOptionsCollection.Where(t => t.QType.Equals(CurrentQuestion.QCode));
+            var filteredList = AllPossibleAnswerOptionsCollection.Where(t => t.QCode.Equals(CurrentQuestion.QCode));
 
             AnswerOptionsForCurrentQuestionCollection = new ObservableCollection<SurveyAnswerModel>(filteredList);
 
@@ -576,34 +576,12 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
-        //[RelayCommand]
-        //public async Task ChangeStatus()
-        //{
-        //    var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
-
-        //    if (filteredList.Count() == 1)
-        //    {
-        //        if (filteredList.First().IsSelected == true)
-        //        {
-        //            filteredList.First().IsSelected = false;
-        //            IsSelected = false;
-        //        }
-        //        else
-        //        {
-        //            filteredList.First().IsSelected = true;
-        //            IsSelected = true;
-        //        }
-        //    }
-           
-        //}
-
-
 
         [RelayCommand]
         public async Task SingleAnswerSelected()
         {
 
-            var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
+            var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
 
             if (filteredList.Count() == 1)
             {
@@ -616,7 +594,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 else
                 {
                     filteredList.First().IsSelected = true;
-                    var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
+                    var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
                     sa.IsSelected = true;
                     IsSelected = true;
                 }
@@ -676,7 +654,7 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             UserAnswerGroups.Clear();
 
-            var dict = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true)).GroupBy(o => o.QType)
+            var dict = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true)).GroupBy(o => o.QCode)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
             //var dict = ActualUserSelectedAnswersList.GroupBy(o => o.QCode)

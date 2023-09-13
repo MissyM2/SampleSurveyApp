@@ -9,7 +9,7 @@ namespace SampleSurveyApp.Core.Domain
 
         public string ACode { get; set; }
 
-        public string QType { get; set; }
+        public string QCode { get; set; }
 
         public string RuleType { get; set; }
 
