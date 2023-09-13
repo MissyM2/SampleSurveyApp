@@ -103,7 +103,7 @@
                          ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                                 SelectionMode="Single"
                                 SelectedItem="{Binding UserSelectedAnswer, Mode=TwoWay}"
-                                SelectionChangedCommand="{Binding SingleAnswerSelectedCommand}"
+                                SelectionChangedCommand="{Binding AnswerSelectedCommand}"
                                 SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
                                 BackgroundColor="Transparent"
                                 Margin="12,8,12,0"
@@ -162,24 +162,18 @@
                             </StackLayout>
                             </ContentView>
                         </DataTemplate>
-
                     </CollectionView.ItemTemplate>
-
-
                 </CollectionView>
             
 
        
 
          <!--QuestionType is List, RuleType is Multiple-->
-        <!--<VerticalStackLayout>
-            <RefreshView IsRefreshing="{Binding IsRefreshing}"
-             Command="{Binding DummyCommand}">
                 <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                             SelectionMode="Multiple"
-                            SelectionChangedCommand="{Binding ResponseChangedCommand}"
+                            SelectionChangedCommand="{Binding AnswerSelectedCommand}"
                             SelectionChangedCommandParameter="{Binding SelectedItems, Source={RelativeSource Self}}"
-                            BackgroundColor="Red"
+                            BackgroundColor="Transparent"
                             Margin="12,8,12,0"
                             IsVisible="{Binding IsVisibleRuleTypeMultiple}">
                     <CollectionView.Triggers>
@@ -198,7 +192,7 @@
                     </CollectionView.Triggers>
                 <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:SurveyAnswerModel">
-                                    <ContentView BackgroundColor="green">
+                                    <ContentView>
                                       <Grid x:Name="responseGrid"
                                             ColumnDefinitions="*, 40"
                                             RowDefinitions="40, 20">
@@ -222,8 +216,6 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                </RefreshView>
-        </VerticalStackLayout>-->
 
          <!--QuestionType is Text-->
         <!--<VerticalStackLayout>

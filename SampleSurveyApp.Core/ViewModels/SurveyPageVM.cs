@@ -578,76 +578,104 @@ namespace SampleSurveyApp.Core.ViewModels
 
 
         [RelayCommand]
-        public async Task SingleAnswerSelected()
+        public async Task AnswerSelected()
         {
 
-            var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
-
-            if (filteredList.Count() == 1)
+            if (CurrentQuestion.QType == "SingleAnswer")
             {
-                if (filteredList.First().IsSelected == true)
+                var answerNotSelected = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode != UserSelectedAnswer.ACode);
+                if (UserSelectedAnswer.IsSelected == true)
                 {
-                    filteredList.First().IsSelected = false;
-
+                    // switch to false
+                    UserSelectedAnswer.IsSelected = false;
+                    answerNotSelected.IsSelected = true;
                     IsSelected = false;
                 }
                 else
                 {
-                    filteredList.First().IsSelected = true;
-                    var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
-                    sa.IsSelected = true;
+                    UserSelectedAnswer.IsSelected = true;
+                    answerNotSelected.IsSelected = false;
+
+                    //var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
+                    //sa.IsSelected = true;
                     IsSelected = true;
                 }
             }
+            else // CurrentQuestion.QType must be MultipleAnswer
+            {
+
+                //if (UserSelectedAnswer.IsSelected == true)
+                //{
+                //    // switch to false
+                //    UserSelectedAnswer.IsSelected = false;
+                //    IsSelected = false;
+
+                //    // find the other answer and make it true
+                //    AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode == UserSelectedAnswer.ACode);
+                //}
+                //else
+                //{
+                //    UserSelectedAnswer.IsSelected = true;
+                //    var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
+                //    sa.IsSelected = true;
+                //    IsSelected = true;
+                //}
+
+            }
+
+
+
 
             // Check to see if this is the last question
-            if (UserSelectedAnswer.RuleType == -1)
+            if (UserSelectedAnswer.RuleType != -1)
+            {
+                NextQCode = UserSelectedAnswer.RuleType;
+                RightBtnLbl = "Next";
+            }
+            else
             {
                 NextQCode = -1;
                 RightBtnLbl = "Review";
-            }
-            else
-            {
-                NextQCode = UserSelectedAnswer.RuleType;
+                
             }
             
             
         }
 
-        [RelayCommand]
-        public async Task ResponseChanged(object responseParams)
-        {
-            UserSelectedAnswers.Clear();
+        //[RelayCommand]
+        //public async Task ResponseChanged(object responseParams)
+        //{
+        //    UserSelectedAnswers.Clear();
 
-            List<SurveyAnswerModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyAnswerModel>().ToList();
+        //    List<SurveyAnswerModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyAnswerModel>().ToList();
 
-            // check to see if there are any questions after this answer is added
-            var tempResponse = myListItems.FirstOrDefault(x => x.RuleType == -1);
-            if (tempResponse != null)
-            {
-                NextQCode = -1;
-                //PrevQCode = ?;
-            }
-            else
-            {
-                //NextQCode = tempResponse.ACode;
-                //PrevQCode = ?;
-            }
-
-
-
-            UserSelectedAnswers = new ObservableCollection<SurveyAnswerModel>(myListItems);
+        //    // check to see if there are any questions after this answer is added
+        //    var tempResponse = myListItems.FirstOrDefault(x => x.RuleType == -1);
+        //    if (tempResponse != null)
+        //    {
+        //        NextQCode = -1;
+        //        //PrevQCode = ?;
+        //    }
+        //    else
+        //    {
+        //        //NextQCode = tempResponse.ACode;
+        //        //PrevQCode = ?;
+        //    }
 
 
-            Debug.WriteLine("Count of selected responses in parameter = " + UserSelectedAnswers.Count.ToString());
+
+        //    UserSelectedAnswers = new ObservableCollection<SurveyAnswerModel>(myListItems);
 
 
-            //else if (CurrentQuestion.RuleType.Equals("Text"))
-            //{
-            //    await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
-            //}
+        //    Debug.WriteLine("Count of selected responses in parameter = " + UserSelectedAnswers.Count.ToString());
 
-        }
+
+        //    //else if (CurrentQuestion.RuleType.Equals("Text"))
+        //    //{
+        //    //    await _messageService.DisplayAlert("Text Question", "Add text question here", "OK", null);
+        //    //}
+
+        //}
 
         private void CreateUserResponsesCollection()
         {
