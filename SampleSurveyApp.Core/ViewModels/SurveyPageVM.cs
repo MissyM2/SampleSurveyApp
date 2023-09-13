@@ -8,6 +8,7 @@ using SampleSurveyApp.Core.Domain;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
 using System.Collections;
+using System.Reflection;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
@@ -51,7 +52,9 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         SurveyQuestionModel currentQuestion;
 
-        public ObservableCollection<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
+        //public ObservableCollection<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
+        public IList<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
+
 
         [ObservableProperty]
         int currQuestionIndex;
@@ -72,6 +75,10 @@ namespace SampleSurveyApp.Core.ViewModels
 
 
         #region UI properties
+
+        [ObservableProperty]
+        ImageSource checkMarkImage;
+
         [ObservableProperty]
         string currentQuestionLbl;
 
@@ -113,6 +120,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         string aText;
+
+        [ObservableProperty]
+        bool isSelected;
 
         #endregion
 
@@ -185,6 +195,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
             AllPossibleAnswerOptionsCollection = new ObservableCollection<SurveyAnswerModel>();
             AnswerOptionsForCurrentQuestionCollection = new ObservableCollection<SurveyAnswerModel>();
+            CheckMarkImage = ImageSource.FromResource("SampleSurveyApp.Maui.Resources.Images.check.png", typeof(SurveyPageVM).GetTypeInfo().Assembly);
 
         }
 
@@ -476,20 +487,25 @@ namespace SampleSurveyApp.Core.ViewModels
             //get new curr q from prev q
             CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.prevQCode));
 
-            // update question in q collection
-            var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.QCode));
-            foundQ.IsSelected = true;
-            foundQ.prevQCode = "";
+            // get answers for curr q
+            AnswerOptionsForCurrentQuestionCollection.Clear();
+            foreach (var answer in answerSource)
+            {
+                if (answer.QType == CurrentQuestion.QCode)
+                {
+                    AnswerOptionsForCurrentQuestionCollection.Add(answer);
+                }
+            }
 
             if (CurrentQuestion.QType == "List")
             {
                 if (CurrentQuestion.RuleType == "Single")
                 {
-                    var selectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QType == CurrentQuestion.QCode && x.IsSelected == true);
+                    var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QType == CurrentQuestion.QCode && x.IsSelected == true);
                 }
                 else if (CurrentQuestion.RuleType == "Multiple")
                 {
-                    var selectedAnswers = AllPossibleAnswerOptionsCollection.Where(t => t.QType == CurrentQuestion.QCode && t.IsSelected == true);
+                    var selectedAnswers = AnswerOptionsForCurrentQuestionCollection.Where(t => t.QType == CurrentQuestion.QCode && t.IsSelected == true);
                 }
             }
 
@@ -606,10 +622,34 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
+        [RelayCommand]
+        public async Task ChangeStatus()
+        {
+            var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
+
+            if (filteredList.Count() == 1)
+            {
+                if (filteredList.First().IsSelected == true)
+                {
+                    filteredList.First().IsSelected = false;
+                    IsSelected = false;
+                }
+                else
+                {
+                    filteredList.First().IsSelected = true;
+                    IsSelected = true;
+                }
+            }
+           
+        }
+
+
 
         [RelayCommand]
-        public async Task SingleAnswerSelected()
+        public async Task SingleAnswerSelected(object obj)
         {
+
+            //var element = UserSelectedAnswer as Element;
 
             var filteredList = AllPossibleAnswerOptionsCollection.Where(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
 
@@ -618,14 +658,19 @@ namespace SampleSurveyApp.Core.ViewModels
                 if (filteredList.First().IsSelected == true)
                 {
                     filteredList.First().IsSelected = false;
-                    AnswerIsSelected = false;
+
+                    IsSelected = false;
                 }
                 else
                 {
                     filteredList.First().IsSelected = true;
-                    AnswerIsSelected = true;
+                    var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QType.Equals(UserSelectedAnswer.QType) && x.ACode.Equals(UserSelectedAnswer.ACode));
+                    sa.IsSelected = true;
+                    IsSelected = true;
                 }
             }
+
+           
 
             //update 
 

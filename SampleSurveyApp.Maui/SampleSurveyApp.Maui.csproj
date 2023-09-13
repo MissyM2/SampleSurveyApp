@@ -33,6 +33,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 	</PropertyGroup>
+	<!--<ItemGroup>
+	  <MauiImage Remove="Resources\Images\check.png" />
+	</ItemGroup>-->
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -42,7 +45,7 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+		<!--<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />-->
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -71,6 +74,6 @@
 	  <ProjectReference Include="..\SampleSurveyApp.Core\SampleSurveyApp.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <BundleResource Include="Resources\Images\check.png" />
+	  <EmbeddedResource Include="Resources\Images\check.png" />
 	</ItemGroup>
 </Project>
