@@ -56,20 +56,20 @@ namespace SampleSurveyApp.Core.ViewModels
         public IList<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
 
 
-        [ObservableProperty]
-        int currQuestionIndex;
+        //[ObservableProperty]
+        //int currQuestionIndex;
         
         [ObservableProperty]
-        string currQCode;
+        int currQCode;
 
         [ObservableProperty]
         SurveyQuestionModel lastQuestion;
 
         [ObservableProperty]
-        string nextQCode;
+        int nextQCode;
 
         [ObservableProperty]
-        string prevQCode;
+        int prevQCode;
 
         #endregion
 
@@ -276,7 +276,7 @@ namespace SampleSurveyApp.Core.ViewModels
             // update question in q collection
             var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.QCode));
             foundQ.IsSelected = true;
-            foundQ.prevQCode = "";
+            foundQ.PrevQCode = 0;
 
                 // do i need this  
             CurrQCode = CurrentQuestion.QCode;
@@ -375,12 +375,12 @@ namespace SampleSurveyApp.Core.ViewModels
 
             var foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(CurrentQuestion.QCode));
 
-            if (UserSelectedAnswer.RuleType == null || UserSelectedAnswer.RuleType == "DONE")  // this is the last q
+            if (UserSelectedAnswer.RuleType == 0 || UserSelectedAnswer.RuleType == -1)  // this is the last q
             {
                 Debug.WriteLine("NextButtonClicked: this is the last question, go to review");
                 // go to review
                     
-                CurrentQuestion.nextQCode = "";
+                CurrentQuestion.NextQCode = 0;
                 CreateUserResponsesCollection();
 
                 SetScreenValuesOnOpen();
@@ -395,13 +395,13 @@ namespace SampleSurveyApp.Core.ViewModels
             else
             {
 
-                CurrentQuestion.nextQCode = foundNextQ.QCode;
+                CurrentQuestion.NextQCode = foundNextQ.QCode;
                 // set prev q
-                if (CurrentQuestion.QCode == "Q1")  // this is the first q
+                if (CurrentQuestion.QCode == 1)  // this is the first q
                 {
-                    foundCurrQ.prevQCode = "";
+                    foundCurrQ.PrevQCode = 0;
                 }
-                foundNextQ.prevQCode = foundCurrQ.QCode;
+                foundNextQ.PrevQCode = foundCurrQ.QCode;
 
                 // all prev codes have been updated.
 
@@ -449,7 +449,7 @@ namespace SampleSurveyApp.Core.ViewModels
             else
             {
                 //get new curr q from prev q
-                CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.prevQCode));
+                CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.PrevQCode));
 
             }
 
@@ -499,9 +499,9 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
                     IsWorkingRightBtn = true;
 
-                    ScreenNameLbl = CurrentQuestion.QCode;
+                    ScreenNameLbl = CurrentQuestion.QCodeDesc;
                     CurrentQuestionLbl = CurrentQuestion.QText;
-                    if (CurrentQuestion.prevQCode != "")
+                    if (CurrentQuestion.PrevQCode != 0)
                     {
                         LeftBtnLbl = "Back";
                         IsWorkingLeftBtn = true;
@@ -601,11 +601,10 @@ namespace SampleSurveyApp.Core.ViewModels
             }
 
             // Check to see if this is the last question
-            if (UserSelectedAnswer.RuleType.ToLower().Equals("done"))
+            if (UserSelectedAnswer.RuleType == -1)
             {
-                NextQCode = null;
+                NextQCode = -1;
                 RightBtnLbl = "Review";
-                NextQCode = "";
             }
             else
             {
@@ -623,15 +622,15 @@ namespace SampleSurveyApp.Core.ViewModels
             List<SurveyAnswerModel> myListItems = ((IEnumerable)responseParams).Cast<SurveyAnswerModel>().ToList();
 
             // check to see if there are any questions after this answer is added
-            var tempResponse = myListItems.FirstOrDefault(x => x.RuleType.ToLower().Equals("done"));
+            var tempResponse = myListItems.FirstOrDefault(x => x.RuleType == -1);
             if (tempResponse != null)
             {
-                NextQCode = null;
+                NextQCode = -1;
                 //PrevQCode = ?;
             }
             else
             {
-                NextQCode = tempResponse.ACode;
+                //NextQCode = tempResponse.ACode;
                 //PrevQCode = ?;
             }
 
@@ -660,7 +659,7 @@ namespace SampleSurveyApp.Core.ViewModels
             //var dict = ActualUserSelectedAnswersList.GroupBy(o => o.QCode)
             //    .ToDictionary(g => g.Key, g => g.ToList());
 
-            foreach (KeyValuePair<string, List<SurveyAnswerModel>> item in dict)
+            foreach (KeyValuePair<int, List<SurveyAnswerModel>> item in dict)
             {
                         
                 var q = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode == item.Key);
@@ -673,11 +672,11 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public class AnswerGroup : List<SurveyAnswerModel>
         {
-            public string QCode { get; set; }
+            public int QCode { get; set; }
             public string QText { get; set; }
 
             //public AnswerGroup(string qCode, string qText, List<SurveyResponseModel> userResponses) : base(userResponses)
-            public AnswerGroup(string qCode, string qText, List<SurveyAnswerModel> userResponses) : base(userResponses)
+            public AnswerGroup(int qCode, string qText, List<SurveyAnswerModel> userResponses) : base(userResponses)
             {
                 QCode = qCode;
                 QText = qText;

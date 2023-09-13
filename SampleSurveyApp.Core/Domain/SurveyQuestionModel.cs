@@ -7,13 +7,15 @@ namespace SampleSurveyApp.Core.Domain
 	{
         public string QType { get; set; }
 
-        public string QCode { get; set; }
+        public int QCode { get; set; }
+
+        public string QCodeDesc { get; set; }
 
         public string QText { get; set; }
 
-        public string prevQCode { get; set; }
+        public int PrevQCode { get; set; }
 
-        public string nextQCode { get; set; }
+        public int NextQCode { get; set; }
 
         public bool IsSelected { get; set; }
     }
