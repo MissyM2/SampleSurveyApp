@@ -97,8 +97,10 @@
                    TextColor="Blue"/>
         </VerticalStackLayout>
 
-        <!--QuestionType is List, RuleType is Single-->
+       
         <StackLayout>
+             <!--QuestionType is List, RuleType is Single-->
+            <StackLayout>
              <CollectionView x:Name="listSingleCv"
                          ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                                 SelectionMode="Single"
@@ -108,20 +110,21 @@
                                 BackgroundColor="Transparent"
                                 Margin="12,8,12,0"
                                 IsVisible="{Binding IsVisibleRuleTypeSingle}">
-                 <CollectionView.Triggers>
-                            <Trigger TargetType="CollectionView"
-                                     Property="IsVisible"
-                                     Value="False">
-                                <Setter Property="HeightRequest"
-                                        Value="0"/>
+                    <CollectionView.Triggers>
+                        <Trigger TargetType="CollectionView"
+                                    Property="IsVisible"
+                                    Value="False">
+                            <Setter Property="HeightRequest"
+                                    Value="0"/>
+                        </Trigger>
+                        <Trigger TargetType="CollectionView"
+                                    Property="IsVisible"
+                                    Value="True">
+                            <Setter Property="HeightRequest"
+                                    Value="450"/>
                             </Trigger>
-                            <Trigger TargetType="CollectionView"
-                                     Property="IsVisible"
-                                     Value="True">
-                                <Setter Property="HeightRequest"
-                                        Value="450"/>
-                                </Trigger>
-                        </CollectionView.Triggers>
+                    </CollectionView.Triggers>
+                
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                         <ContentView>
@@ -164,120 +167,17 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            
+                </StackLayout>
 
-       
-
-         <!--QuestionType is List, RuleType is Multiple-->
-               <!-- <CollectionView ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+             <!--QuestionType is List, RuleType is Multiple-->
+            <StackLayout IsVisible="{Binding IsVisibleRuleTypeMultiple}">
+            <CollectionView x:Name="MultipleSelectionsCV"
+                            ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                             SelectionMode="Multiple"
-                            SelectedItems="{Binding UserSelectedAnswers, Mode=TwoWay}"
-                            SelectionChangedCommand="{Binding AnswersSelectedCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItems, Source={RelativeSource Self}}"
-                            BackgroundColor="Transparent"
-                            Margin="12,8,12,0"
-                            IsVisible="{Binding IsVisibleRuleTypeMultiple}"> -->
-
-                <CollectionView x:Name="MultipleSelectionsCV"
-                                ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
-                                SelectionMode="Multiple"
-                                SelectionChangedCommand="{Binding MultipleSelectionCommand}"
-                                SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference MultipleSelectionsCV}}"
-                                IsVisible="{Binding IsVisibleRuleTypeMultiple}">
-
-                    <CollectionView.Triggers>
-                        <Trigger TargetType="CollectionView"
-                                 Property="IsVisible"
-                                 Value="False">
-                            <Setter Property="HeightRequest"
-                                    Value="0"/>
-                        </Trigger>
-                        <Trigger TargetType="CollectionView"
-                                 Property="IsVisible"
-                                 Value="True">
-                            <Setter Property="HeightRequest"
-                                    Value="450"/>
-                            </Trigger>
-                    </CollectionView.Triggers>
-                <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:SurveyAnswerModel">
-                                    <ContentView>
-                                      <Grid x:Name="responseGrid"
-                                            ColumnDefinitions="*, 40"
-                                            RowDefinitions="40, 20">
-                                            <VerticalStackLayout >
-                                                <Label Text="{Binding AText}" Margin="10,4,4,4" />
-                                            </VerticalStackLayout>
-                                            <VerticalStackLayout Grid.Column="1"
-                                                                 Grid.Row="0">
-                                                <Image x:Name="checkImage"
-                                                       Source="check.png" Margin="0,5,0,0"
-                                                       HeightRequest="20">
-                                                </Image>
-                                            </VerticalStackLayout>
-                                            <BoxView Grid.Column="0"
-                                                     Grid.ColumnSpan="2"
-                                                     Grid.Row="1"
-                                                     BackgroundColor="LightBlue"
-                                                     HeightRequest="1"/>
-                                        </Grid>                  
-                                    </ContentView>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-
-         <!--QuestionType is Text-->
-        <!--<VerticalStackLayout>
-            <Frame HeightRequest="200"
-                   BorderColor="LightGray"
-                   Padding="0"
-                   IsVisible="{Binding IsVisibleQTypeText}">
-                <Frame.Triggers>
-                    <Trigger TargetType="Frame"
-                                Property="IsVisible"
-                                Value="False">
-                        <Setter Property="HeightRequest"
-                                Value="0"/>
-                    </Trigger>
-                    <Trigger TargetType="Frame"
-                                Property="IsVisible"
-                                Value="True">
-                        <Setter Property="HeightRequest"
-                                Value="450"/>
-                        </Trigger>
-                </Frame.Triggers>
-                <StackLayout>
-                    <Editor x:Name="txtEditor"
-                            Placeholder="Text goes here"
-                            HeightRequest="250"
-                            IsEnabled="{Binding IsVisibleQTypeText}"
-                            Text="{Binding UserTextAnswer, Mode=TwoWay}">
-                        <Editor.Behaviors>
-                            <toolkit:EventToCommandBehavior
-                                EventName="TextChanged"
-                                Command="{Binding UserTextAnswerChangedCommand}"/>
-                            <toolkit:CharactersValidationBehavior
-                                MinimumLength="3"
-                                MaximumLength="25"
-                                Flags="ValidateOnValueChanged"
-                                CharacterType="Digit"
-                                InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                ValidStyle="{StaticResource ValidEntryStyle}"
-                                MaximumCharacterTypeCount="{Binding TextLen, Source={x:Reference MaximumCharacterCountEntry}}"
-                                MinimumCharacterTypeCount="{Binding TextLen, Source={x:Reference MinimumCharacterCountEntry}}"/>
-                        </Editor.Behaviors>
-
-                    </Editor>
-                    </StackLayout>
-            </Frame>
-        </VerticalStackLayout>-->
-
-          <!--REVIEW ANSWERS-->
-           <CollectionView x:Name="responseCV"
-                            ItemsSource="{Binding UserAnswerGroups}"
-                            IsGrouped="True"
-                            IsVisible="{Binding IsVisibleAnswerReview}">
-                 <CollectionView.Triggers>
+                            SelectionChangedCommand="{Binding MultipleSelectionCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference MultipleSelectionsCV}}"
+                            IsVisible="{Binding IsVisibleRuleTypeMultiple}">
+                <CollectionView.Triggers>
                     <Trigger TargetType="CollectionView"
                                 Property="IsVisible"
                                 Value="False">
@@ -291,6 +191,100 @@
                                 Value="450"/>
                         </Trigger>
                 </CollectionView.Triggers>
+            <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:SurveyAnswerModel">
+                                <ContentView>
+                                    <Grid x:Name="responseGrid"
+                                        ColumnDefinitions="*, 40"
+                                        RowDefinitions="40, 20">
+                                        <VerticalStackLayout >
+                                            <Label Text="{Binding AText}" Margin="10,4,4,4" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1"
+                                                                Grid.Row="0">
+                                            <Image x:Name="checkImage"
+                                                    Source="check.png" Margin="0,5,0,0"
+                                                    HeightRequest="20">
+                                            </Image>
+                                        </VerticalStackLayout>
+                                        <BoxView Grid.Column="0"
+                                                    Grid.ColumnSpan="2"
+                                                    Grid.Row="1"
+                                                    BackgroundColor="LightBlue"
+                                                    HeightRequest="1"/>
+                                    </Grid>                  
+                                </ContentView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            </StackLayout>
+
+             <!--QuestionType is Text-->
+            <!--<VerticalStackLayout>
+                <Frame HeightRequest="200"
+                       BorderColor="LightGray"
+                       Padding="0"
+                       IsVisible="{Binding IsVisibleQTypeText}">
+                    <Frame.Triggers>
+                        <Trigger TargetType="Frame"
+                                    Property="IsVisible"
+                                    Value="False">
+                            <Setter Property="HeightRequest"
+                                    Value="0"/>
+                        </Trigger>
+                        <Trigger TargetType="Frame"
+                                    Property="IsVisible"
+                                    Value="True">
+                            <Setter Property="HeightRequest"
+                                    Value="450"/>
+                            </Trigger>
+                    </Frame.Triggers>
+                    <StackLayout>
+                        <Editor x:Name="txtEditor"
+                                Placeholder="Text goes here"
+                                HeightRequest="250"
+                                IsEnabled="{Binding IsVisibleQTypeText}"
+                                Text="{Binding UserTextAnswer, Mode=TwoWay}">
+                            <Editor.Behaviors>
+                                <toolkit:EventToCommandBehavior
+                                    EventName="TextChanged"
+                                    Command="{Binding UserTextAnswerChangedCommand}"/>
+                                <toolkit:CharactersValidationBehavior
+                                    MinimumLength="3"
+                                    MaximumLength="25"
+                                    Flags="ValidateOnValueChanged"
+                                    CharacterType="Digit"
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    MaximumCharacterTypeCount="{Binding TextLen, Source={x:Reference MaximumCharacterCountEntry}}"
+                                    MinimumCharacterTypeCount="{Binding TextLen, Source={x:Reference MinimumCharacterCountEntry}}"/>
+                            </Editor.Behaviors>
+
+                        </Editor>
+                        </StackLayout>
+                </Frame>
+            </VerticalStackLayout>-->
+
+          <!--REVIEW ANSWERS-->
+            <StackLayout IsVisible="{Binding IsVisibleAnswerReview}">
+           <CollectionView x:Name="responseCV"
+                            ItemsSource="{Binding UserAnswerGroups}"
+                            IsGrouped="True"
+                            IsVisible="{Binding IsVisibleAnswerReview}">
+                 <!--<CollectionView.Triggers>
+                    <Trigger TargetType="CollectionView"
+                                Property="IsVisible"
+                                Value="False">
+                        <Setter Property="HeightRequest"
+                                Value="0"/>
+                    </Trigger>
+                    <Trigger TargetType="CollectionView"
+                                Property="IsVisible"
+                                Value="True">
+                        <Setter Property="HeightRequest"
+                                Value="450"/>
+                        </Trigger>
+                </CollectionView.Triggers>-->
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                         <VerticalStackLayout>
@@ -316,6 +310,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            </StackLayout>
         </StackLayout>
         
 

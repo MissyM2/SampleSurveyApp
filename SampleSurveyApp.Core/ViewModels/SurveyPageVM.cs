@@ -363,20 +363,6 @@ namespace SampleSurveyApp.Core.ViewModels
                     {
                         await _messageService.DisplayAlert("", "Please make a selection", "OK", "Cancel");
                     }
-                    else
-                    {
-
-                        foreach (var foundA in AllPossibleAnswerOptionsCollection)
-                        {
-                            foreach (var answerOptionSelected in UserSelectedAnswers)
-                            {
-                                if (foundA.QCode == answerOptionSelected.QCode && foundA.AText == answerOptionSelected.AText)
-                                {
-                                    foundA.IsSelected = true;
-                                }
-                            }
-                        }
-                    }
                 }
                 else //(CurrentQuestion.QType.Equals("Text"))
                 {
@@ -597,30 +583,32 @@ namespace SampleSurveyApp.Core.ViewModels
                     IsVisibleRuleTypeSingle = true;
                     IsVisibleRuleTypeMultiple = false;
                     IsVisibleQTypeText = false;
-                    IsVisibleAnswerReview = false;
+                    IsVisibleAnswerReview = true;
 
                     if (CurrentQuestion.QType == "SingleAnswer")
                     {
                         IsVisibleRuleTypeSingle = true;
                         IsVisibleRuleTypeMultiple = false;
-                        IsVisibleAnswerReview = false;
                         IsVisibleQTypeText = false;
+                        IsVisibleAnswerReview = false;
                         InstructionLbl = "SINGLE Select an option.";
                     }
                     else if (CurrentQuestion.QType == "MultipleAnswers") // CurrentQuestion.RuleType must be multiple
                     {
                         IsVisibleRuleTypeSingle = false;
                         IsVisibleRuleTypeMultiple = true;
-                        IsVisibleAnswerReview = false;
                         IsVisibleQTypeText = false;
+                        IsVisibleAnswerReview = true;
+
                         InstructionLbl = "MULTIPLE: Select all that apply.";
                     }
                     else // CurrentQuestion.QType can only be Text
                     {
                         IsVisibleRuleTypeSingle = false;
                         IsVisibleRuleTypeMultiple = false;
+                        IsVisibleAnswerReview = true;
                         IsVisibleQTypeText = true;
-                        IsVisibleAnswerReview = false;
+                        
                         InstructionLbl = "TEXT: Shat shouild text label be.  Checking character cound.";
                     }
                 }
@@ -634,8 +622,9 @@ namespace SampleSurveyApp.Core.ViewModels
                     InstructionLbl = "";
                     IsVisibleRuleTypeSingle = false;
                     IsVisibleRuleTypeMultiple = false;
-                    IsVisibleQTypeText = false;
                     IsVisibleAnswerReview = true;
+                    IsVisibleQTypeText = false;
+                    
                 }
             }
         }
