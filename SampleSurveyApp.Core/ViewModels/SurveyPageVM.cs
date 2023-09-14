@@ -45,7 +45,12 @@ namespace SampleSurveyApp.Core.ViewModels
         // these two properties (1 object, 1 list of objects are for answers selected by user - either single or multiselecct
         [ObservableProperty]
         public SurveyAnswerModel userSelectedAnswer;
-        public ObservableCollection<SurveyAnswerModel> UserSelectedAnswers { get; set; } = new();
+
+        public List<SurveyAnswerModel> UserSelectedAnswers { get; set; } = new();
+        //public List<SurveyAnswerModel> answers = new List<SurveyAnswerModel>();
+
+        //[ObservableProperty]
+        //ObservableCollection<object> selectedData;
 
         [ObservableProperty]
         public string userTextAnswer;
@@ -177,6 +182,7 @@ namespace SampleSurveyApp.Core.ViewModels
         public ObservableCollection<SurveyResponseModel> SurveyResponseList { get; set; } = new();
 
 
+       
 
 
         public SurveyPageVM(
@@ -402,24 +408,54 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 var foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(CurrentQuestion.QCode));
 
-                if (UserSelectedAnswer.RuleType == 0 || UserSelectedAnswer.RuleType == -1)  // this is the last q
+                int ruleType = 0;
+
+                if (CurrentQuestion.QType== "SingleAnswer")
                 {
-                    Debug.WriteLine("NextButtonClicked: this is the last question, go to review");
-                    // go to review
+                    if (UserSelectedAnswer.RuleType == 0 || UserSelectedAnswer.RuleType == -1)  // this is the last q
+                    {
+                        Debug.WriteLine("NextButtonClicked: this is the last question, go to review");
+                        // go to review
 
-                    CurrentQuestion.NextQCode = 0;
-                    CreateUserResponsesCollection();
+                        CurrentQuestion.NextQCode = 0;
+                        CreateUserResponsesCollection();
 
-                    SetScreenValuesOnOpen();
+                        SetScreenValuesOnOpen();
+                    }
+                    ruleType = UserSelectedAnswer.RuleType;
                 }
-                var foundNextQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(UserSelectedAnswer.RuleType));
-
-                if (foundNextQ == null)
+                else if (CurrentQuestion.QType == "MultipleAnswers")
                 {
-                    //  there are no more questions
+                    
+                    foreach (var answer in UserSelectedAnswers)
+                    {
+                        if (answer.RuleType == 0 || answer.RuleType == -1)
+                        {
+
+                            // go to review
+
+                            Debug.WriteLine("NextButtonClicked: this is the last question, go to review");
+                            // go to review
+
+                            CurrentQuestion.NextQCode = 0;
+                            CreateUserResponsesCollection();
+
+                            SetScreenValuesOnOpen();
+                        }
+                        ruleType = answer.RuleType;
+
+                    }
+                }
+
+               
+                var foundNextQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(ruleType));
+
+                if (foundNextQ == null)  // there are no more q
+                {
+
                     CurrentQuestion = null;
                 }
-                else
+                else  // there is a next q
                 {
 
                     CurrentQuestion.NextQCode = foundNextQ.QCode;
@@ -619,35 +655,24 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
         #endregion
-        //[RelayCommand]
-        //public async Task AnswersSelected(IList<object>)
-        //{
-        //    Debug.WriteLine("Selected Item is " + UserSelectedAnswers.ToList());
-        //}
+        
 
         public ICommand MultipleSelectionCommand => new Command<IList<object>>((obj) =>
         {
-           // List<SurveyAnswerModel> test = new List<SurveyAnswerModel>();
+            List<SurveyAnswerModel> temp = new List<SurveyAnswerModel>();
 
             foreach (var item in obj)
             {
                 var selectedItems = item as SurveyAnswerModel;
-                UserSelectedAnswers.Add(selectedItems);
+                selectedItems.IsSelected = true;
+                temp.Add(selectedItems);
             }
+            UserSelectedAnswers.Clear();
+            foreach (var item in temp)
+            {
+                UserSelectedAnswers.Add(item);
+            }   
         });
-
-        //[RelayCommand]
-        //public void MultipleSelectionCommand => new Command<IList<object>>((obj) =>
-        //{
-        //    List<SurveyAnswerModel> test = new List<SurveyAnswerModel>();
-
-        //    foreach (var item in obj)
-        //    {
-        //        var selectedItems = item as SurveyAnswerModel;
-        //        test.Add(selectedItems);
-        //    }
-        //});
-
 
         [RelayCommand]
         public async Task AnswerSelected()
