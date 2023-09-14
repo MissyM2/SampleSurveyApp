@@ -10,6 +10,22 @@
              x:DataType="vm:SurveyPageVM">
 
     <ContentPage.Resources>
+        <Style TargetType="CollectionView">
+            <Style.Triggers>
+                <Trigger TargetType="CollectionView"
+                                    Property="IsVisible"
+                                    Value="False">
+                            <Setter Property="HeightRequest"
+                                    Value="0"/>
+                        </Trigger>
+                        <Trigger TargetType="CollectionView"
+                                    Property="IsVisible"
+                                    Value="True">
+                            <Setter Property="HeightRequest"
+                                    Value="450"/>
+                        </Trigger>
+            </Style.Triggers>
+        </Style>
        
          <Style x:Key="InvalidEntryStyle"
                TargetType="Entry">
@@ -96,21 +112,6 @@
                                 BackgroundColor="Transparent"
                                 Margin="12,8,12,0"
                                 IsVisible="{Binding IsVisibleRuleTypeSingle}">
-                    <CollectionView.Triggers>
-                        <Trigger TargetType="CollectionView"
-                                    Property="IsVisible"
-                                    Value="False">
-                            <Setter Property="HeightRequest"
-                                    Value="0"/>
-                        </Trigger>
-                        <Trigger TargetType="CollectionView"
-                                    Property="IsVisible"
-                                    Value="True">
-                            <Setter Property="HeightRequest"
-                                    Value="450"/>
-                            </Trigger>
-                    </CollectionView.Triggers>
-                
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:SurveyAnswerModel">
                             <controls:AnswerOptionCardView  />
@@ -125,20 +126,6 @@
                             SelectionChangedCommand="{Binding MultipleSelectionCommand}"
                             SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference MultipleSelectionsCV}}"
                             IsVisible="{Binding IsVisibleRuleTypeMultiple}">
-                <CollectionView.Triggers>
-                    <Trigger TargetType="CollectionView"
-                                Property="IsVisible"
-                                Value="False">
-                        <Setter Property="HeightRequest"
-                                Value="0"/>
-                    </Trigger>
-                    <Trigger TargetType="CollectionView"
-                                Property="IsVisible"
-                                Value="True">
-                        <Setter Property="HeightRequest"
-                                Value="450"/>
-                        </Trigger>
-                </CollectionView.Triggers>
                 <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:SurveyAnswerModel">
                             <controls:AnswerOptionCardView  />
@@ -165,29 +152,7 @@
                                     Value="450"/>
                             </Trigger>
                     </Frame.Triggers>
-                    <StackLayout>
-                        <Editor x:Name="txtEditor"
-                                Placeholder="Text goes here"
-                                HeightRequest="250"
-                                IsEnabled="{Binding IsVisibleQTypeText}"
-                                Text="{Binding UserTextAnswer, Mode=TwoWay}">
-                            <Editor.Behaviors>
-                                <toolkit:EventToCommandBehavior
-                                    EventName="TextChanged"
-                                    Command="{Binding UserTextAnswerChangedCommand}"/>
-                                <toolkit:CharactersValidationBehavior
-                                    MinimumLength="3"
-                                    MaximumLength="25"
-                                    Flags="ValidateOnValueChanged"
-                                    CharacterType="Digit"
-                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                    ValidStyle="{StaticResource ValidEntryStyle}"
-                                    MaximumCharacterTypeCount="{Binding TextLen, Source={x:Reference MaximumCharacterCountEntry}}"
-                                    MinimumCharacterTypeCount="{Binding TextLen, Source={x:Reference MinimumCharacterCountEntry}}"/>
-                            </Editor.Behaviors>
-
-                        </Editor>
-                        </StackLayout>
+                    <controls:TextEditorCardView />
                 </Frame>
 
           <!--REVIEW ANSWERS-->
@@ -195,20 +160,6 @@
                             ItemsSource="{Binding UserAnswerGroups}"
                             IsGrouped="True"
                             IsVisible="{Binding IsVisibleAnswerReview}">
-                 <!--<CollectionView.Triggers>
-                    <Trigger TargetType="CollectionView"
-                                Property="IsVisible"
-                                Value="False">
-                        <Setter Property="HeightRequest"
-                                Value="0"/>
-                    </Trigger>
-                    <Trigger TargetType="CollectionView"
-                                Property="IsVisible"
-                                Value="True">
-                        <Setter Property="HeightRequest"
-                                Value="450"/>
-                        </Trigger>
-                </CollectionView.Triggers>-->
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                         <VerticalStackLayout>
