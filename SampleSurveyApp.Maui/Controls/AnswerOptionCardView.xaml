@@ -11,11 +11,15 @@
                 <VisualState Name="Normal" >
                     <VisualState.Setters>
                         <Setter TargetName="checkMarkImage" Property="IsVisible" Value="false"/>
+                        <Setter Property="BackgroundColor" Value="white"/>
+                    
                     </VisualState.Setters>
+
                 </VisualState>
                 <VisualState Name="Selected">
                     <VisualState.Setters>
                         <Setter TargetName="checkMarkImage" Property="IsVisible" Value="true"/>
+                        <Setter Property="BackgroundColor" Value="white"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

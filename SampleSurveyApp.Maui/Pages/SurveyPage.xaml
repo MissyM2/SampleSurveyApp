@@ -19,7 +19,9 @@
                     <Setter Property="HeightRequest" Value="450"/>
                 </Trigger>
             </Style.Triggers>
+            
         </Style>
+
        
         <Style x:Key="InvalidEntryStyle" TargetType="Entry">
             <Setter Property="TextColor" Value="IndianRed"/>
