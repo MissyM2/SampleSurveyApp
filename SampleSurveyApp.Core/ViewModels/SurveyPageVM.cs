@@ -47,10 +47,6 @@ namespace SampleSurveyApp.Core.ViewModels
         public SurveyAnswerModel userSelectedAnswer;
 
         public List<SurveyAnswerModel> UserSelectedAnswers { get; set; } = new();
-        //public List<SurveyAnswerModel> answers = new List<SurveyAnswerModel>();
-
-        //[ObservableProperty]
-        //ObservableCollection<object> selectedData;
 
         [ObservableProperty]
         public string userTextAnswer;
@@ -58,15 +54,8 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         SurveyQuestionModel currentQuestion;
 
-        //public ObservableCollection<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
         public IList<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
 
-
-        //[ObservableProperty]
-        //int currQuestionIndex;
-        
-        [ObservableProperty]
-        int currQCode;
 
         [ObservableProperty]
         SurveyQuestionModel lastQuestion;
@@ -143,7 +132,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
-
         [ObservableProperty]
         string selectedItem;
 
@@ -183,9 +171,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public ObservableCollection<SurveyModel> SurveyList { get; set; } = new();
         public ObservableCollection<SurveyResponseModel> SurveyResponseList { get; set; } = new();
-
-
-       
 
 
         public SurveyPageVM(
@@ -269,7 +254,6 @@ namespace SampleSurveyApp.Core.ViewModels
                 AllPossibleQuestionsCollection.Add(question);
             }
 
-                
 
             //get curr q
             CurrentQuestion = AllPossibleQuestionsCollection[0];
@@ -288,12 +272,9 @@ namespace SampleSurveyApp.Core.ViewModels
             foundQ.IsSelected = true;
             foundQ.PrevQCode = 0;
 
-                // do i need this  
-            CurrQCode = CurrentQuestion.QCode;
-
             IsVisibleSurveyHeader = false;
 
-                // set screen values based on properties in CurrentQuestion
+             // set screen values based on properties in CurrentQuestion
              SetScreenValuesOnOpen();
 
         }
@@ -308,9 +289,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (CurrentQuestion.NextQCode == 0)  // question has not been used yet and does not have answers associated
             {
-
-
-                if (CurrentQuestion.QType.Equals("SingleAnswer"))
+                if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
                 {
                     var answerSelected = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode == UserSelectedAnswer.ACode);
                     var answerNotSelected = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode != UserSelectedAnswer.ACode);
@@ -324,9 +303,6 @@ namespace SampleSurveyApp.Core.ViewModels
                     {
                         UserSelectedAnswer.IsSelected = true;
                         answerNotSelected.IsSelected = false;
-
-                        //var sa = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode.Equals(UserSelectedAnswer.QCode) && x.ACode.Equals(UserSelectedAnswer.ACode));
-                        //sa.IsSelected = true;
                         IsSelected = true;
                     }
 
@@ -354,7 +330,6 @@ namespace SampleSurveyApp.Core.ViewModels
                         {
                             Debug.WriteLine("NextButtonClicked: Problem:There was no option selected.");
                         }
-
                     }
                 }
                 else if (CurrentQuestion.QType.Equals("MultipleAnswers"))
@@ -391,12 +366,11 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
 
                 // update current q with nextq and update nextq property
-
                 var foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(CurrentQuestion.QCode));
 
                 int ruleType = 0;
 
-                if (CurrentQuestion.QType== "SingleAnswer")
+                if (CurrentQuestion.QType == "SingleAnswer")   // CurrentQuestion.QType must be SingleAnswer
                 {
                     if (UserSelectedAnswer.RuleType == 0 || UserSelectedAnswer.RuleType == -1)  // this is the last q
                     {
@@ -406,11 +380,12 @@ namespace SampleSurveyApp.Core.ViewModels
                         CurrentQuestion.NextQCode = 0;
                         CreateUserResponsesCollection();
 
+                        // set screen values based on properties in CurrentQuestion
                         SetScreenValuesOnOpen();
                     }
                     ruleType = UserSelectedAnswer.RuleType;
                 }
-                else if (CurrentQuestion.QType == "MultipleAnswers")
+                else if (CurrentQuestion.QType == "MultipleAnswers")      // CurrentQuestion.QType must be MultipleAnswers
                 {
                     
                     foreach (var answer in UserSelectedAnswers)
@@ -425,9 +400,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
                             CurrentQuestion.NextQCode = 0;
                             CreateUserResponsesCollection();
+
+                            // set screen values based on properties in CurrentQuestion
                             SetScreenValuesOnOpen();
-
-
                         }
                         ruleType = answer.RuleType;
 
@@ -436,10 +411,8 @@ namespace SampleSurveyApp.Core.ViewModels
 
                
                 var foundNextQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(ruleType));
-
                 if (foundNextQ == null)  // there are no more q
                 {
-
                     CurrentQuestion = null;
                 }
                 else  // there is a next q
@@ -466,7 +439,6 @@ namespace SampleSurveyApp.Core.ViewModels
                     AnswerOptionsForCurrentQuestionCollection.Clear();
                     foreach (var i in AllPossibleAnswerOptionsCollection)
                     {
-
                         if (i.QCode == CurrentQuestion.QCode)
                         {
                             AnswerOptionsForCurrentQuestionCollection.Add(i);
@@ -517,7 +489,6 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 //get new curr q from prev q
                 CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.PrevQCode));
-
             }
 
             // get answers for curr q
@@ -530,21 +501,21 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
             }
 
-            
-            if (CurrentQuestion.QType == "SingleAnswer")
+            if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
             {
                 var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.IsSelected == true);
                 UserSelectedAnswer = selectedAnswer;
             }
-            else if (CurrentQuestion.QType == "MultipleAnswers")
+            else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
             {
                 var selectedAnswers = AnswerOptionsForCurrentQuestionCollection.Where(t => t.QCode == CurrentQuestion.QCode && t.IsSelected == true);
             }
-            else  // q type must be text
+            else  // CurrentQuestion.QType must be Text
             {
                 Debug.WriteLine("Get existing text for back button");
             }
 
+            // set screen values based on properties in CurrentQuestion
             SetScreenValuesOnOpen();
 
         }
@@ -587,7 +558,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     IsVisibleQTypeText = false;
                     IsVisibleAnswerReview = true;
 
-                    if (CurrentQuestion.QType == "SingleAnswer")
+                    if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
                     {
                         IsVisibleRuleTypeSingle = true;
                         IsVisibleRuleTypeMultiple = false;
@@ -595,7 +566,7 @@ namespace SampleSurveyApp.Core.ViewModels
                         IsVisibleAnswerReview = false;
                         InstructionLbl = "SINGLE Select an option.";
                     }
-                    else if (CurrentQuestion.QType == "MultipleAnswers") // CurrentQuestion.RuleType must be multiple
+                    else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
                     {
                         IsVisibleRuleTypeSingle = false;
                         IsVisibleRuleTypeMultiple = true;
@@ -604,7 +575,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
                         InstructionLbl = "MULTIPLE: Select all that apply.";
                     }
-                    else // CurrentQuestion.QType can only be Text
+                    else // CurrentQuestion.QType must be Text
                     {
                         IsVisibleRuleTypeSingle = false;
                         IsVisibleRuleTypeMultiple = false;
@@ -685,7 +656,7 @@ namespace SampleSurveyApp.Core.ViewModels
             IsMissySelectedAnswer = UserSelectedAnswer.IsSelected;
             if (CurrentQuestion.NextQCode == 0)  // the first time the user has selected an answer to this question
             {
-                if (CurrentQuestion.QType == "SingleAnswer")
+                if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
                 {
                     var answerNotSelected = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode != UserSelectedAnswer.ACode);
                     if (UserSelectedAnswer.IsSelected == true)

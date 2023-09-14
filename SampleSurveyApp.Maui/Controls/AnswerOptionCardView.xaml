@@ -49,10 +49,6 @@
                     </Image.Triggers>
                 </Image>
             </VerticalStackLayout>
-
-            <!--<VerticalStackLayout Grid.Column="2" Grid.Row="0">
-                <Image x:Name="checkImage" Source="check.png" Margin="0,5,0,0"  HeightRequest="20" IsVisible="{Binding IsSelected}"/>
-            </VerticalStackLayout>-->
           
         </Grid>
         <BoxView Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" BackgroundColor="LightBlue" HeightRequest="1"/>
