@@ -439,8 +439,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
                             CurrentQuestion.NextQCode = 0;
                             CreateUserResponsesCollection();
-
                             SetScreenValuesOnOpen();
+
+
                         }
                         ruleType = answer.RuleType;
 
@@ -666,16 +667,29 @@ namespace SampleSurveyApp.Core.ViewModels
                 var selectedItems = item as SurveyAnswerModel;
                 selectedItems.IsSelected = true;
                 temp.Add(selectedItems);
+                // Check to see if this is the last question
+                if(selectedItems.RuleType != -1)
+                {
+                    NextQCode = selectedItems.RuleType;
+                    RightBtnLbl = "Next";
+                }
+                else
+                {
+                    NextQCode = -1;
+                    RightBtnLbl = "Review";
+                }
+
             }
             UserSelectedAnswers.Clear();
             foreach (var item in temp)
             {
                 UserSelectedAnswers.Add(item);
+
             }   
         });
 
         [RelayCommand]
-        public async Task AnswerSelected()
+        public async Task AnswerSelected() //Single Answer
         {
             if (CurrentQuestion.NextQCode == 0)  // the first time the user has selected an answer to this question
             {
@@ -696,25 +710,6 @@ namespace SampleSurveyApp.Core.ViewModels
                         IsSelected = true;
                     }
                     
-                }
-                else // CurrentQuestion.QType must be MultipleAnswer
-                {
-
-                    if (CurrentQuestion.QType == "MultipleAnswer")
-                    {
-                        // switch to false
-                        if (UserSelectedAnswer.IsSelected == true)
-                        {
-                            UserSelectedAnswer.IsSelected = false;
-                            IsSelected = false;
-                        }
-                        else
-                        {
-                            UserSelectedAnswer.IsSelected = true;
-                            IsSelected = true;
-                        }
-                    }
-
                 }
             }
 
