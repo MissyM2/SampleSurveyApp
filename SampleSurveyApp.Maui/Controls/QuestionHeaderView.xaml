@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SampleSurveyApp.Maui.Controls.QuestionHeaderView">
+    <StackLayout Margin="0,0,0,20">
+        <StackLayout BackgroundColor="CornflowerBlue" Padding="0,10,0,10">
+                <Label Text="{Binding SPID}" HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"/>
+        </StackLayout>
+
+        <StackLayout BackgroundColor="PeachPuff" Padding="0,15,0,15">
+            <Label Text="{Binding CurrentQuestionLbl}"
+                    VerticalOptions="Center"
+                    Margin="10,0,10,0"/>
+        </StackLayout>
+
+        <StackLayout Grid.Row="2" BackgroundColor="LightYellow" Padding="0,10,0,10">
+            <Label Text="{Binding InstructionLbl}" Margin="10,0,0,0"
+                    TextColor="gray"/>
+        </StackLayout>
+        <BoxView BackgroundColor="LightBlue" HeightRequest="2"/>
+    </StackLayout >
+</ContentView>
+

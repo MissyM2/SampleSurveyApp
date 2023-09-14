@@ -12,29 +12,19 @@
     <ContentPage.Resources>
         <Style TargetType="CollectionView">
             <Style.Triggers>
-                <Trigger TargetType="CollectionView"
-                                    Property="IsVisible"
-                                    Value="False">
-                            <Setter Property="HeightRequest"
-                                    Value="0"/>
-                        </Trigger>
-                        <Trigger TargetType="CollectionView"
-                                    Property="IsVisible"
-                                    Value="True">
-                            <Setter Property="HeightRequest"
-                                    Value="450"/>
-                        </Trigger>
+                <Trigger TargetType="CollectionView" Property="IsVisible" Value="False">
+                    <Setter Property="HeightRequest" Value="0"/>
+                </Trigger>
+                <Trigger TargetType="CollectionView" Property="IsVisible" Value="True">
+                    <Setter Property="HeightRequest" Value="450"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
        
-         <Style x:Key="InvalidEntryStyle"
-               TargetType="Entry">
+        <Style x:Key="InvalidEntryStyle" TargetType="Entry">
             <Setter Property="TextColor" Value="IndianRed"/>
-
         </Style>
-
-        <Style x:Key="ValidEntryStyle"
-               TargetType="Entry">
+        <Style x:Key="ValidEntryStyle" TargetType="Entry">
             <Setter Property="TextColor" Value="Green"/>
         </Style>
     </ContentPage.Resources>
@@ -51,31 +41,14 @@
                         FontSize="Micro"
                         Command="{Binding CreateSurveyCommand}"
                         BackgroundColor="green"/>
-            
         </StackLayout>
 
           
    <!-- Survey-->
-        <!-- Survey Header Info-->
+
+        <!-- Survey Question Header Info-->
         <StackLayout IsVisible="true">
-            <StackLayout BackgroundColor="CornflowerBlue"
-                                Padding="5">
-                <Label Text="{Binding SPID}" HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center"/>
-            </StackLayout>
-
-            <FlexLayout BackgroundColor="PeachPuff">
-                <Label Text="{Binding CurrentQuestionLbl}"
-                       VerticalOptions="Center"
-                       Margin="10,0,10,0"/>
-            </FlexLayout>
-
-            <StackLayout Grid.Row="2"
-                                 Padding="5">
-                <Label Text="{Binding InstructionLbl}" Margin="10,0,0,0"
-                       TextColor="Blue"/>
-            </StackLayout>
-        
+            <controls:QuestionHeaderView />
        </StackLayout>
 
         <!-- Container for Answers -->
@@ -112,26 +85,26 @@
             </CollectionView>
 
              <!--QuestionType is Text-->
-                <Frame HeightRequest="200"
-                       BorderColor="LightGray"
-                       Padding="0"
-                       IsVisible="{Binding IsVisibleQTypeText}">
-                    <Frame.Triggers>
-                        <Trigger TargetType="Frame"
-                                    Property="IsVisible"
-                                    Value="False">
-                            <Setter Property="HeightRequest"
-                                    Value="0"/>
+            <Frame HeightRequest="200"
+                    BorderColor="LightGray"
+                    Padding="0"
+                    IsVisible="{Binding IsVisibleQTypeText}">
+                <Frame.Triggers>
+                    <Trigger TargetType="Frame"
+                                Property="IsVisible"
+                                Value="False">
+                        <Setter Property="HeightRequest"
+                                Value="0"/>
+                    </Trigger>
+                    <Trigger TargetType="Frame"
+                                Property="IsVisible"
+                                Value="True">
+                        <Setter Property="HeightRequest"
+                                Value="450"/>
                         </Trigger>
-                        <Trigger TargetType="Frame"
-                                    Property="IsVisible"
-                                    Value="True">
-                            <Setter Property="HeightRequest"
-                                    Value="450"/>
-                            </Trigger>
-                    </Frame.Triggers>
-                    <controls:TextEditorCardView />
-                </Frame>
+                </Frame.Triggers>
+                <controls:TextEditorCardView />
+            </Frame>
 
           <!--REVIEW ANSWERS-->
            <CollectionView x:Name="responseCV"
@@ -141,30 +114,24 @@
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                         <VerticalStackLayout>
-                            <StackLayout BackgroundColor="PeachPuff"
-                                         Padding="5,10,5,9"
-                                         VerticalOptions="CenterAndExpand">
-                                <Label Text="{Binding QText}"
-                                       TextColor="Black"
-                                       FontAttributes="Bold"/>
+                            <StackLayout BackgroundColor="LightYellow" Padding="5,10,5,9">
+                                <Label Text="{Binding QText}" />
                             </StackLayout>
-                            <BoxView BackgroundColor="LightBlue"
-                                     HeightRequest="1"/>
+                            <BoxView BackgroundColor="LightBlue" HeightRequest="1"/>
                         </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                         <VerticalStackLayout>
-                                    <Label Text="{Binding AText}" Padding="5,10,5,10"/>
-                                    <BoxView BackgroundColor="LightBlue"
-                                             HeightRequest="1"/>
-                            </VerticalStackLayout>
-                    </DataTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout>
+                        <Label Text="{Binding AText}" Padding="5,10,5,10"/>
+                        <BoxView BackgroundColor="LightBlue" HeightRequest="1"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </StackLayout>
-       
+
     </StackLayout>
       
 </ContentPage>
