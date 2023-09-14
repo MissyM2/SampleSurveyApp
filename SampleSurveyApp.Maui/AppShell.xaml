@@ -4,12 +4,21 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SampleSurveyApp.Maui"
-    Shell.FlyoutBehavior="Disabled">
+    xmlns:pages="clr-namespace:SampleSurveyApp.Maui.Pages"
+    Shell.FlyoutBehavior="Flyout">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Survey"
+        ContentTemplate="{DataTemplate pages:SurveyPage}"
+        Route="SurveyPage" />
+
+    <MenuItem Text="Delete Surveys"
+              Command="{Binding DeleteAllSurveysCommand}"/>
+    <MenuItem Text="Delete Response"
+              Command="{Binding DeleteAllResponsesCommand}"/>
+     <FlyoutItem Title="Overview Page">
+        <ShellContent ContentTemplate="{DataTemplate pages:OverviewPage}" Route="OverviewPage" />
+    </FlyoutItem>
 
 </Shell>
 

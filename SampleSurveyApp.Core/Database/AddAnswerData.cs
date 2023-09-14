@@ -22,7 +22,7 @@ namespace SampleSurveyApp.Core.Database
                 new SurveyAnswerModel () { QCode = 2, ACode = 2, AText = "No", RuleType = -1},
 
                 new SurveyAnswerModel () { QCode = 3, ACode = 1, AText = "Yes", RuleType = 4},
-                new SurveyAnswerModel () { QCode = 3, ACode = 2, AText = "No", RuleType = 4},
+                new SurveyAnswerModel () { QCode = 3, ACode = 2, AText = "No (Go to Text)", RuleType = 15},
 
                 new SurveyAnswerModel () { QCode = 4, ACode = 1, AText = "SingleSelectionOption 1", RuleType = 5},
                 new SurveyAnswerModel () { QCode = 4, ACode = 2, AText = "SingleSelectionOption 2", RuleType = -1},
@@ -76,7 +76,9 @@ namespace SampleSurveyApp.Core.Database
                 new SurveyAnswerModel () { QCode = 12, ACode = 2, AText = "No", RuleType = 13},
                 new SurveyAnswerModel () { QCode = 12, ACode = 5, AText = "Could not observe", RuleType = 13},
 
-                new SurveyAnswerModel () { QCode = 13, ACode = 1, AText = "", RuleType = -1}
+                new SurveyAnswerModel () { QCode = 13, ACode = 1, AText = "", RuleType = -1},
+
+                new SurveyAnswerModel () { QCode = 15, ACode = 1, AText = "", RuleType = 3}
             };
         }
 

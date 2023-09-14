@@ -34,6 +34,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<SurveyPage>();
         builder.Services.AddSingleton<SurveyPageVM>();
 
+        builder.Services.AddSingleton<OverviewPage>();
+
+        builder.Services.AddSingleton<ShellPageVM>();
+
 
         return builder.Build();
 	}

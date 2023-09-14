@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SampleSurveyApp.Maui.Pages.OverviewPage"
+             Title="OverviewPage">
+    <VerticalStackLayout>
+         <Label Text="Generic Survey" FontSize="Large" HorizontalTextAlignment="Center" Margin="0,10,0,10" />
+            <Label Text="* contains 14 questions" FontAttributes="Bold" FontSize="Micro" Margin="10,0,0,0" />
+            <Label Text="* single selection, multi-selection and text types" FontSize="Micro" Margin="10,0,0,0"/>
+            <Label Text="* a review page with ability to insert user selected survey data" FontSize="Micro" Margin="10,0,0,0"/>
+            <Label Text="* generic repository" FontSize="Micro" Margin="10,0,0,10"/>
+
+            <Label Text="Structure" FontSize="Medium" FontAttributes="Bold" />
+            <Label Text="* Sqlite db" FontAttributes="Bold" FontSize="Micro" Margin="20,0,0,0" />
+            <Label Text="* 3 projects" FontAttributes="Bold" FontSize="Micro" Margin="20,0,0,10"/>
+
+            <Label Text="App.Core" FontSize="Small" Margin="10,0,0,0" />
+            <Label Text="/Models" FontSize="Micro" Margin="20,0,0,0" />
+            <Label Text="* SurveyModel" FontSize="Micro" Margin="40,0,0,0" />
+            <Label Text="* SurveyQuestionModel," FontSize="Micro" Margin="40,0,0,0" />
+            <Label Text="* SurveyResponseModel" FontSize="Micro" Margin="40,0,0,10" />
+
+            <Label Text="/ViewModels" FontSize="Micro" Margin="20,0,0,0"/>
+            <Label Text="* MainPageVM" FontSize="Micro" Margin="40,0,0,0"/>
+            <Label Text="* SurveyPageVM" FontSize="Micro" Margin="40,0,0,0"/>
+            <Label Text="* BaseVM, Interfaces for services" FontSize="Micro" Margin="40,0,0,10"/>
+
+            <Label Text="/Services" FontSize="Micro" Margin="20,0,0,0"/>
+            <Label Text="* Interfaces for services" FontSize="Micro" Margin="40,0,0,10"/>
+                
+            <Label Text="App.Maui" FontAttributes="Bold" FontSize="Small" Margin="10,0,0,0" />
+            <Label Text="/Pages" FontSize="Micro" Margin="20,0,0,0"/>
+            <Label Text="* MainPage" FontSize="Micro" Margin="40,0,0,0"/>
+            <Label Text="* SurveyPage" FontSize="Micro" Margin="40,0,0,10"/>
+            <Label Text="/Services" FontSize="Micro" Margin="20,0,0,0"/>
+            <Label Text="* MessageService, NavigationService, UserPreferences" FontSize="Micro" Margin="40,0,0,0"/>
+            <Label Text="* NavigationService" FontSize="Micro" Margin="40,0,0,0"/>
+            <Label Text="* UserPreferences" FontSize="Micro" Margin="40,0,0,10"/>
+
+            <Label Text="App.Maui.Tests" FontAttributes="Bold" FontSize="Small" Margin="20,0,0,0" />
+            <Label Text="* test details here" FontSize="Micro" Margin="40,0,0,10"/>
+
+    </VerticalStackLayout>
+</ContentPage>

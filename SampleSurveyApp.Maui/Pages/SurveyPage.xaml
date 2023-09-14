@@ -7,9 +7,9 @@
              xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
              x:Name="Root"
              x:DataType="vm:SurveyPageVM">
-    <ContentPage.Resources>
 
-    <Style TargetType="ContentView">
+    <ContentPage.Resources>
+        <Style TargetType="ContentView">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
                     <VisualStateGroup x:Name="CommonStates">
@@ -38,11 +38,12 @@
             <Setter Property="TextColor" Value="Green"/>
         </Style>
     </ContentPage.Resources>
+
     <Shell.TitleView>
-        <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*" BackgroundColor="Black">
+        <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*">
           <Button Text="{Binding LeftBtnLbl}"
-                  BackgroundColor="Black"
-                  TextColor="Blue"
+                  BackgroundColor="Transparent"
+                  TextColor="White"
                   FontSize="18"
                   Grid.Column="0"
                   HorizontalOptions="Start"
@@ -52,10 +53,10 @@
                 <Label x:Name="titleLabel" FontSize="20" FontAttributes="Bold"
                        Text="{Binding ScreenNameLbl}"
                        HorizontalTextAlignment="Center"
-                       BackgroundColor="Black" TextColor="White" Grid.Column="1" />
+                       BackgroundColor="Transparent" TextColor="White" Grid.Column="1" />
            <Button Text="{Binding RightBtnLbl}"
-                   BackgroundColor="Black"
-                   TextColor="CornflowerBlue"
+                   BackgroundColor="transparent"
+                   TextColor="White"
                    Grid.Column="2" FontSize="18"
                    HorizontalOptions="End"
                    Command="{Binding NextButtonClickedCommand}"
@@ -65,42 +66,43 @@
     </Shell.TitleView>
 
     <StackLayout>
-        <FlexLayout Grid.Row="0" JustifyContent="SpaceAround"
-                    IsVisible="{Binding IsVisibleSurveyHeader}">
-            <Button Text="New survey"
-                        WidthRequest="110"
+        <StackLayout IsVisible="{Binding IsVisibleSurveyHeader}" Padding="0,10,0,10">
+            <Button Text="Start a survey"
+                        WidthRequest="200"
                         HeightRequest="30"
                         FontSize="Micro"
                         Command="{Binding CreateSurveyCommand}"
                         BackgroundColor="green"/>
             
-        </FlexLayout>
+        </StackLayout>
 
           
-   <!-- Survey--> 
-        <VerticalStackLayout Grid.Row="0"
-                            BackgroundColor="CornflowerBlue"
-                            Padding="5">
-            <Label Text="{Binding SPID}" HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"/>
-        </VerticalStackLayout>
+   <!-- Survey-->
+        <!-- Survey Header Info-->
+        <StackLayout IsVisible="true">
+            <StackLayout BackgroundColor="CornflowerBlue"
+                                Padding="5">
+                <Label Text="{Binding SPID}" HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"/>
+            </StackLayout>
 
-        <FlexLayout BackgroundColor="PeachPuff">
-            <Label Text="{Binding CurrentQuestionLbl}"
-                   VerticalOptions="Center"
-                   Margin="10,0,10,0"/>
-        </FlexLayout>
+            <FlexLayout BackgroundColor="PeachPuff">
+                <Label Text="{Binding CurrentQuestionLbl}"
+                       VerticalOptions="Center"
+                       Margin="10,0,10,0"/>
+            </FlexLayout>
 
-        <VerticalStackLayout Grid.Row="2"
-                             Padding="5">
-            <Label Text="{Binding InstructionLbl}" Margin="10,0,0,0"
-                   TextColor="Blue"/>
-        </VerticalStackLayout>
+            <StackLayout Grid.Row="2"
+                                 Padding="5">
+                <Label Text="{Binding InstructionLbl}" Margin="10,0,0,0"
+                       TextColor="Blue"/>
+            </StackLayout>
+        
+       </StackLayout>
 
-       
+        <!-- Container for Answers -->
         <StackLayout>
              <!--QuestionType is List, RuleType is Single-->
-            <StackLayout>
              <CollectionView x:Name="listSingleCv"
                          ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                                 SelectionMode="Single"
@@ -167,10 +169,8 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                </StackLayout>
 
              <!--QuestionType is List, RuleType is Multiple-->
-            <StackLayout IsVisible="{Binding IsVisibleRuleTypeMultiple}">
             <CollectionView x:Name="MultipleSelectionsCV"
                             ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                             SelectionMode="Multiple"
@@ -217,10 +217,8 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            </StackLayout>
 
              <!--QuestionType is Text-->
-            <!--<VerticalStackLayout>
                 <Frame HeightRequest="200"
                        BorderColor="LightGray"
                        Padding="0"
@@ -263,10 +261,8 @@
                         </Editor>
                         </StackLayout>
                 </Frame>
-            </VerticalStackLayout>-->
 
           <!--REVIEW ANSWERS-->
-            <StackLayout IsVisible="{Binding IsVisibleAnswerReview}">
            <CollectionView x:Name="responseCV"
                             ItemsSource="{Binding UserAnswerGroups}"
                             IsGrouped="True"
@@ -310,14 +306,8 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            </StackLayout>
         </StackLayout>
-        
-
-        
-        
-        <!--<ActivityIndicator IsRunning="{Binding IsBusy}"/>-->
        
-</StackLayout>
+    </StackLayout>
       
 </ContentPage>

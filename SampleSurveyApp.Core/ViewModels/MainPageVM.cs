@@ -58,63 +58,7 @@ namespace SampleSurveyApp.Core.ViewModels
             await _navigationService.GoToSurveyPageAsync();
         }
 
-        //        [RelayCommand]
-        //        public async Task Refresh()
-        //        {
-        //            IsBusy = true;
-
-
-        //#if DEBUG
-        //            await Task.Delay(500);
-        //#endif
-
-        //            var aqd = new AddQuestionData(_surveyQuestionModelRepository);
-        //            await aqd.AddQuestionsAsync();
-
-        //            var aad = new AddAnswerData(_surveyAnswerModelRepository);
-        //            await aad.AddAnswersAsync();
-
-
-        //            IsBusy = false;
-
-        //            //toaster?.MakeToast("Refreshed!");
-        //        }
-
-        //[RelayCommand]
-        //public async Task CreateSurvey()
-        //{
-        //    if (IsBusy) return;
-
-        //    //try
-        //    //{
-        //        IsBusy = true;
-        //        NewSurvey = new SurveyModel();
-        //        NewSurvey.SurveyDate = DateTime.Now;
-        //        NewSurvey.SurveyStatus = "I";
-        //        NewSurvey.SyncStatus = "I";
-
-
-        //            // insert a new record
-        //        await _surveyModelRepository.InsertAsync(NewSurvey);
-        //        InsertedSurvey = NewSurvey;
-
-        //        //await _navigationService.GoToSurveyPageAsync<SurveyPageVM>($"itemID={InsertedSurvey.Id");
-        //        await _navigationService.GoToSurveyPageAsync(InsertedSurvey.Id);
-
-
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    Debug.WriteLine($"Unable to insert a survey: {ex.Message}");
-        //    //    await _messageService.DisplayAlert("Error", "Failed to insert a surveys", "OK", null);
-
-        //    //}
-        //    //finally
-        //    //{
-        //    IsBusy = false;
-        //    //}
-
-        //}
+        
 
         [RelayCommand]
         public async Task DeleteAllSurveys()
@@ -147,34 +91,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-        [RelayCommand]
-        public async Task DeleteAllResponses()
-        {
-            if (IsBusy) return;
-
-            //try
-            //{
-            //    IsBusy = true;
-            //    if (SurveyResponseList.Any()) SurveyResponseList.Clear();
-            //    var responses = new List<SurveyResponseModel>();
-            //    responses = await _surveyResponseModelRepository.GetAllAsync();
-            //    foreach (var response in responses)
-            //    {
-            //        await _surveyResponseModelRepository.DeleteAsync(response);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"Unable to delete all responses: {ex.Message}");
-            //    await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", null);
-
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //}
-
-        }
+       
 
         //[RelayCommand]
         //public async Task ViewSurveyList()

@@ -95,7 +95,7 @@ namespace SampleSurveyApp.Core.ViewModels
         int count;
 
         [ObservableProperty]
-        string screenNameLbl;
+        string screenNameLbl = "Survey Start Page";
 
         [ObservableProperty]
         string leftBtnLbl;
@@ -298,9 +298,6 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task NextButtonClicked()
         {
-
-            // FIX THIS THERE IS NO CURR QUESTION NEXT CODE.  IT IS NOT ADDED UNTIL LATER.
-            // It is causing an issue when you go to review
             Console.WriteLine("NextButtonClicked");
 
             // see if the question has been used before
