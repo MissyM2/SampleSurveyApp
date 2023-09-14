@@ -34,20 +34,22 @@
     </Shell.TitleView>
 
     <StackLayout>
-        <StackLayout IsVisible="{Binding IsVisibleSurveyHeader}" Padding="0,10,0,10">
+        <StackLayout IsVisible="{Binding IsVisibleSurveyStartButton}" Padding="0,10,0,10" BackgroundColor="pink"
+                     >
             <Button Text="Start a survey"
                         WidthRequest="200"
                         HeightRequest="30"
                         FontSize="Micro"
                         Command="{Binding CreateSurveyCommand}"
-                        BackgroundColor="green"/>
+                        BackgroundColor="green"
+                        VerticalOptions="Center"/>
         </StackLayout>
 
           
    <!-- Survey-->
 
         <!-- Survey Question Header Info-->
-        <StackLayout IsVisible="true">
+        <StackLayout IsVisible="{Binding IsVisibleSurveyHeader}">
             <controls:QuestionHeaderView />
        </StackLayout>
 

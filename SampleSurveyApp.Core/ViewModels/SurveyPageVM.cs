@@ -116,7 +116,9 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isVisibleAnswerReview;
 
         [ObservableProperty]
-        bool isVisibleSurveyHeader = true;
+        bool isVisibleSurveyHeader = false;
+        [ObservableProperty]
+        bool isVisibleSurveyStartButton = true;
 
         [ObservableProperty]
         bool isWorkingLeftBtn = true;
@@ -138,8 +140,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
-        //[ObservableProperty]
-        //string selectedListItem;
 
         [ObservableProperty]
         string selectedItem;
@@ -159,8 +159,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         int textLen = 0;
-        [ObservableProperty]
-        bool isMissy = false;
 
         [ObservableProperty]
         string qType;
@@ -558,6 +556,8 @@ namespace SampleSurveyApp.Core.ViewModels
         public void SetScreenValuesOnOpen()
         {
             SPID = "987654";
+            IsVisibleSurveyStartButton = false;
+            IsVisibleSurveyHeader = true;
 
             if (CurrentQuestion != null)
             {
