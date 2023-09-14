@@ -159,6 +159,8 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         int textLen = 0;
+        [ObservableProperty]
+        bool isMissy = false;
 
         [ObservableProperty]
         string qType;

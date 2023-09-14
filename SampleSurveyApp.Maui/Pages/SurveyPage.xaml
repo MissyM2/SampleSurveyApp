@@ -5,28 +5,12 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:SampleSurveyApp.Core.ViewModels;assembly=SampleSurveyApp.Core"
              xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
-             x:Name="Root"
+             xmlns:controls="clr-namespace:SampleSurveyApp.Maui.Controls"
+             x:Name="SurveyPageName"
              x:DataType="vm:SurveyPageVM">
 
     <ContentPage.Resources>
-        <Style TargetType="ContentView">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal">
-                            <VisualState.Setters>
-                                <Setter TargetName="checkImage" Property="Image.IsVisible" Value="false"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter TargetName="checkImage" Property="Image.IsVisible" Value="true"/>
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
+       
          <Style x:Key="InvalidEntryStyle"
                TargetType="Entry">
             <Setter Property="TextColor" Value="IndianRed"/>
@@ -128,44 +112,8 @@
                     </CollectionView.Triggers>
                 
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                        <ContentView>
-                            <StackLayout>
-                                <Grid x:Name="responseGrid"
-                                    ColumnDefinitions="*, 40,40"
-                                    RowDefinitions="40, 20">
-                                     <VerticalStackLayout >
-                                        <Label Text="{Binding AText}" Margin="10,4,4,4" />
-                                    </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="1"
-                                                            Grid.Row="0">
-                                        <Label x:Name="isVisibleLabel"
-                                               Text="{Binding IsSelected}"/>
-                                                        
-                                    </VerticalStackLayout>
-                                    <VerticalStackLayout Grid.Column="2"
-                                                            Grid.Row="0">
-                                        <Image Source="check.png" Margin="0,5,0,0"
-                                                HeightRequest="20"
-                                                IsVisible="{Binding Source={x:Reference isVisibleLabel},Path=Text}">      
-                                        </Image>
-                                    </VerticalStackLayout>
-
-                                    <VerticalStackLayout Grid.Column="2"
-                                                            Grid.Row="0">
-                                         <Image x:Name="checkImage"
-                                                Source="check.png" Margin="0,5,0,0"
-                                                HeightRequest="20">
-                                        </Image>
-                                    </VerticalStackLayout>
-                                    <BoxView Grid.Column="0"
-                                                Grid.ColumnSpan="3"
-                                                Grid.Row="1"
-                                                BackgroundColor="LightBlue"
-                                                HeightRequest="1"/>
-                                </Grid>
-                            </StackLayout>
-                            </ContentView>
+                        <DataTemplate x:DataType="models:SurveyAnswerModel">
+                            <controls:AnswerOptionCardView  />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
@@ -191,30 +139,10 @@
                                 Value="450"/>
                         </Trigger>
                 </CollectionView.Triggers>
-            <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:SurveyAnswerModel">
-                                <ContentView>
-                                    <Grid x:Name="responseGrid"
-                                        ColumnDefinitions="*, 40"
-                                        RowDefinitions="40, 20">
-                                        <VerticalStackLayout >
-                                            <Label Text="{Binding AText}" Margin="10,4,4,4" />
-                                        </VerticalStackLayout>
-                                        <VerticalStackLayout Grid.Column="1"
-                                                                Grid.Row="0">
-                                            <Image x:Name="checkImage"
-                                                    Source="check.png" Margin="0,5,0,0"
-                                                    HeightRequest="20">
-                                            </Image>
-                                        </VerticalStackLayout>
-                                        <BoxView Grid.Column="0"
-                                                    Grid.ColumnSpan="2"
-                                                    Grid.Row="1"
-                                                    BackgroundColor="LightBlue"
-                                                    HeightRequest="1"/>
-                                    </Grid>                  
-                                </ContentView>
-                    </DataTemplate>
+                <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:SurveyAnswerModel">
+                            <controls:AnswerOptionCardView  />
+                        </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
