@@ -34,14 +34,13 @@
     </Shell.TitleView>
 
     <StackLayout>
-        <StackLayout IsVisible="{Binding IsVisibleSurveyStartButton}" Padding="0,10,0,10" BackgroundColor="pink"
-                     >
+        <StackLayout IsVisible="{Binding IsVisibleSurveyStartButton}" Padding="0,10,0,10">
             <Button Text="Start a survey"
                         WidthRequest="200"
                         HeightRequest="30"
                         FontSize="Micro"
                         Command="{Binding CreateSurveyCommand}"
-                        BackgroundColor="green"
+                        BackgroundColor="CornflowerBlue"
                         VerticalOptions="Center"/>
         </StackLayout>
 
@@ -67,8 +66,8 @@
                                 IsVisible="{Binding IsVisibleRuleTypeSingle}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:SurveyAnswerModel">
-                            <controls:AnswerOptionCardView  />
-                        </DataTemplate>
+                            <controls:AnswerOptionCardView />
+                    </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 

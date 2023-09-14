@@ -95,6 +95,9 @@ namespace SampleSurveyApp.Core.ViewModels
         int count;
 
         [ObservableProperty]
+        bool isMissySelectedAnswer;
+
+        [ObservableProperty]
         string screenNameLbl = "Survey Start Page";
 
         [ObservableProperty]
@@ -679,6 +682,7 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task AnswerSelected() //Single Answer
         {
+            IsMissySelectedAnswer = UserSelectedAnswer.IsSelected;
             if (CurrentQuestion.NextQCode == 0)  // the first time the user has selected an answer to this question
             {
                 if (CurrentQuestion.QType == "SingleAnswer")

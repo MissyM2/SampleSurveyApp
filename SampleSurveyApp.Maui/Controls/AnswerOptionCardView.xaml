@@ -6,40 +6,52 @@
              x:Class="SampleSurveyApp.Maui.Controls.AnswerOptionCardView"
              x:Name="this">
 
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup Name="CommonStates">
+                <VisualState Name="Normal" >
+                    <VisualState.Setters>
+                        <Setter TargetName="checkMarkImage" Property="IsVisible" Value="false"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState Name="Selected">
+                    <VisualState.Setters>
+                        <Setter TargetName="checkMarkImage" Property="IsVisible" Value="true"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
     <StackLayout>
+          
         <Grid x:Name="responseGrid"
             ColumnDefinitions="*, 40,40"
             RowDefinitions="40, 20">
-                <VerticalStackLayout >
+
+            <VerticalStackLayout VerticalOptions="Center">
                 <Label Text="{Binding AText}" Margin="10,4,4,4" />
             </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1"
-                                    Grid.Row="0">
-                <Label x:Name="isVisibleLabel"
-                        Text="{Binding IsSelected}"/>
-                                                        
+
+            <VerticalStackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">
+                <Label x:Name="isVisibleLabel" Text="{Binding IsSelected}"/>                                 
             </VerticalStackLayout>
-            <VerticalStackLayout Grid.Column="2"
-                                    Grid.Row="0">
-                <Image Source="check.png" Margin="0,5,0,0"
-                        HeightRequest="20"
-                        IsVisible="{Binding Source={x:Reference isVisibleLabel},Path=Text}">      
+
+            <VerticalStackLayout Grid.Column="2" Grid.Row="0">
+                <Image x:Name="checkMarkImage" Source="check.png" Margin="0,5,0,0" HeightRequest="20" IsVisible="{Binding IsSelected}">
+                    <Image.Triggers>
+                            <DataTrigger TargetType="Image"
+                                            Binding="{Binding IsMissySelectedAnswer}" Value="true">
+                                <Setter Property="IsVisible" Value="true"/>
+                            </DataTrigger>
+                    </Image.Triggers>
                 </Image>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Column="2"
-                                    Grid.Row="0">
-                <Image x:Name="checkImage"
-                    Source="check.png" Margin="0,5,0,0"
-                    HeightRequest="20"
-                    IsVisible="{Binding IsSelected}"/>
-            </VerticalStackLayout>
-            <BoxView Grid.Column="0"
-                        Grid.ColumnSpan="3"
-                        Grid.Row="1"
-                        BackgroundColor="LightBlue"
-                        HeightRequest="1"/>
+            <!--<VerticalStackLayout Grid.Column="2" Grid.Row="0">
+                <Image x:Name="checkImage" Source="check.png" Margin="0,5,0,0"  HeightRequest="20" IsVisible="{Binding IsSelected}"/>
+            </VerticalStackLayout>-->
+          
         </Grid>
+        <BoxView Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" BackgroundColor="LightBlue" HeightRequest="1"/>
     </StackLayout>
 </ContentView>
 
