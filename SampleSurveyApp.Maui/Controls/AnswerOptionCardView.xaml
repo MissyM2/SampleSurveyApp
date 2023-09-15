@@ -9,6 +9,10 @@
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup Name="CommonStates">
                 <VisualState Name="Normal" >
+                    <!--<VisualState.StateTriggers>
+                        <StateTrigger IsActive="{Binding IsSelected}"
+                                      IsActiveChanged="OnNormalStateIsActiveChanged" />
+                    </VisualState.StateTriggers>-->
                     <VisualState.Setters>
                         <Setter TargetName="checkMarkImage" Property="IsVisible" Value="false"/>
                         <Setter Property="BackgroundColor" Value="white"/>
@@ -17,6 +21,10 @@
 
                 </VisualState>
                 <VisualState Name="Selected">
+                <!--<VisualState.StateTriggers>
+                        <StateTrigger IsActive="{Binding IsSelected}"
+                                      IsActiveChanged="OnSelectedStateIsActiveChanged" />
+                    </VisualState.StateTriggers>-->
                     <VisualState.Setters>
                         <Setter TargetName="checkMarkImage" Property="IsVisible" Value="true"/>
                         <Setter Property="BackgroundColor" Value="white"/>
@@ -40,15 +48,9 @@
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="2" Grid.Row="0">
-                <Image x:Name="checkMarkImage" Source="check.png" Margin="0,5,0,0" HeightRequest="20" IsVisible="{Binding IsSelected}">
-                    <Image.Triggers>
-                            <DataTrigger TargetType="Image"
-                                            Binding="{Binding IsMissySelectedAnswer}" Value="true">
-                                <Setter Property="IsVisible" Value="true"/>
-                            </DataTrigger>
-                    </Image.Triggers>
-                </Image>
+                <Image x:Name="checkMarkImage" Source="check.png" Margin="0,5,0,0" HeightRequest="20" IsVisible="{Binding IsSelected}"/>
             </VerticalStackLayout>
+           
           
         </Grid>
         <BoxView Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" BackgroundColor="LightBlue" HeightRequest="1"/>

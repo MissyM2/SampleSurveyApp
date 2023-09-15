@@ -16,7 +16,7 @@ namespace SampleSurveyApp.Core.Database
             SurveyAnswerList = new List<SurveyAnswerModel>()
             {
                 new SurveyAnswerModel () { QCode = 1, ACode = 1, AText = "Yes", RuleType = 2},
-                new SurveyAnswerModel () { QCode = 1, ACode = 2, AText = "No", RuleType = -1},
+                new SurveyAnswerModel () { QCode = 1, ACode = 2, AText = "No", RuleType = 2},
 
                 new SurveyAnswerModel () { QCode = 2, ACode = 1, AText = "Yes", RuleType = 3},
                 new SurveyAnswerModel () { QCode = 2, ACode = 2, AText = "No", RuleType = -1},
