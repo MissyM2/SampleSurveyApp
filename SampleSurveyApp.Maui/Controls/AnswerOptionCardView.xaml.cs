@@ -6,5 +6,17 @@ public partial class AnswerOptionCardView : ContentView
 	{
 		InitializeComponent();
 	}
-   
+
+    void OnNormalStateIsActiveChanged(object sender, EventArgs e)
+    {
+        StateTriggerBase stateTrigger = sender as StateTriggerBase;
+        Console.WriteLine($"Normal state active: {stateTrigger.IsActive}");
+    }
+
+    void OnSelectedStateIsActiveChanged(object sender, EventArgs e)
+    {
+        StateTriggerBase stateTrigger = sender as StateTriggerBase;
+        Console.WriteLine($"Selected state active: {stateTrigger.IsActive}");
+    }
+
 }

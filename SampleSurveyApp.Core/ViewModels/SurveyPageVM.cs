@@ -109,6 +109,12 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isVisibleAnswerReview;
 
         [ObservableProperty]
+        bool isAnswerReview = false;
+
+        [ObservableProperty]
+        bool answerReviewIsNext;
+
+        [ObservableProperty]
         bool isVisibleSurveyHeader = false;
         [ObservableProperty]
         bool isVisibleSurveyStartButton = true;
@@ -160,9 +166,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         string ruleType;
-
-        [ObservableProperty]
-        bool isReview = false;
 
         [ObservableProperty]
         bool answerHasBeenSelectedForThisQuestion;
@@ -324,22 +327,18 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if(AnswerHasBeenSelectedForThisQuestion == true)
             { 
-
-                // see if the question has been used before
-                // if so, show their answers.
-
-
-
-                // update current q with nextq and update nextq property
                 var foundCurrQ = CurrentQuestion;
                 int ruleType = 0;
 
                 if (CurrentQuestion.QType == "SingleAnswer")   // CurrentQuestion.QType must be SingleAnswer
                 {
+                   
+
                     if (UserSelectedAnswer.RuleType == 0 || UserSelectedAnswer.RuleType == -1)  // this is the last q
                     {
                         Debug.WriteLine("NextButtonClicked: this is the last question, go to review");
                         // go to review
+                        IsAnswerReview = true;
 
                         CurrentQuestion.NextQCode = 0;
                         CreateUserResponsesCollection();
@@ -381,7 +380,8 @@ namespace SampleSurveyApp.Core.ViewModels
                 var foundNextQ = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode.Equals(ruleType));
                 if (foundNextQ == null)  // there are no more q
                 {
-                    CurrentQuestion = null;
+                    Debug.WriteLine("Should CurrentQuestion be null?");
+                    //CurrentQuestion = null;
                 }
                 else  // there is a next q
                 {
@@ -432,9 +432,10 @@ namespace SampleSurveyApp.Core.ViewModels
         private async void GoBack()
         {
             Console.WriteLine("BackButtonClicked");
+            
 
             // see if it is review page
-            if (CurrentQuestion == null)
+            if (IsAnswerReview == true)
             {
                 var foundQs = AllPossibleQuestionsCollection.Where(x => x.IsSelected.Equals(true));
                 CurrentQuestion = foundQs.Last();
@@ -451,12 +452,12 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (answer.QCode == CurrentQuestion.QCode)
                 {
-                    
+
                     AnswerOptionsForCurrentQuestionCollection.Add(answer);
                 }
             }
 
-            if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType == "MultipleAnswers") 
+            if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType == "MultipleAnswers")
             {
                 MakeSureAnswerHasBeenSelectedForCurrentQuestion();
             }
@@ -513,11 +514,13 @@ namespace SampleSurveyApp.Core.ViewModels
                 if (selectedItems.RuleType != -1)
                 {
                     NextQCode = selectedItems.RuleType;
+                    AnswerReviewIsNext = false;
                     RightBtnLbl = "Next";
                 }
                 else
                 {
                     NextQCode = -1;
+                    AnswerReviewIsNext = true;
                     RightBtnLbl = "Review";
                 }
 
@@ -551,6 +554,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 else
                 {
                     NextQCode = -1;
+                    AnswerReviewIsNext = true;
                     RightBtnLbl = "Review";
                 }
             }
@@ -569,7 +573,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (CurrentQuestion != null)
             {
-                if (RightBtnLbl != "Review")
+                if (IsAnswerReview == false)
                 {
                     IsWorkingRightBtn = true;
 
