@@ -437,33 +437,32 @@ namespace SampleSurveyApp.Core.ViewModels
             // see if it is review page
             if (IsAnswerReview == true)
             {
-                var foundQs = AllPossibleQuestionsCollection.Where(x => x.IsSelected.Equals(true));
-                CurrentQuestion = foundQs.Last();
+                IsAnswerReview = false;
+               // var foundQs = AllPossibleQuestionsCollection.Where(x => x.IsSelected.Equals(true));
+                //CurrentQuestion = foundQs.Last();
             }
             else
             {
                 //get new curr q from prev q
                 CurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.PrevQCode));
-            }
-
-            // get answers for curr q
-            AnswerOptionsForCurrentQuestionCollection.Clear();
-            foreach (var answer in answerSource)
-            {
-                if (answer.QCode == CurrentQuestion.QCode)
+                // get answers for curr q
+                AnswerOptionsForCurrentQuestionCollection.Clear();
+                foreach (var answer in answerSource)
                 {
+                    if (answer.QCode == CurrentQuestion.QCode)
+                    {
 
-                    AnswerOptionsForCurrentQuestionCollection.Add(answer);
+                        AnswerOptionsForCurrentQuestionCollection.Add(answer);
+                    }
                 }
-            }
-
-            if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType == "MultipleAnswers")
-            {
-                MakeSureAnswerHasBeenSelectedForCurrentQuestion();
-            }
-            else  // CurrentQuestion.QType must be Text
-            {
-                Debug.WriteLine("Get existing text for back button");
+                if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType == "MultipleAnswers")
+                {
+                    MakeSureAnswerHasBeenSelectedForCurrentQuestion();
+                }
+                else  // CurrentQuestion.QType must be Text
+                {
+                    Debug.WriteLine("Get existing text for back button");
+                }
             }
 
             // set screen values based on properties in CurrentQuestion
