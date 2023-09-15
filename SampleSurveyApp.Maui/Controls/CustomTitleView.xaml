@@ -9,7 +9,7 @@
                   FontSize="18"
                   Grid.Column="0"
                   HorizontalOptions="Start"
-                  Command="{Binding BackButtonClickedCommand}"
+                  Command="{Binding GoBackCommand}"
                   IsVisible="{Binding IsWorkingLeftBtn}"
                   IsEnabled="{Binding IsWorkingLeftBtn}"/>
                 <Label x:Name="titleLabel" FontSize="20" FontAttributes="Bold"
@@ -21,7 +21,7 @@
                    TextColor="White"
                    Grid.Column="2" FontSize="18"
                    HorizontalOptions="End"
-                   Command="{Binding NextButtonClickedCommand}"
+                   Command="{Binding GoNextCommand}"
                    IsVisible="{Binding IsWorkingRightBtn}"
                    IsEnabled="{Binding IsWorkingRightBtn}"/>
             </Grid>

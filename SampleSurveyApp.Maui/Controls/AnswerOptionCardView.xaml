@@ -9,10 +9,6 @@
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup Name="CommonStates">
                 <VisualState Name="Normal" >
-                    <!--<VisualState.StateTriggers>
-                        <StateTrigger IsActive="{Binding IsSelected}"
-                                      IsActiveChanged="OnNormalStateIsActiveChanged" />
-                    </VisualState.StateTriggers>-->
                     <VisualState.Setters>
                         <Setter TargetName="checkMarkImage" Property="IsVisible" Value="false"/>
                         <Setter Property="BackgroundColor" Value="white"/>
@@ -21,10 +17,6 @@
 
                 </VisualState>
                 <VisualState Name="Selected">
-                <!--<VisualState.StateTriggers>
-                        <StateTrigger IsActive="{Binding IsSelected}"
-                                      IsActiveChanged="OnSelectedStateIsActiveChanged" />
-                    </VisualState.StateTriggers>-->
                     <VisualState.Setters>
                         <Setter TargetName="checkMarkImage" Property="IsVisible" Value="true"/>
                         <Setter Property="BackgroundColor" Value="white"/>

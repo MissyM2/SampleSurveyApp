@@ -287,7 +287,7 @@ namespace SampleSurveyApp.Core.ViewModels
         #region Navigation
 
         [RelayCommand]
-        public async Task NextButtonClicked()
+        public async Task GoNext()
         {
             Console.WriteLine("NextButtonClicked");
 
@@ -427,23 +427,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-        private void MakeSureAnswerHasBeenSelectedForCurrentQuestion()
-        {
-            var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
-            AnswerHasBeenSelectedForThisQuestion = false;
-            foreach (var item in currentAnswers)
-            {
-                if (item.IsSelected == true)
-                {
-                    AnswerHasBeenSelectedForThisQuestion = true;
-                }
-            }
-        }
-
-       
 
         [RelayCommand]
-        private async void BackButtonClicked()
+        private async void GoBack()
         {
             Console.WriteLine("BackButtonClicked");
 
@@ -465,6 +451,7 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (answer.QCode == CurrentQuestion.QCode)
                 {
+                    
                     AnswerOptionsForCurrentQuestionCollection.Add(answer);
                 }
             }
@@ -483,11 +470,19 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-
-
-        #endregion
-
-        #region Answers
+        private void MakeSureAnswerHasBeenSelectedForCurrentQuestion()
+        {
+            var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
+            AnswerHasBeenSelectedForThisQuestion = false;
+            foreach (var item in currentAnswers)
+            {
+                if (item.IsSelected == true)
+                {
+                    UserSelectedAnswer = item;
+                    AnswerHasBeenSelectedForThisQuestion = true;
+                }
+            }
+        }
 
         private int GetAnswerOptionsForCurrentQuestion()
         {
@@ -502,6 +497,8 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
+
+        #region User Selections
 
         public ICommand MultipleSelectionCommand => new Command<IList<object>>((obj) =>
         {
@@ -559,10 +556,12 @@ namespace SampleSurveyApp.Core.ViewModels
             }
         }
 
+        #endregion
 
-            #region UI
 
-            public void SetScreenValuesOnOpen()
+        #region UI Screen Values
+
+        public void SetScreenValuesOnOpen()
         {
             SPID = "987654";
             IsVisibleSurveyStartButton = false;
@@ -645,7 +644,6 @@ namespace SampleSurveyApp.Core.ViewModels
         private void CreateUserResponsesCollection()
         {
             UserAnswerGroups.Clear();
-
             var dict = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true)).GroupBy(o => o.QCode)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
@@ -656,9 +654,6 @@ namespace SampleSurveyApp.Core.ViewModels
                 UserAnswerGroups.Add(new AnswerGroup(item.Key, q.QText, new List<SurveyAnswerModel>(item.Value)));
             }
         }
-
-
-
 
         public class AnswerGroup : List<SurveyAnswerModel>
         {
