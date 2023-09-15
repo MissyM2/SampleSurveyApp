@@ -292,30 +292,9 @@ namespace SampleSurveyApp.Core.ViewModels
             Console.WriteLine("NextButtonClicked");
 
             // has an answer been selected
-            if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
+            if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType.Equals("MultipleAnswers"))  
             {
-                var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
-                AnswerHasBeenSelectedForThisQuestion = false;
-                foreach (var item in currentAnswers)
-                {
-                    if (item.IsSelected == true)
-                    {
-                        AnswerHasBeenSelectedForThisQuestion = true;
-                    }
-                }
-            }
-            else if (CurrentQuestion.QType.Equals("MultipleAnswers"))
-            {
-                var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
-                AnswerHasBeenSelectedForThisQuestion = false;
-                foreach (var item in currentAnswers)
-                {
-                    if (item.IsSelected == true)
-                    {
-                        AnswerHasBeenSelectedForThisQuestion = true;
-                    }
-                }
-                
+                MakeSureAnswerHasBeenSelectedForCurrentQuestion();
             }
             else //(CurrentQuestion.QType.Equals("Text"))
             {
@@ -448,10 +427,20 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-        private void EvaluateChangeOfAnswer()
+        private void MakeSureAnswerHasBeenSelectedForCurrentQuestion()
         {
-            throw new NotImplementedException();
+            var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
+            AnswerHasBeenSelectedForThisQuestion = false;
+            foreach (var item in currentAnswers)
+            {
+                if (item.IsSelected == true)
+                {
+                    AnswerHasBeenSelectedForThisQuestion = true;
+                }
+            }
         }
+
+       
 
         [RelayCommand]
         private async void BackButtonClicked()
@@ -480,46 +469,9 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
             }
 
-            if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
+            if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType == "MultipleAnswers") 
             {
-
-
-                var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
-                AnswerHasBeenSelectedForThisQuestion = false;
-                foreach (var item in currentAnswers)
-                {
-                    if (item.IsSelected == true)
-                    {
-                        AnswerHasBeenSelectedForThisQuestion = true;
-                    }
-                }
-
-
-
-                //var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.IsSelected == true);
-                //UserSelectedAnswer = selectedAnswer;
-                //if(UserSelectedAnswer.IsSelected == true)
-                //{
-                //    CheckmarkIsSelected = true;
-                //}
-                //else
-                //{
-                //    CheckmarkIsSelected = false;
-                //}
-            }
-            else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
-            {
-                var selectedAnswers = AnswerOptionsForCurrentQuestionCollection.Where(t => t.QCode == CurrentQuestion.QCode && t.IsSelected == true);
-
-                var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
-                AnswerHasBeenSelectedForThisQuestion = false;
-                foreach (var item in currentAnswers)
-                {
-                    if (item.IsSelected == true)
-                    {
-                        AnswerHasBeenSelectedForThisQuestion = true;
-                    }
-                }
+                MakeSureAnswerHasBeenSelectedForCurrentQuestion();
             }
             else  // CurrentQuestion.QType must be Text
             {
