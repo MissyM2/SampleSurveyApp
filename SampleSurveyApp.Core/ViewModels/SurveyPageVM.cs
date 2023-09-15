@@ -223,16 +223,13 @@ namespace SampleSurveyApp.Core.ViewModels
             // insert a new record
             await _surveyModelRepository.InsertAsync(NewSurvey);
             InsertedSurvey = NewSurvey;
-            await Refresh();
+            await Init();
             IsBusy = false;
 
         }
 
-
-
-        #region Navigation
         [RelayCommand]
-        public async Task Refresh()
+        public async Task Init()
         {
             await _surveyQuestionModelRepository.DeleteAllAsync();
             var aqd = new AddQuestionData(_surveyQuestionModelRepository);
@@ -281,10 +278,13 @@ namespace SampleSurveyApp.Core.ViewModels
 
             IsVisibleSurveyHeader = false;
 
-             // set screen values based on properties in CurrentQuestion
-             SetScreenValuesOnOpen();
+            // set screen values based on properties in CurrentQuestion
+            SetScreenValuesOnOpen();
 
         }
+
+
+        #region Navigation
 
         [RelayCommand]
         public async Task NextButtonClicked()
@@ -303,11 +303,11 @@ namespace SampleSurveyApp.Core.ViewModels
                         AnswerHasBeenSelectedForThisQuestion = true;
                     }
                 }
-
             }
             else if (CurrentQuestion.QType.Equals("MultipleAnswers"))
             {
                 var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
+                AnswerHasBeenSelectedForThisQuestion = false;
                 foreach (var item in currentAnswers)
                 {
                     if (item.IsSelected == true)
@@ -482,20 +482,44 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
             {
-                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.IsSelected == true);
-                UserSelectedAnswer = selectedAnswer;
-                if(UserSelectedAnswer.IsSelected == true)
+
+
+                var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
+                AnswerHasBeenSelectedForThisQuestion = false;
+                foreach (var item in currentAnswers)
                 {
-                    CheckmarkIsSelected = true;
+                    if (item.IsSelected == true)
+                    {
+                        AnswerHasBeenSelectedForThisQuestion = true;
+                    }
                 }
-                else
-                {
-                    CheckmarkIsSelected = false;
-                }
+
+
+
+                //var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.IsSelected == true);
+                //UserSelectedAnswer = selectedAnswer;
+                //if(UserSelectedAnswer.IsSelected == true)
+                //{
+                //    CheckmarkIsSelected = true;
+                //}
+                //else
+                //{
+                //    CheckmarkIsSelected = false;
+                //}
             }
             else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
             {
                 var selectedAnswers = AnswerOptionsForCurrentQuestionCollection.Where(t => t.QCode == CurrentQuestion.QCode && t.IsSelected == true);
+
+                var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
+                AnswerHasBeenSelectedForThisQuestion = false;
+                foreach (var item in currentAnswers)
+                {
+                    if (item.IsSelected == true)
+                    {
+                        AnswerHasBeenSelectedForThisQuestion = true;
+                    }
+                }
             }
             else  // CurrentQuestion.QType must be Text
             {
