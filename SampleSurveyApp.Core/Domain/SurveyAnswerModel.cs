@@ -7,19 +7,9 @@ namespace SampleSurveyApp.Core.Domain
 {
 	public partial class SurveyAnswerModel : BaseDatabaseItem
 	{
-        //public int QCode { get; set; }
-
-        //public int ACode { get; set; }
-
-        //public string AText { get; set; }
-
-        //public int RuleType { get; set; }
-
-        //public bool IsSelected { get; set; }
-
 
         [ObservableProperty]
-        int qCode;
+        int currQCode;
 
         [ObservableProperty]
         int aCode;
@@ -28,7 +18,7 @@ namespace SampleSurveyApp.Core.Domain
         string aText;
 
         [ObservableProperty]
-        int ruleType;
+        int navRule;
 
         [ObservableProperty]
         bool isSelected;

@@ -7,7 +7,7 @@ namespace SampleSurveyApp.Core.Domain
 	{
         public int SurveyId { get; set; }
 
-        public int QCode { get; set; }
+        public int CurrQCode { get; set; }
 
         public string QText{ get; set; }
 

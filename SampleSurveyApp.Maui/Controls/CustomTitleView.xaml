@@ -10,7 +10,7 @@
                   Grid.Column="0"
                   HorizontalOptions="Start"
                   Command="{Binding NavigateCommand}"
-                  CommandParameter="Back"
+                  CommandParameter="Prev"
                   IsVisible="{Binding IsWorkingLeftBtn}"
                   IsEnabled="{Binding IsWorkingLeftBtn}"/>
                 <Label x:Name="titleLabel" FontSize="20" FontAttributes="Bold"

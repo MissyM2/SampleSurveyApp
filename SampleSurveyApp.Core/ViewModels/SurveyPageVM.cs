@@ -59,13 +59,10 @@ namespace SampleSurveyApp.Core.ViewModels
         SurveyQuestionModel nextCurrentQuestion;
 
         [ObservableProperty]
-        int currentRuleType;
+        int currentNavRule;
 
         public IList<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
 
-
-        //[ObservableProperty]
-        //SurveyQuestionModel lastQuestion;
 
         [ObservableProperty]
         int nextQCode;
@@ -171,7 +168,7 @@ namespace SampleSurveyApp.Core.ViewModels
         string qType;
 
         [ObservableProperty]
-        string ruleType;
+        string navRule;
 
         [ObservableProperty]
         bool answerHasBeenSelectedForThisQuestion;
@@ -275,13 +272,13 @@ namespace SampleSurveyApp.Core.ViewModels
             AnswerOptionsForCurrentQuestionCollection.Clear();
             foreach (var answer in answerSource)
             {
-                if (answer.QCode == CurrentQuestion.QCode)
+                if (answer.CurrQCode == CurrentQuestion.CurrQCode)
                 {
                     AnswerOptionsForCurrentQuestionCollection.Add(answer);
                 }
             }
             // update question in q collection
-            var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.QCode));
+            var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
             foundQ.IsSelected = true;
             foundQ.PrevQCode = 0;
 
@@ -303,8 +300,14 @@ namespace SampleSurveyApp.Core.ViewModels
             // has an answer been selected;
             if (direction == "Next")
             {
-                if (CurrentRuleType == -1) // last q before review
+                if (CurrentNavRule == -1) // last q before review
                 {
+                    // set rule type
+                    if (CurrentQuestion.NextQCode == 0)
+                    {
+                        CurrentNavRule = -1;
+                    }
+                    
 
                     // go to review
                     IsAnswerReview = true;
@@ -312,37 +315,44 @@ namespace SampleSurveyApp.Core.ViewModels
                     CreateUserResponsesCollection();
 
                     // set screen values based on properties in CurrentQuestion
+                    
                     SetScreenValuesOnOpen();
 
                 }
                 else  // all others
                 {
+
+
                     // get nextqcode on CurrentQuestion after answer selection has been made
-                    CurrentQuestion.NextQCode = UserSelectedAnswer.RuleType;
+                    CurrentQuestion.NextQCode = UserSelectedAnswer.NavRule;
 
                     // get nextquestion
-                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode == CurrentRuleType);
+                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
 
 
                     // set nextqcode on CurrentQuestion
                     if (CurrentQuestion.NextQCode == 0)
                     {
-                        CurrentQuestion.NextQCode = NextCurrentQuestion.QCode;
+                        CurrentQuestion.NextQCode = NextCurrentQuestion.CurrQCode;
                     }
 
                     // set prevqcode on CurrentQuestion
-                    NextCurrentQuestion.PrevQCode = CurrentQuestion.QCode;
+                    NextCurrentQuestion.PrevQCode = CurrentQuestion.CurrQCode;
 
                     // get new current question
                     CurrentQuestion = NextCurrentQuestion;
                     CurrentQuestion.IsSelected = true;
+
+                    // set rule type
+                    //CurrentNavRule = CurrentQuestion.NextQCode;
+
 
 
                     // get answers for current question
                     AnswerOptionsForCurrentQuestionCollection.Clear();
                     foreach (var i in AllPossibleAnswerOptionsCollection)
                     {
-                        if (i.QCode == CurrentQuestion.QCode)
+                        if (i.CurrQCode == CurrentQuestion.CurrQCode)
                         {
                             AnswerOptionsForCurrentQuestionCollection.Add(i);
                         }
@@ -362,13 +372,13 @@ namespace SampleSurveyApp.Core.ViewModels
                         {
                             // set the answer to IsSelected
 
-                            var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == "");
+                            var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode && x.AText == "");
                             foundA.IsSelected = true;
 
                             // insert record into
                             SurveyResponseModel responseObj = new SurveyResponseModel();
                             responseObj.SurveyId = Int32.Parse(SPID);
-                            responseObj.QCode = CurrentQuestion.QCode;
+                            responseObj.CurrQCode = CurrentQuestion.CurrQCode;
                             responseObj.QText = CurrentQuestion.QText;
                             responseObj.ACode = foundA.ACode;
                             responseObj.AText = UserTextAnswer;
@@ -382,18 +392,20 @@ namespace SampleSurveyApp.Core.ViewModels
 
 
             }
-            else // direction == "Back"
+            else // direction == "Prev"
             {
                 IsAnswerReview = false;
-                if (CurrentRuleType == -1)  // first question from review
+
+                // how do you tell that you are coming from the review page
+                if (CurrentNavRule == -1)  // first question from review
                 {
-                    CurrentRuleType = CurrentQuestion.PrevQCode;
+                    CurrentNavRule = CurrentQuestion.CurrQCode;
 
                     // get answers for current question
                     AnswerOptionsForCurrentQuestionCollection.Clear();
                     foreach (var i in AllPossibleAnswerOptionsCollection)
                     {
-                        if (i.QCode == CurrentQuestion.QCode)
+                        if (i.CurrQCode == CurrentQuestion.CurrQCode)
                         {
                             AnswerOptionsForCurrentQuestionCollection.Add(i);
                         }
@@ -401,16 +413,16 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
                 else // all others
                 {
-                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode == CurrentQuestion.PrevQCode);
+                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentQuestion.PrevQCode);
                     CurrentQuestion = NextCurrentQuestion;
                     CurrentQuestion.IsSelected = true;
-
+                    CurrentNavRule = CurrentQuestion.CurrQCode;
 
                     // get answers for current question
                     AnswerOptionsForCurrentQuestionCollection.Clear();
                     foreach (var i in AllPossibleAnswerOptionsCollection)
                     {
-                        if (i.QCode == CurrentQuestion.QCode)
+                        if (i.CurrQCode == CurrentQuestion.CurrQCode)
                         {
                             AnswerOptionsForCurrentQuestionCollection.Add(i);
                         }
@@ -429,16 +441,16 @@ namespace SampleSurveyApp.Core.ViewModels
 
         private void MakeSureAnswerHasBeenSelectedForCurrentQuestion()
         {
-            var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.QCode == CurrentQuestion.QCode);
+            var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.CurrQCode == CurrentQuestion.CurrQCode);
             AnswerHasBeenSelectedForThisQuestion = false;
             foreach (var item in currentAnswers)
             {
                 if (item.IsSelected == true)
                 {
                     UserSelectedAnswer = item;
-                    if (CurrentRuleType == -1)
+                    if (CurrentNavRule == -1)
                     {
-                        CurrentRuleType = UserSelectedAnswer.RuleType;
+                        CurrentNavRule = UserSelectedAnswer.NavRule;
                     }
                     AnswerHasBeenSelectedForThisQuestion = true;
                 }
@@ -448,7 +460,7 @@ namespace SampleSurveyApp.Core.ViewModels
         private int GetAnswerOptionsForCurrentQuestion()
         {
             AnswerOptionsForCurrentQuestionCollection.Clear();
-            var filteredList = AllPossibleAnswerOptionsCollection.Where(t => t.QCode.Equals(CurrentQuestion.QCode));
+            var filteredList = AllPossibleAnswerOptionsCollection.Where(t => t.CurrQCode.Equals(CurrentQuestion.CurrQCode));
 
             AnswerOptionsForCurrentQuestionCollection = new ObservableCollection<SurveyAnswerModel>(filteredList);
 
@@ -472,9 +484,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 temp.Add(selectedItems);
                 // Check to see if this is the last question
-                if (selectedItems.RuleType != -1)
+                if (selectedItems.NavRule != -1)
                 {
-                    NextQCode = selectedItems.RuleType;
+                    NextQCode = selectedItems.NavRule;
                     AnswerReviewIsNext = false;
                     RightBtnLbl = "Next";
                 }
@@ -490,7 +502,7 @@ namespace SampleSurveyApp.Core.ViewModels
             foreach (var item in temp)
             {
                 UserSelectedAnswers.Add(item);
-                CurrentRuleType = item.RuleType;
+                CurrentNavRule = item.NavRule;
 
             }
         });
@@ -502,16 +514,16 @@ namespace SampleSurveyApp.Core.ViewModels
             //{
             if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
             {
-                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode == UserSelectedAnswer.ACode);
-                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.QCode == UserSelectedAnswer.QCode && x.ACode != UserSelectedAnswer.ACode);
+                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == UserSelectedAnswer.CurrQCode && x.ACode == UserSelectedAnswer.ACode);
+                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == UserSelectedAnswer.CurrQCode && x.ACode != UserSelectedAnswer.ACode);
 
                 selectedAnswer.IsSelected = true;
-                CurrentRuleType = selectedAnswer.RuleType;
+                CurrentNavRule = selectedAnswer.NavRule;
                 otherAnswer.IsSelected = false;
 
-                if (UserSelectedAnswer.RuleType != -1)
+                if (UserSelectedAnswer.NavRule != -1)
                 {
-                    NextQCode = UserSelectedAnswer.RuleType;
+                    NextQCode = UserSelectedAnswer.NavRule;
                     RightBtnLbl = "Next";
                 }
                 else
@@ -538,11 +550,11 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 IsWorkingRightBtn = true;
 
-                ScreenNameLbl = CurrentQuestion.QCodeDesc;
+                ScreenNameLbl = CurrentQuestion.CurrQCodeDesc;
                 CurrentQuestionLbl = CurrentQuestion.QText;
                 if (CurrentQuestion.PrevQCode != 0)
                 {
-                    LeftBtnLbl = "Back";
+                    LeftBtnLbl = "Prev";
                     IsWorkingLeftBtn = true;
                 }
                 else
@@ -588,7 +600,7 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 ScreenNameLbl = "Review";
                 CurrentQuestionLbl = "Please review your answers here.";
-                LeftBtnLbl = "Back";
+                LeftBtnLbl = "Prev";
                 RightBtnLbl = "";
                 IsWorkingRightBtn = false;
                 InstructionLbl = "";
@@ -608,26 +620,26 @@ namespace SampleSurveyApp.Core.ViewModels
         private void CreateUserResponsesCollection()
         {
             UserAnswerGroups.Clear();
-            var dict = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true)).GroupBy(o => o.QCode)
+            var dict = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true)).GroupBy(o => o.CurrQCode)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
             foreach (KeyValuePair<int, List<SurveyAnswerModel>> item in dict)
             {
                         
-                var q = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode == item.Key);
+                var q = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode == item.Key);
                 UserAnswerGroups.Add(new AnswerGroup(item.Key, q.QText, new List<SurveyAnswerModel>(item.Value)));
             }
         }
 
         public class AnswerGroup : List<SurveyAnswerModel>
         {
-            public int QCode { get; set; }
+            public int CurrQCode { get; set; }
             public string QText { get; set; }
 
             //public AnswerGroup(string qCode, string qText, List<SurveyResponseModel> userResponses) : base(userResponses)
             public AnswerGroup(int qCode, string qText, List<SurveyAnswerModel> userResponses) : base(userResponses)
             {
-                QCode = qCode;
+                CurrQCode = qCode;
                 QText = qText;
             }
         }

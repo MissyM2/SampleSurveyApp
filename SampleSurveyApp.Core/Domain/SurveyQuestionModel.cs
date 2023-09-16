@@ -7,9 +7,9 @@ namespace SampleSurveyApp.Core.Domain
 	{
         public string QType { get; set; }
 
-        public int QCode { get; set; }
+        public int CurrQCode { get; set; }
 
-        public string QCodeDesc { get; set; }
+        public string CurrQCodeDesc { get; set; }
 
         public string QText { get; set; }
 
