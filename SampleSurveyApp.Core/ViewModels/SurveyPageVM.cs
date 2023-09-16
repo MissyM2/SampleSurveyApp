@@ -301,129 +301,95 @@ namespace SampleSurveyApp.Core.ViewModels
             Console.WriteLine("NavigateClicked");
 
             // has an answer been selected;
-
-            if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType.Equals("MultipleAnswers"))  
+            if (direction == "Next")
             {
-                MakeSureAnswerHasBeenSelectedForCurrentQuestion();
-            }
-            else //(CurrentQuestion.QType.Equals("Text"))
-            {
-                if (string.IsNullOrEmpty(UserTextAnswer))
+                if (CurrentRuleType == -1) // last q before review
                 {
-                    await _messageService.DisplayAlert("", "Please enter a response", "OK", "Cancel");
-                }
-                else
-                {
-                    // set the answer to IsSelected
 
-                    var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == "");
-                    foundA.IsSelected = true;
+                    // go to review
+                    IsAnswerReview = true;
+                    CurrentQuestion.NextQCode = 0;
+                    CreateUserResponsesCollection();
 
-                    // insert record into
-                    SurveyResponseModel responseObj = new SurveyResponseModel();
-                    responseObj.SurveyId = Int32.Parse(SPID);
-                    responseObj.QCode = CurrentQuestion.QCode;
-                    responseObj.QText = CurrentQuestion.QText;
-                    responseObj.ACode = foundA.ACode;
-                    responseObj.AText = UserTextAnswer;
-
-                    await _surveyResponseModelRepository.InsertAsync(responseObj);
+                    // set screen values based on properties in CurrentQuestion
+                    SetScreenValuesOnOpen();
 
                 }
-            }
-
-
-
-            if (CurrentRuleType == -1)
-            {
-                // go to review
-                IsAnswerReview = true;
-
-                CurrentQuestion.NextQCode = 0;
-                CreateUserResponsesCollection();
-
-                // set screen values based on properties in CurrentQuestion
-                SetScreenValuesOnOpen();
-            }
-
-            else
-            {
-                if (direction == "Next")
+                else  // all others
                 {
-                    CurrentQuestion.NextQCode = CurrentRuleType;
-                }
+                    // get nextqcode on CurrentQuestion after answer selection has been made
+                    CurrentQuestion.NextQCode = UserSelectedAnswer.RuleType;
 
-                
-                // set the right Rule= type and find the next question to be displayed
-                if (direction == "Next")
-                {
-
-                    // there are 2 cirsumstances.
-                    // first, it is the first time through. CurrentQuestion.IsSelected is false and all of its associated answers.IsSelected are false
-                    // CurrentQuestion.IsSelected is already true and and one of its answers.IsSelected is also true
-
-                    // first check to see the ruletype
-
+                    // get nextquestion
                     NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode == CurrentRuleType);
-                }
-                else  // going back
-                {
-                    //CurrentRuleType = CurrentQuestion.PrevQCode;
-                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode == CurrentQuestion.PrevQCode);
-                }
 
-                if (NextCurrentQuestion == null)  // there are no more q
-                {
-                    Debug.WriteLine("Should CurrentQuestion be null?");
-                    //CurrentQuestion = null;
-                }
-                else  // there is a next q
-                {
 
-                    // set the NextQCode and PrevQCode if they are 0
-
-                    // nextQCode
-
-                    if (direction=="Next")
+                    // set nextqcode on CurrentQuestion
+                    if (CurrentQuestion.NextQCode == 0)
                     {
-                        if (CurrentQuestion.NextQCode == 0)
-                        {
-                            CurrentQuestion.NextQCode = NextCurrentQuestion.QCode;
-                        }
-
+                        CurrentQuestion.NextQCode = NextCurrentQuestion.QCode;
                     }
-                   
 
-                    // prevQCode
+                    // set prevqcode on CurrentQuestion
+                    NextCurrentQuestion.PrevQCode = CurrentQuestion.QCode;
 
-                    //if (CurrentQuestion.PrevQCode == 0)
-                    //{
-                        //if (CurrentQuestion.QCode == 1)  // this is the first q
-                        //{
-                        //    CurrentQuestion.PrevQCode = 0;
-                        //}
-                        if (direction == "Next")
-                    {
-                        NextCurrentQuestion.PrevQCode = CurrentQuestion.QCode;
-                    }
-                        
-                    //}
-                   
-
-                    // update current question
-
-                    if (UserSelectedAnswer != null)
-                    {
-                        Debug.WriteLine("User Answer has been selectd.");
-                    }
-                    CurrentQuestion = NextCurrentQuestion; 
-
-
-                    // update question in q collection
-                    //var foundCurrQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.QCode.Equals(CurrentQuestion.QCode));
+                    // get new current question
+                    CurrentQuestion = NextCurrentQuestion;
                     CurrentQuestion.IsSelected = true;
 
-                    // get answers for current q
+
+                    // get answers for current question
+                    AnswerOptionsForCurrentQuestionCollection.Clear();
+                    foreach (var i in AllPossibleAnswerOptionsCollection)
+                    {
+                        if (i.QCode == CurrentQuestion.QCode)
+                        {
+                            AnswerOptionsForCurrentQuestionCollection.Add(i);
+                        }
+                    }
+
+                    if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType.Equals("MultipleAnswers"))
+                    {
+                        MakeSureAnswerHasBeenSelectedForCurrentQuestion();
+                    }
+                    else //(CurrentQuestion.QType.Equals("Text"))
+                    {
+                        if (string.IsNullOrEmpty(UserTextAnswer))
+                        {
+                            await _messageService.DisplayAlert("", "Please enter a response", "OK", "Cancel");
+                        }
+                        else
+                        {
+                            // set the answer to IsSelected
+
+                            var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.QCode == CurrentQuestion.QCode && x.AText == "");
+                            foundA.IsSelected = true;
+
+                            // insert record into
+                            SurveyResponseModel responseObj = new SurveyResponseModel();
+                            responseObj.SurveyId = Int32.Parse(SPID);
+                            responseObj.QCode = CurrentQuestion.QCode;
+                            responseObj.QText = CurrentQuestion.QText;
+                            responseObj.ACode = foundA.ACode;
+                            responseObj.AText = UserTextAnswer;
+
+                            await _surveyResponseModelRepository.InsertAsync(responseObj);
+
+                        }
+                    }
+
+                }
+
+
+            }
+            else // direction == "Back"
+            {
+                IsAnswerReview = false;
+                if (CurrentRuleType == -1)  // first question from review
+                {
+                    CurrentRuleType = CurrentQuestion.PrevQCode;
+
+                    // get answers for current question
                     AnswerOptionsForCurrentQuestionCollection.Clear();
                     foreach (var i in AllPossibleAnswerOptionsCollection)
                     {
@@ -433,13 +399,31 @@ namespace SampleSurveyApp.Core.ViewModels
                         }
                     }
                 }
+                else // all others
+                {
+                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.QCode == CurrentQuestion.PrevQCode);
+                    CurrentQuestion = NextCurrentQuestion;
+                    CurrentQuestion.IsSelected = true;
 
 
+                    // get answers for current question
+                    AnswerOptionsForCurrentQuestionCollection.Clear();
+                    foreach (var i in AllPossibleAnswerOptionsCollection)
+                    {
+                        if (i.QCode == CurrentQuestion.QCode)
+                        {
+                            AnswerOptionsForCurrentQuestionCollection.Add(i);
+                        }
+                    }
 
-                // set screen values based on properties in CurrentQuestion
-                SetScreenValuesOnOpen();
+                }
+
 
             }
+
+
+            SetScreenValuesOnOpen();
+
 
         }
 
@@ -452,6 +436,10 @@ namespace SampleSurveyApp.Core.ViewModels
                 if (item.IsSelected == true)
                 {
                     UserSelectedAnswer = item;
+                    if (CurrentRuleType == -1)
+                    {
+                        CurrentRuleType = UserSelectedAnswer.RuleType;
+                    }
                     AnswerHasBeenSelectedForThisQuestion = true;
                 }
             }
@@ -481,6 +469,7 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 var selectedItems = item as SurveyAnswerModel;
                 selectedItems.IsSelected = true;
+
                 temp.Add(selectedItems);
                 // Check to see if this is the last question
                 if (selectedItems.RuleType != -1)
@@ -501,6 +490,7 @@ namespace SampleSurveyApp.Core.ViewModels
             foreach (var item in temp)
             {
                 UserSelectedAnswers.Add(item);
+                CurrentRuleType = item.RuleType;
 
             }
         });
@@ -544,72 +534,69 @@ namespace SampleSurveyApp.Core.ViewModels
             IsVisibleSurveyStartButton = false;
             IsVisibleSurveyHeader = true;
 
-            if (CurrentQuestion != null)
+            if (IsAnswerReview == false)
             {
-                if (IsAnswerReview == false)
+                IsWorkingRightBtn = true;
+
+                ScreenNameLbl = CurrentQuestion.QCodeDesc;
+                CurrentQuestionLbl = CurrentQuestion.QText;
+                if (CurrentQuestion.PrevQCode != 0)
                 {
-                    IsWorkingRightBtn = true;
-
-                    ScreenNameLbl = CurrentQuestion.QCodeDesc;
-                    CurrentQuestionLbl = CurrentQuestion.QText;
-                    if (CurrentQuestion.PrevQCode != 0)
-                    {
-                        LeftBtnLbl = "Back";
-                        IsWorkingLeftBtn = true;
-                    }
-                    else
-                    {
-                        LeftBtnLbl = "";
-                        IsWorkingLeftBtn = false;
-
-                    }
-                    RightBtnLbl = "Next";
-                    IsVisibleRuleTypeSingle = true;
-                    IsVisibleRuleTypeMultiple = false;
-                    IsVisibleQTypeText = false;
-                    IsVisibleAnswerReview = true;
-
-                    if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
-                    {
-                        IsVisibleRuleTypeSingle = true;
-                        IsVisibleRuleTypeMultiple = false;
-                        IsVisibleQTypeText = false;
-                        IsVisibleAnswerReview = false;
-                        InstructionLbl = "SINGLE Select an option.";
-                    }
-                    else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
-                    {
-                        IsVisibleRuleTypeSingle = false;
-                        IsVisibleRuleTypeMultiple = true;
-                        IsVisibleQTypeText = false;
-                        IsVisibleAnswerReview = true;
-
-                        InstructionLbl = "MULTIPLE: Select all that apply.";
-                    }
-                    else // CurrentQuestion.QType must be Text
-                    {
-                        IsVisibleRuleTypeSingle = false;
-                        IsVisibleRuleTypeMultiple = false;
-                        IsVisibleAnswerReview = true;
-                        IsVisibleQTypeText = true;
-                        
-                        InstructionLbl = "TEXT: Shat shouild text label be.  Checking character cound.";
-                    }
+                    LeftBtnLbl = "Back";
+                    IsWorkingLeftBtn = true;
                 }
                 else
                 {
-                    ScreenNameLbl = "Review";
-                    CurrentQuestionLbl = "Please review your answers here.";
-                    LeftBtnLbl = "Back";
-                    RightBtnLbl = "";
-                    IsWorkingRightBtn = false;
-                    InstructionLbl = "";
+                    LeftBtnLbl = "";
+                    IsWorkingLeftBtn = false;
+
+                }
+                RightBtnLbl = "Next";
+                IsVisibleRuleTypeSingle = true;
+                IsVisibleRuleTypeMultiple = false;
+                IsVisibleQTypeText = false;
+                IsVisibleAnswerReview = false;
+
+                if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
+                {
+                    IsVisibleRuleTypeSingle = true;
+                    IsVisibleRuleTypeMultiple = false;
+                    IsVisibleQTypeText = false;
+                    IsVisibleAnswerReview = false;
+                    InstructionLbl = "SINGLE Select an option.";
+                }
+                else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
+                {
+                    IsVisibleRuleTypeSingle = false;
+                    IsVisibleRuleTypeMultiple = true;
+                    IsVisibleQTypeText = false;
+                    IsVisibleAnswerReview = false;
+
+                    InstructionLbl = "MULTIPLE: Select all that apply.";
+                }
+                else // CurrentQuestion.QType must be Text
+                {
                     IsVisibleRuleTypeSingle = false;
                     IsVisibleRuleTypeMultiple = false;
-                    IsVisibleAnswerReview = true;
-                    IsVisibleQTypeText = false;
-                    
+                    IsVisibleAnswerReview = false;
+                    IsVisibleQTypeText = true;
+                        
+                    InstructionLbl = "TEXT: Shat shouild text label be.  Checking character cound.";
                 }
+            }
+            else
+            {
+                ScreenNameLbl = "Review";
+                CurrentQuestionLbl = "Please review your answers here.";
+                LeftBtnLbl = "Back";
+                RightBtnLbl = "";
+                IsWorkingRightBtn = false;
+                InstructionLbl = "";
+                IsVisibleRuleTypeSingle = false;
+                IsVisibleRuleTypeMultiple = false;
+                IsVisibleAnswerReview = true;
+                IsVisibleQTypeText = false;
+                    
             }
         }
 
