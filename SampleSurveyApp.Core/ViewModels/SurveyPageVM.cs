@@ -286,7 +286,7 @@ namespace SampleSurveyApp.Core.ViewModels
             // update question in q collection
             var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
             foundQ.IsSelected = true;
-            foundQ.PrevQCode = 0;
+            foundQ.PrevQCode = -2   ;
 
             IsVisibleSurveyHeader = false;
 
@@ -308,11 +308,13 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (direction == "Next")
             {
-                if (CurrentQuestion.NextQCode == 0)
+                if (CurrentQuestion.NextQCode == -1)
                 {
                     CurrentNavRule = -1;
                 }
-                
+
+                SetTitleViewValuesOnOpen();
+
                 if (CurrentNavRule == -1) // last q before review
                 {
                     // set rule type
@@ -324,12 +326,12 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     // go to review
                     IsAnswerReview = true;
-                    CurrentQuestion.NextQCode = 0;
+                    CurrentQuestion.NextQCode = -1;
                     CreateUserResponsesCollection();
 
                     // set screen values based on properties in CurrentQuestion
 
-                    SetTitleViewValuesOnOpen();
+                    //SetTitleViewValuesOnOpen();
                     SetScreenValuesOnOpen();
 
                 }
@@ -399,15 +401,25 @@ namespace SampleSurveyApp.Core.ViewModels
             }
             else // direction == "Prev"
             {
+                if (IsAnswerReview == true)
+                {
+                    if (CurrentQuestion.NextQCode == -1)
+                    {
+                        CurrentNavRule = -1;
+                    }
+                }
+
                 IsAnswerReview = false;
-                SetTitleViewValuesOnOpen();
 
                 // how do you tell that you are coming from the review page
+
+                
                 if (CurrentNavRule == -1)  // first question from review
                 {
                     
 
                     CurrentNavRule = CurrentQuestion.CurrQCode;
+                    SetTitleViewValuesOnOpen();
 
                     // get answers for current question
                     AnswerOptionsForCurrentQuestionCollection.Clear();
@@ -424,8 +436,9 @@ namespace SampleSurveyApp.Core.ViewModels
                     CurrentNavRule = CurrentQuestion.PrevQCode;
                     NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentQuestion.PrevQCode);
                    CurrentQuestion = NextCurrentQuestion;
-                   // CurrentQuestion.IsSelected = true;
-                    
+                    SetTitleViewValuesOnOpen();
+                    // CurrentQuestion.IsSelected = true;
+
 
                     // get answers for current question
                     AnswerOptionsForCurrentQuestionCollection.Clear();
@@ -550,7 +563,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 }
 
-                if(CurrentQuestion.NextQCode == 0)
+                if(CurrentQuestion.NextQCode == -1)
                 {
                     RightBtnLbl = "Review";
                 }

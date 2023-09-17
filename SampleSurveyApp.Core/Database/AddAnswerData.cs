@@ -19,13 +19,13 @@ namespace SampleSurveyApp.Core.Database
                 new SurveyAnswerModel () { CurrQCode = 1, ACode = 2, AText = "No", NavRule = 2},
 
                 new SurveyAnswerModel () { CurrQCode = 2, ACode = 1, AText = "Yes", NavRule = 3},
-                new SurveyAnswerModel () { CurrQCode = 2, ACode = 2, AText = "No", NavRule = -1},
+                new SurveyAnswerModel () { CurrQCode = 2, ACode = 2, AText = "No (goes to Review)", NavRule = -1},
 
                 new SurveyAnswerModel () { CurrQCode = 3, ACode = 1, AText = "Yes", NavRule = 4},
-                new SurveyAnswerModel () { CurrQCode = 3, ACode = 2, AText = "No (Go to Text)", NavRule = 15},
+                new SurveyAnswerModel () { CurrQCode = 3, ACode = 2, AText = "No (Goes to Text)", NavRule = 15},
 
-                new SurveyAnswerModel () { CurrQCode = 4, ACode = 1, AText = "SingleSelectionOption 1", NavRule = 5},
-                new SurveyAnswerModel () { CurrQCode = 4, ACode = 2, AText = "SingleSelectionOption 2", NavRule = -1},
+                new SurveyAnswerModel () { CurrQCode = 4, ACode = 1, AText = "SingleSelOption 1", NavRule = 5},
+                new SurveyAnswerModel () { CurrQCode = 4, ACode = 2, AText = "SingleSelOption 2 (Goes to Review)", NavRule = -1},
 
                 new SurveyAnswerModel () { CurrQCode = 5, ACode = 1, AText = "MultipleSelectionOption 1", NavRule = -1},
                 new SurveyAnswerModel () { CurrQCode = 5, ACode = 2, AText = "MultipleSelectionOption 2", NavRule = -1},
