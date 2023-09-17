@@ -45,7 +45,9 @@ namespace SampleSurveyApp.Core.ViewModels
         // these are the answers either selected or input by the users
         [ObservableProperty]
         public SurveyAnswerModel currentlySelectedAnswer;
+
         public List<SurveyAnswerModel> CurrentlySelectedAnswers { get; set; } = new();
+
         [ObservableProperty]
         public string userTextAnswer;
 
@@ -60,6 +62,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         bool questionHasBeenAnswered = false;
+
+        [ObservableProperty]
+        bool answerHasBeenSelected = false;
 
         public IList<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
 
@@ -140,20 +145,10 @@ namespace SampleSurveyApp.Core.ViewModels
         string selectedItem;
 
         [ObservableProperty]
-        bool answerIsSelected;
-
-        [ObservableProperty]
-        public bool checkmarkIsSelected;
-
-        [ObservableProperty]
         int id;
 
         [ObservableProperty]
         string sPID;
-
-        [ObservableProperty]
-        bool isRefreshing;
-       
 
         [ObservableProperty]
         int textLen = 0;
@@ -164,9 +159,6 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         string navRule;
 
-        [ObservableProperty]
-        bool answerHasBeenSelectedForThisQuestion;
-
         public List<AnswerGroup> UserAnswerGroups { get; private set; } = new List<AnswerGroup>();
         public ObservableCollection<SurveyResponseModel> AnswerCollection { get; set; } = new();
 
@@ -176,8 +168,8 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         public SurveyModel insertedSurvey;
 
-        public ObservableCollection<SurveyModel> SurveyList { get; set; } = new();
-        public ObservableCollection<SurveyResponseModel> SurveyResponseList { get; set; } = new();
+        //public ObservableCollection<SurveyModel> SurveyList { get; set; } = new();
+        //public ObservableCollection<SurveyResponseModel> SurveyResponseList { get; set; } = new();
 
 
         public SurveyPageVM(
@@ -292,25 +284,19 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             Console.WriteLine("NavigateClicked");
 
-            // set values for titleview control
-            
-
             if (direction == "Next")
             {
+                // request answer if empty
+                if (AnswerHasBeenSelected == false)
+                {
+                    await _messageService.DisplayAlert("Answer", "Please answer.", "OK", null);
+                }
+
                 // set current nav rule
                 if (CurrentQuestion.NextQCode == -1)  // next screen is review
                 {
-                    if (CurrentlySelectedAnswer.NavRule == -1)
-                    {
-                        CurrentNavRule = -1;
-                    }
-                    else
-                    {
-                        CurrentNavRule = CurrentlySelectedAnswer.NavRule;
-                    }
+                    CurrentNavRule = -1;
                 }
-
-                
 
                 if (CurrentNavRule == -1) // any question with a NavRule of -1, meaning the next screen is the AnswerReview
                 {
@@ -425,18 +411,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-
-        private int GetAnswerOptionsForCurrentQuestion()
-        {
-            AnswerOptionsForCurrentQuestionCollection.Clear();
-            var filteredList = AllPossibleAnswerOptionsCollection.Where(t => t.CurrQCode.Equals(CurrentQuestion.CurrQCode));
-
-            AnswerOptionsForCurrentQuestionCollection = new ObservableCollection<SurveyAnswerModel>(filteredList);
-
-            //foreach (var item in itemList) AnswerOptionsForCurrentQuestionList.Add(item);
-            return 1;
-        }
-
         #endregion
 
 
@@ -452,11 +426,12 @@ namespace SampleSurveyApp.Core.ViewModels
                 selectedItems.IsSelected = true;
 
                 temp.Add(selectedItems);
+
                 // Check to see if this is the last question
                 if (selectedItems.NavRule != -1)
                 {
                     CurrentQuestion.NextQCode = selectedItems.NavRule;
-                    AnswerReviewIsNext = false;
+                    //AnswerReviewIsNext = false;
                     RightBtnLbl = "Next";
                 }
                 else
@@ -474,32 +449,32 @@ namespace SampleSurveyApp.Core.ViewModels
                 CurrentNavRule = item.NavRule;
 
             }
+            AnswerHasBeenSelected = true;
         });
 
         [RelayCommand]
         public async Task AnswerSelected() //Single Answer
         {
-            if (CurrentQuestion.QType == "SingleAnswer") 
+            var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode == CurrentlySelectedAnswer.ACode);
+            var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
+
+            selectedAnswer.IsSelected = true;
+            CurrentNavRule = selectedAnswer.NavRule;
+            otherAnswer.IsSelected = false;
+
+            if (CurrentlySelectedAnswer.NavRule != -1)
             {
-                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode == CurrentlySelectedAnswer.ACode);
-                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
-
-                selectedAnswer.IsSelected = true;
-                CurrentNavRule = selectedAnswer.NavRule;
-                otherAnswer.IsSelected = false;
-
-                if (CurrentlySelectedAnswer.NavRule != -1)
-                {
-                    CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
-                    RightBtnLbl = "Next";
-                }
-                else
-                {
-                    CurrentQuestion.NextQCode = -1;
-                    AnswerReviewIsNext = true;
-                    RightBtnLbl = "Review";
-                }
+                CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
+                RightBtnLbl = "Next";
             }
+            else
+            {
+                CurrentQuestion.NextQCode = -1;
+                AnswerReviewIsNext = true;
+                RightBtnLbl = "Review";
+            }
+
+            AnswerHasBeenSelected = true;
         }
 
         #endregion
@@ -523,17 +498,6 @@ namespace SampleSurveyApp.Core.ViewModels
                     LeftBtnLbl = "Prev";
                     IsWorkingLeftBtn = true;
                 }
-                //if (CurrentQuestion.PrevQCode != -2)
-                //{
-                //    LeftBtnLbl = "Prev";
-                //    IsWorkingLeftBtn = true;
-                //}
-                //else
-                //{
-                    //LeftBtnLbl = "";
-                    //IsWorkingLeftBtn = false;
-
-               // }
 
                 if(CurrentQuestion.NextQCode == -1)
                 {
@@ -543,9 +507,6 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
                     RightBtnLbl = "Next";
                 }
-
-
-                
             }
             else
             {
@@ -566,22 +527,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (IsAnswerReview == false)
             {
-                //IsWorkingRightBtn = true;
-
-                //ScreenNameLbl = CurrentQuestion.CurrQCodeDesc;
                 CurrentQuestionLbl = CurrentQuestion.QText;
-                //if (CurrentQuestion.PrevQCode != -2)
-                //{
-                //    LeftBtnLbl = "Prev";
-                //    IsWorkingLeftBtn = true;
-                //}
-                //else
-                //{
-                //    LeftBtnLbl = "";
-                //    IsWorkingLeftBtn = false;
-
-                //}
-                //RightBtnLbl = "Next";
                 IsVisibleRuleTypeSingle = true;
                 IsVisibleRuleTypeMultiple = false;
                 IsVisibleQTypeText = false;
@@ -616,11 +562,7 @@ namespace SampleSurveyApp.Core.ViewModels
             }
             else
             {
-               // ScreenNameLbl = "Review";
                 CurrentQuestionLbl = "Please review your answers here.";
-                //LeftBtnLbl = "Prev";
-                //RightBtnLbl = "";
-                //IsWorkingRightBtn = false;
                 InstructionLbl = "";
                 IsVisibleRuleTypeSingle = false;
                 IsVisibleRuleTypeMultiple = false;

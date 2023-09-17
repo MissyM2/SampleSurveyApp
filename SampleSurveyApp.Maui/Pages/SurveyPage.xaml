@@ -112,7 +112,22 @@
            <CollectionView x:Name="responseCV"
                             ItemsSource="{Binding UserAnswerGroups}"
                             IsGrouped="True"
-                            IsVisible="{Binding IsVisibleAnswerReview}">
+                            IsVisible="{Binding IsVisibleAnswerReview}"
+                            BackgroundColor="Transparent">
+                <CollectionView.Triggers>
+                    <Trigger TargetType="CollectionView"
+                                Property="IsVisible"
+                                Value="False">
+                        <Setter Property="HeightRequest"
+                                Value="0"/>
+                    </Trigger>
+                    <Trigger TargetType="CollectionView"
+                                Property="IsVisible"
+                                Value="True">
+                        <Setter Property="HeightRequest"
+                                Value="575"/>
+                        </Trigger>
+                </CollectionView.Triggers>
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                         <VerticalStackLayout>

@@ -6,6 +6,25 @@
              x:Class="SampleSurveyApp.Maui.Controls.AnswerOptionCardView"
              x:Name="this">
 
+    <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup Name="CommonStates">
+                <VisualState Name="Normal" >
+                    <VisualState.Setters>
+                        <Setter TargetName="checkMarkImage" Property="IsVisible" Value="false"/>
+                        <Setter Property="BackgroundColor" Value="white"/>
+                    
+                    </VisualState.Setters>
+
+                </VisualState>
+                <VisualState Name="Selected">
+                    <VisualState.Setters>
+                        <Setter TargetName="checkMarkImage" Property="IsVisible" Value="true"/>
+                        <Setter Property="BackgroundColor" Value="white"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
     <StackLayout>
           
         <Grid x:Name="responseGrid"
