@@ -286,11 +286,12 @@ namespace SampleSurveyApp.Core.ViewModels
             // update question in q collection
             var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
             foundQ.IsSelected = true;
-            foundQ.PrevQCode = -2   ;
+            foundQ.PrevQCode = 0;
 
             IsVisibleSurveyHeader = false;
 
             // set screen values based on properties in CurrentQuestion
+            SetTitleViewValuesOnOpen();
             SetScreenValuesOnOpen();
 
         }
