@@ -51,8 +51,8 @@ namespace SampleSurveyApp.Core.Database
                         CurrQCode=item.CurrQCode,
                         CurrQCodeDesc = item.CurrQCodeDesc,
                         QText = item.QText,
-                        PrevQCode = 0,
-                        NextQCode = 0,
+                        PrevQCode = -2,
+                        NextQCode = -2,
                         IsSelected = false
                     });
                 }
