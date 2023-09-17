@@ -311,14 +311,24 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (CurrentQuestion.NextQCode == -1)
                 {
-                    CurrentNavRule = -1;
+                    if (UserSelectedAnswer.NavRule == -1)
+                    {
+                        CurrentNavRule = -1;
+                    }
+                    else
+                    {
+                        CurrentNavRule = UserSelectedAnswer.NavRule;
+                    }
+                    
+
+                    // what is UserSelected answer
                 }
 
-                SetTitleViewValuesOnOpen();
+                
 
                 if (CurrentNavRule == -1) // last q before review
                 {
-                    // set rule type
+                    // set nav rule
                     if (CurrentQuestion.NextQCode == -2)
                     {
                         CurrentNavRule = -1;
@@ -327,6 +337,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     // go to review
                     IsAnswerReview = true;
+                    SetTitleViewValuesOnOpen();
                     CurrentQuestion.NextQCode = -1;
                     CreateUserResponsesCollection();
 
@@ -354,7 +365,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     if (QuestionHasBeenAnswered == true)
                     {
 
-                        NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentQuestion.NextQCode);
+                        NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
                         CurrentQuestion = NextCurrentQuestion;
 
                     }
@@ -552,17 +563,27 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 IsWorkingRightBtn = true;
                 ScreenNameLbl = CurrentQuestion.CurrQCodeDesc;
-                if (CurrentQuestion.PrevQCode != -2)
+                if (CurrentQuestion.PrevQCode == 0)
+                {
+                    LeftBtnLbl = "";
+                    IsWorkingLeftBtn = false;
+                }
+                else
                 {
                     LeftBtnLbl = "Prev";
                     IsWorkingLeftBtn = true;
                 }
-                else
-                {
-                    LeftBtnLbl = "";
-                    IsWorkingLeftBtn = false;
+                //if (CurrentQuestion.PrevQCode != -2)
+                //{
+                //    LeftBtnLbl = "Prev";
+                //    IsWorkingLeftBtn = true;
+                //}
+                //else
+                //{
+                    //LeftBtnLbl = "";
+                    //IsWorkingLeftBtn = false;
 
-                }
+               // }
 
                 if(CurrentQuestion.NextQCode == -1)
                 {
