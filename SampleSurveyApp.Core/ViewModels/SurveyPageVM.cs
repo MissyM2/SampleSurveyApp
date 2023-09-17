@@ -30,25 +30,22 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
-        #region Q and A lists
+        #region Question and Answer Options Lists and Observable Collections
 
         public List<SurveyQuestionModel> questionSource { get; set; } = new();
         public List<SurveyAnswerModel> answerSource { get; set; } = new();
 
         public ObservableCollection<SurveyQuestionModel> AllPossibleQuestionsCollection { get; set; }
-
         public ObservableCollection<SurveyAnswerModel> AllPossibleAnswerOptionsCollection { get; set; }
 
         #endregion
 
         #region Current Question and Current Answers
 
-        // these two properties (1 object, 1 list of objects are for answers selected by user - either single or multiselecct
+        // these are the answers either selected or input by the users
         [ObservableProperty]
-        public SurveyAnswerModel userSelectedAnswer;
-
-        public List<SurveyAnswerModel> UserSelectedAnswers { get; set; } = new();
-
+        public SurveyAnswerModel currentlySelectedAnswer;
+        public List<SurveyAnswerModel> CurrentlySelectedAnswers { get; set; } = new();
         [ObservableProperty]
         public string userTextAnswer;
 
@@ -59,9 +56,6 @@ namespace SampleSurveyApp.Core.ViewModels
         SurveyQuestionModel nextCurrentQuestion;
 
         [ObservableProperty]
-        SurveyQuestionModel prevCurrentQuestion;
-
-        [ObservableProperty]
         int currentNavRule;
 
         [ObservableProperty]
@@ -69,12 +63,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public IList<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
 
-
-        //[ObservableProperty]
-        //int nextQCode;
-
-        //[ObservableProperty]
-        //int prevQCode;
 
         #endregion
 
@@ -309,90 +297,54 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (direction == "Next")
             {
-                if (CurrentQuestion.NextQCode == -1)
+                // set current nav rule
+                if (CurrentQuestion.NextQCode == -1)  // next screen is review
                 {
-                    if (UserSelectedAnswer.NavRule == -1)
+                    if (CurrentlySelectedAnswer.NavRule == -1)
                     {
                         CurrentNavRule = -1;
                     }
                     else
                     {
-                        CurrentNavRule = UserSelectedAnswer.NavRule;
+                        CurrentNavRule = CurrentlySelectedAnswer.NavRule;
                     }
-                    
-
-                    // what is UserSelected answer
                 }
 
                 
 
-                if (CurrentNavRule == -1) // last q before review
+                if (CurrentNavRule == -1) // any question with a NavRule of -1, meaning the next screen is the AnswerReview
                 {
-                    // set nav rule
+                    // set current nav rule
                     if (CurrentQuestion.NextQCode == -2)
                     {
                         CurrentNavRule = -1;
                     }
-                    
 
-                    // go to review
+                    // set 
                     IsAnswerReview = true;
-                    SetTitleViewValuesOnOpen();
+                    
                     CurrentQuestion.NextQCode = -1;
                     CreateUserResponsesCollection();
 
-                    // set screen values based on properties in CurrentQuestion
+                    // set title view
+                    SetTitleViewValuesOnOpen();
 
-                    //SetTitleViewValuesOnOpen();
+                    // set screen values based on properties in CurrentQuestion
                     SetScreenValuesOnOpen();
 
                 }
-                else  // all others
+                else  // all questions with a NavRule other than -1, meaning the next screen is another question
                 {
-                    
-                    if (CurrentQuestion.NextQCode == -2 || CurrentQuestion.PrevQCode == -2)
-                    {
-                        QuestionHasBeenAnswered = false;
+                    // set current nav rule
+                    CurrentNavRule = CurrentQuestion.NextQCode;
+                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
 
-                    }
-                    else
-                    {
-                        QuestionHasBeenAnswered = true;
-                    }
+                    // set prevqcode on CurrentQuestion
+                    NextCurrentQuestion.PrevQCode = CurrentQuestion.CurrQCode;
 
-
-                    //  PROPERTY PREVIOUSLY ANSWERED
-                    if (QuestionHasBeenAnswered == true)
-                    {
-
-                        NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
-                        CurrentQuestion = NextCurrentQuestion;
-
-                    }
-                    else
-                    {
-                        // get nextqcode on CurrentQuestion after answer selection has been made
-                        CurrentQuestion.NextQCode = UserSelectedAnswer.NavRule;
-
-                        // get nextquestion
-                        NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == UserSelectedAnswer.NavRule);
-
-
-                        // set nextqcode on CurrentQuestion
-                        if (CurrentQuestion.NextQCode == -2)
-                        {
-                            CurrentQuestion.NextQCode = NextCurrentQuestion.CurrQCode;
-                        }
-
-                        // set prevqcode on CurrentQuestion
-                        NextCurrentQuestion.PrevQCode = CurrentQuestion.CurrQCode;
-
-                        // get new current question
-                        CurrentQuestion = NextCurrentQuestion;
-                        CurrentQuestion.IsSelected = true;
-
-
-                    }
+                    // get new current question
+                    CurrentQuestion = NextCurrentQuestion;
+                    CurrentQuestion.IsSelected = true;
 
 
                     // get answers for current question
@@ -405,14 +357,15 @@ namespace SampleSurveyApp.Core.ViewModels
                         }
                     }
 
+                    // set title view
                     SetTitleViewValuesOnOpen();
-
                 }
 
 
             }
             else // direction == "Prev"
             {
+                // set current nav rule
                 if (IsAnswerReview == true)
                 {
                     if (CurrentQuestion.NextQCode == -1)
@@ -422,17 +375,12 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
 
                 IsAnswerReview = false;
-
-                // how do you tell that you are coming from the review page
-
                 
                 if (CurrentNavRule == -1)  // first question from review
                 {
-                    
-
+                    // set current navigation rule
                     CurrentNavRule = CurrentQuestion.CurrQCode;
-                    SetTitleViewValuesOnOpen();
-
+                    
                     // get answers for current question
                     AnswerOptionsForCurrentQuestionCollection.Clear();
                     foreach (var i in AllPossibleAnswerOptionsCollection)
@@ -442,13 +390,17 @@ namespace SampleSurveyApp.Core.ViewModels
                             AnswerOptionsForCurrentQuestionCollection.Add(i);
                         }
                     }
+
+                    // set title view
+                    SetTitleViewValuesOnOpen();
                 }
                 else // all others
                 {
+                    // set current navigation rule
                     CurrentNavRule = CurrentQuestion.PrevQCode;
-                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentQuestion.PrevQCode);
-                   CurrentQuestion = NextCurrentQuestion;
-                    SetTitleViewValuesOnOpen();
+                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
+
+                    CurrentQuestion = NextCurrentQuestion;
                     // CurrentQuestion.IsSelected = true;
 
 
@@ -462,9 +414,9 @@ namespace SampleSurveyApp.Core.ViewModels
                         }
                     }
 
+                    // set title view
+                    SetTitleViewValuesOnOpen();
                 }
-
-
             }
 
 
@@ -515,10 +467,10 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
 
             }
-            UserSelectedAnswers.Clear();
+            CurrentlySelectedAnswers.Clear();
             foreach (var item in temp)
             {
-                UserSelectedAnswers.Add(item);
+                CurrentlySelectedAnswers.Add(item);
                 CurrentNavRule = item.NavRule;
 
             }
@@ -527,20 +479,18 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task AnswerSelected() //Single Answer
         {
-            //if (CurrentQuestion.NextQCode == -2)  // the first time the user has selected an answer to this question
-            //{
-            if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
+            if (CurrentQuestion.QType == "SingleAnswer") 
             {
-                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == UserSelectedAnswer.CurrQCode && x.ACode == UserSelectedAnswer.ACode);
-                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == UserSelectedAnswer.CurrQCode && x.ACode != UserSelectedAnswer.ACode);
+                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode == CurrentlySelectedAnswer.ACode);
+                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
 
                 selectedAnswer.IsSelected = true;
                 CurrentNavRule = selectedAnswer.NavRule;
                 otherAnswer.IsSelected = false;
 
-                if (UserSelectedAnswer.NavRule != -1)
+                if (CurrentlySelectedAnswer.NavRule != -1)
                 {
-                    CurrentQuestion.NextQCode = UserSelectedAnswer.NavRule;
+                    CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
                     RightBtnLbl = "Next";
                 }
                 else

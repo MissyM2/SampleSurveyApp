@@ -60,7 +60,7 @@
              <CollectionView x:Name="listSingleCv"
                          ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                                 SelectionMode="Single"
-                                SelectedItem="{Binding UserSelectedAnswer, Mode=TwoWay}"
+                                SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
                                 SelectionChangedCommand="{Binding AnswerSelectedCommand}"
                                 SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
                                 Margin="12,8,12,0"
