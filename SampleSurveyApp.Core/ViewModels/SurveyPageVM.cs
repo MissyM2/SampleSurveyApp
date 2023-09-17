@@ -70,11 +70,11 @@ namespace SampleSurveyApp.Core.ViewModels
         public IList<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
 
 
-        [ObservableProperty]
-        int nextQCode;
+        //[ObservableProperty]
+        //int nextQCode;
 
-        [ObservableProperty]
-        int prevQCode;
+        //[ObservableProperty]
+        //int prevQCode;
 
         #endregion
 
@@ -503,13 +503,13 @@ namespace SampleSurveyApp.Core.ViewModels
                 // Check to see if this is the last question
                 if (selectedItems.NavRule != -1)
                 {
-                    NextQCode = selectedItems.NavRule;
+                    CurrentQuestion.NextQCode = selectedItems.NavRule;
                     AnswerReviewIsNext = false;
                     RightBtnLbl = "Next";
                 }
                 else
                 {
-                    NextQCode = -1;
+                    CurrentQuestion.NextQCode = -1;
                     AnswerReviewIsNext = true;
                     RightBtnLbl = "Review";
                 }
@@ -540,12 +540,12 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 if (UserSelectedAnswer.NavRule != -1)
                 {
-                    NextQCode = UserSelectedAnswer.NavRule;
+                    CurrentQuestion.NextQCode = UserSelectedAnswer.NavRule;
                     RightBtnLbl = "Next";
                 }
                 else
                 {
-                    NextQCode = -1;
+                    CurrentQuestion.NextQCode = -1;
                     AnswerReviewIsNext = true;
                     RightBtnLbl = "Review";
                 }
