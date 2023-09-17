@@ -303,9 +303,12 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             Console.WriteLine("NavigateClicked");
 
-            // has an answer been selected;
+            // set values for titleview control
+            
+
             if (direction == "Next")
             {
+                SetTitleViewValuesOnOpen();
                 if (CurrentNavRule == -1) // last q before review
                 {
                     // set rule type
@@ -389,10 +392,13 @@ namespace SampleSurveyApp.Core.ViewModels
             else // direction == "Prev"
             {
                 IsAnswerReview = false;
+                SetTitleViewValuesOnOpen();
 
                 // how do you tell that you are coming from the review page
                 if (CurrentNavRule == -1)  // first question from review
                 {
+                    
+
                     CurrentNavRule = CurrentQuestion.CurrQCode;
 
                     // get answers for current question
@@ -434,23 +440,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
-        //private void MakeSureAnswerHasBeenSelectedForCurrentQuestion()
-        //{
-        //    var currentAnswers = AllPossibleAnswerOptionsCollection.Where(x => x.CurrQCode == CurrentQuestion.CurrQCode);
-        //    AnswerHasBeenSelectedForThisQuestion = false;
-        //    foreach (var item in currentAnswers)
-        //    {
-        //        if (item.IsSelected == true)
-        //        {
-        //            UserSelectedAnswer = item;
-        //            if (CurrentNavRule == -1)
-        //            {
-        //                CurrentNavRule = UserSelectedAnswer.NavRule;
-        //            }
-        //            AnswerHasBeenSelectedForThisQuestion = true;
-        //        }
-        //    }
-        //}
 
         private int GetAnswerOptionsForCurrentQuestion()
         {
@@ -535,18 +524,12 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #region UI Screen Values
 
-        public void SetScreenValuesOnOpen()
+        public void SetTitleViewValuesOnOpen()
         {
-            SPID = "987654";
-            IsVisibleSurveyStartButton = false;
-            IsVisibleSurveyHeader = true;
-
             if (IsAnswerReview == false)
             {
                 IsWorkingRightBtn = true;
-
                 ScreenNameLbl = CurrentQuestion.CurrQCodeDesc;
-                CurrentQuestionLbl = CurrentQuestion.QText;
                 if (CurrentQuestion.PrevQCode != -2)
                 {
                     LeftBtnLbl = "Prev";
@@ -558,7 +541,54 @@ namespace SampleSurveyApp.Core.ViewModels
                     IsWorkingLeftBtn = false;
 
                 }
-                RightBtnLbl = "Next";
+
+                if(CurrentQuestion.NextQCode == 0)
+                {
+                    RightBtnLbl = "Review";
+                }
+                else
+                {
+                    RightBtnLbl = "Next";
+                }
+
+
+                
+            }
+            else
+            {
+                ScreenNameLbl = "Review";
+                LeftBtnLbl = "Prev";
+                RightBtnLbl = "";
+                IsWorkingRightBtn = false;
+
+            }
+        }
+
+
+        public void SetScreenValuesOnOpen()
+        {
+            SPID = "987654";
+            IsVisibleSurveyStartButton = false;
+            IsVisibleSurveyHeader = true;
+
+            if (IsAnswerReview == false)
+            {
+                //IsWorkingRightBtn = true;
+
+                //ScreenNameLbl = CurrentQuestion.CurrQCodeDesc;
+                CurrentQuestionLbl = CurrentQuestion.QText;
+                //if (CurrentQuestion.PrevQCode != -2)
+                //{
+                //    LeftBtnLbl = "Prev";
+                //    IsWorkingLeftBtn = true;
+                //}
+                //else
+                //{
+                //    LeftBtnLbl = "";
+                //    IsWorkingLeftBtn = false;
+
+                //}
+                //RightBtnLbl = "Next";
                 IsVisibleRuleTypeSingle = true;
                 IsVisibleRuleTypeMultiple = false;
                 IsVisibleQTypeText = false;
@@ -593,11 +623,11 @@ namespace SampleSurveyApp.Core.ViewModels
             }
             else
             {
-                ScreenNameLbl = "Review";
+               // ScreenNameLbl = "Review";
                 CurrentQuestionLbl = "Please review your answers here.";
-                LeftBtnLbl = "Prev";
-                RightBtnLbl = "";
-                IsWorkingRightBtn = false;
+                //LeftBtnLbl = "Prev";
+                //RightBtnLbl = "";
+                //IsWorkingRightBtn = false;
                 InstructionLbl = "";
                 IsVisibleRuleTypeSingle = false;
                 IsVisibleRuleTypeMultiple = false;
