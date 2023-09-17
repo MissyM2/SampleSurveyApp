@@ -308,7 +308,11 @@ namespace SampleSurveyApp.Core.ViewModels
 
             if (direction == "Next")
             {
-                SetTitleViewValuesOnOpen();
+                if (CurrentQuestion.NextQCode == 0)
+                {
+                    CurrentNavRule = -1;
+                }
+                
                 if (CurrentNavRule == -1) // last q before review
                 {
                     // set rule type
@@ -324,12 +328,14 @@ namespace SampleSurveyApp.Core.ViewModels
                     CreateUserResponsesCollection();
 
                     // set screen values based on properties in CurrentQuestion
-                    
+
+                    SetTitleViewValuesOnOpen();
                     SetScreenValuesOnOpen();
 
                 }
                 else  // all others
                 {
+                    
                     if (CurrentQuestion.NextQCode == -2 || CurrentQuestion.PrevQCode == -2)
                     {
                         QuestionHasBeenAnswered = false;
@@ -384,6 +390,8 @@ namespace SampleSurveyApp.Core.ViewModels
                             AnswerOptionsForCurrentQuestionCollection.Add(i);
                         }
                     }
+
+                    SetTitleViewValuesOnOpen();
 
                 }
 
