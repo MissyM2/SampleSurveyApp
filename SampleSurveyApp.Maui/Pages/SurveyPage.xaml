@@ -56,7 +56,7 @@
 
         <!-- Container for Answers -->
         <StackLayout>
-             <!--QuestionType is List, RuleType is Single-->
+             <!--QType is SingleAnswer-->
              <CollectionView x:Name="listSingleCv"
                          ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                                 SelectionMode="Single"
@@ -72,7 +72,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-             <!--QuestionType is List, RuleType is Multiple-->
+             <!--QType is MultipleAnswers-->
             <CollectionView x:Name="MultipleSelectionsCV"
                             ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                             SelectionMode="Multiple"

@@ -6,25 +6,6 @@
              x:Class="SampleSurveyApp.Maui.Controls.AnswerOptionCardView"
              x:Name="this">
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup Name="CommonStates">
-                <VisualState Name="Normal" >
-                    <VisualState.Setters>
-                        <Setter TargetName="checkMarkImage" Property="IsVisible" Value="false"/>
-                        <Setter Property="BackgroundColor" Value="white"/>
-                    
-                    </VisualState.Setters>
-
-                </VisualState>
-                <VisualState Name="Selected">
-                    <VisualState.Setters>
-                        <Setter TargetName="checkMarkImage" Property="IsVisible" Value="true"/>
-                        <Setter Property="BackgroundColor" Value="white"/>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
     <StackLayout>
           
         <Grid x:Name="responseGrid"
@@ -40,7 +21,16 @@
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="2" Grid.Row="0">
-                <Image x:Name="checkMarkImage" Source="check.png" Margin="0,5,0,0" HeightRequest="20" IsVisible="{Binding IsSelected}"/>
+                <Image x:Name="checkMarkImage" Source="check.png" Margin="0,5,0,0" HeightRequest="20">
+                    <Image.Triggers>
+                                <DataTrigger TargetType="Image" Binding="{Binding IsSelected}" Value="True">
+                                    <Setter Property="IsVisible" Value="True"/>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Image" Binding="{Binding IsSelected}" Value="False">
+                                    <Setter Property="IsVisible" Value="False"/>
+                                </DataTrigger>
+                         </Image.Triggers>
+                    </Image>
             </VerticalStackLayout>
            
           

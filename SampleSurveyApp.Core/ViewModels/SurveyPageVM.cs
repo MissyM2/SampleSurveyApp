@@ -368,8 +368,6 @@ namespace SampleSurveyApp.Core.ViewModels
                         CurrentQuestion = NextCurrentQuestion;
                         CurrentQuestion.IsSelected = true;
 
-                        // set rule type
-                        //CurrentNavRule = CurrentQuestion.NextQCode;
 
                     }
 
@@ -383,36 +381,6 @@ namespace SampleSurveyApp.Core.ViewModels
                             AnswerOptionsForCurrentQuestionCollection.Add(i);
                         }
                     }
-
-                    //if (CurrentQuestion.QType == "SingleAnswer" || CurrentQuestion.QType.Equals("MultipleAnswers"))
-                    //{
-                    //    MakeSureAnswerHasBeenSelectedForCurrentQuestion();
-                    //}
-                    //else //(CurrentQuestion.QType.Equals("Text"))
-                    //{
-                    //    if (string.IsNullOrEmpty(UserTextAnswer))
-                    //    {
-                    //        await _messageService.DisplayAlert("", "Please enter a response", "OK", "Cancel");
-                    //    }
-                    //    else
-                    //    {
-                    //        // set the answer to IsSelected
-
-                    //        var foundA = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode && x.AText == "");
-                    //        foundA.IsSelected = true;
-
-                    //        // insert record into
-                    //        SurveyResponseModel responseObj = new SurveyResponseModel();
-                    //        responseObj.SurveyId = Int32.Parse(SPID);
-                    //        responseObj.CurrQCode = CurrentQuestion.CurrQCode;
-                    //        responseObj.QText = CurrentQuestion.QText;
-                    //        responseObj.ACode = foundA.ACode;
-                    //        responseObj.AText = UserTextAnswer;
-
-                    //        await _surveyResponseModelRepository.InsertAsync(responseObj);
-
-                    //    }
-                    //}
 
                 }
 
