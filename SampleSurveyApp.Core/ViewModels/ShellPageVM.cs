@@ -60,7 +60,7 @@ namespace SampleSurveyApp.Core.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to delete all surveys", "OK", "Cancel");
+                await _messageService.CustomAlert("Error", "Failed to delete all surveys", "OK");
 
             }
             finally
@@ -92,7 +92,7 @@ namespace SampleSurveyApp.Core.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
-                await _messageService.DisplayAlert("Error", "Failed to delete all responses", "OK", "Cancel");
+                await _messageService.CustomAlert("Error", "Failed to delete all responses", "OK");
 
             }
             finally

@@ -287,9 +287,12 @@ namespace SampleSurveyApp.Core.ViewModels
             if (direction == "Next")
             {
                 // request answer if empty
-                if (AnswerHasBeenSelected == false)
+
+                if (CurrentQuestion.NextQCode == -2)
                 {
-                    await _messageService.DisplayAlert("Answer", "Please answer.", "OK", null);
+                    Debug.WriteLine("no answer selected");
+                    await _messageService.CustomAlert("Answer", "Please answer.", "OK");
+                    return;
                 }
 
                 // set current nav rule
