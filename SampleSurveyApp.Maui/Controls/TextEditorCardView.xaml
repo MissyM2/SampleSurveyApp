@@ -14,8 +14,8 @@
                     EventName="TextChanged"
                     Command="{Binding UserTextAnswerChangedCommand}"/>
                 <toolkit:CharactersValidationBehavior
-                    MinimumLength="3"
-                    MaximumLength="25"
+                    MinimumLength="{Binding MinTextLen}"
+                    MaximumLength="{Binding MaxTextLen}"
                     Flags="ValidateOnValueChanged"
                     CharacterType="Digit"
                     InvalidStyle="{StaticResource InvalidEntryStyle}"

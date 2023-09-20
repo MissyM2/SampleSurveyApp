@@ -22,7 +22,10 @@ namespace SampleSurveyApp.Core.Database
                 new SurveyAnswerModel () { CurrQCode=2, ACode=2, AText="No (goes to Review)", NavRule=-1},
 
                 new SurveyAnswerModel () { CurrQCode=3, ACode=1, AText="Yes", NavRule=4},
+
                 new SurveyAnswerModel () { CurrQCode=3, ACode=2, AText="No (Goes to Text)", NavRule=15},
+
+                new SurveyAnswerModel () { CurrQCode=15, ACode=1, AText="", NavRule=4},
 
                 new SurveyAnswerModel () { CurrQCode=4, ACode=1, AText="SingleSelOption 1", NavRule=5},
                 new SurveyAnswerModel () { CurrQCode=4, ACode=2, AText="SingleSelOption 2 (Goes to Review)", NavRule=-1},
@@ -76,9 +79,9 @@ namespace SampleSurveyApp.Core.Database
                 new SurveyAnswerModel () { CurrQCode=12, ACode=2, AText="No", NavRule=13},
                 new SurveyAnswerModel () { CurrQCode=12, ACode=5, AText="Could not observe", NavRule=13},
 
-                new SurveyAnswerModel () { CurrQCode=13, ACode=1, AText="", NavRule=-1},
+                new SurveyAnswerModel () { CurrQCode=13, ACode=1, AText="", NavRule=-1}
 
-                new SurveyAnswerModel () { CurrQCode=15, ACode=1, AText="", NavRule=3}
+                
             };
         }
 

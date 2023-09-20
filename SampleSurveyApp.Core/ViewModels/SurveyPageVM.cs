@@ -154,6 +154,12 @@ namespace SampleSurveyApp.Core.ViewModels
         int textLen = 0;
 
         [ObservableProperty]
+        int minTextLen = 3;
+
+        [ObservableProperty]
+        int maxTextLen = 25;
+
+        [ObservableProperty]
         string qType;
 
         [ObservableProperty]
@@ -168,8 +174,7 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         public SurveyModel insertedSurvey;
 
-        //public ObservableCollection<SurveyModel> SurveyList { get; set; } = new();
-        //public ObservableCollection<SurveyResponseModel> SurveyResponseList { get; set; } = new();
+
 
 
         public SurveyPageVM(
@@ -283,17 +288,50 @@ namespace SampleSurveyApp.Core.ViewModels
         public async Task Navigate(string direction)
         {
             Console.WriteLine("NavigateClicked");
+            //CurrentlySelectedAnswer = null;
 
             if (direction == "Next")
             {
+                
                 // request answer if empty
 
                 if (CurrentQuestion.NextQCode == -2)
                 {
-                    Debug.WriteLine("no answer selected");
-                    await _messageService.CustomAlert("Answer", "Please answer.", "OK");
-                    return;
+                    if (CurrentQuestion.QType == "Text" && TextLen < 3)
+                    {
+                        Debug.WriteLine("no text entered");
+                        await _messageService.CustomAlert("No Answer", "Please enter your answer, greater than 3 chars. You added " + TextLen, "OK");
+                        return;
+                    }
+
+                    if (CurrentQuestion.QType == "SingleAnswer")
+                    {
+                        Debug.WriteLine("CurrentQuestion.Qtype ==SingleAnswer: no answer selected");
+                        await _messageService.CustomAlert("No Answer", "Please make a choice.", "OK");
+                        return;
+                    }
+
+                    if (CurrentQuestion.QType == "MultipleAnswers")
+                    {
+                        Debug.WriteLine("CurrentQuestion.QType == MultipleAnswers: no answer selected");
+                        await _messageService.CustomAlert("Answer", "Please make your selection(s).", "OK");
+                        return;
+                    }
+                    
                 }
+
+                // multiple choice and multiple selection answers are chosen before the Next is tapped
+                if (CurrentQuestion.QType == "Text")
+                {
+                    //  there is only one answer option for a text q
+                    
+                    CurrentlySelectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode);
+                    CurrentlySelectedAnswer.IsSelected = true;
+                    CurrentlySelectedAnswer.AText = UserTextAnswer;
+                    CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
+                    CurrentNavRule = CurrentlySelectedAnswer.NavRule;
+                }
+
 
                 // set current nav rule
                 if (CurrentQuestion.NextQCode == -1)  // next screen is review
@@ -411,13 +449,34 @@ namespace SampleSurveyApp.Core.ViewModels
 
             SetScreenValuesOnOpen();
 
-
         }
 
         #endregion
 
 
-        #region User Selections
+        #region User Input
+
+        [RelayCommand]
+        public async Task UserTextAnswerChanged()
+        {
+            Debug.WriteLine("User Text Answer");
+            TextLen = UserTextAnswer.Length;
+            if (TextLen == 0)
+            {
+                Debug.WriteLine("User has added 0 character." + TextLen);
+
+            }
+            else if (TextLen == 1)
+            {
+                Debug.WriteLine("User has added 1 character." + TextLen);
+            }
+            else
+            {
+                Debug.WriteLine("more than 1 character" + TextLen);
+            }
+
+
+        }
 
         public ICommand MultipleSelectionCommand => new Command<IList<object>>((obj) =>
         {
