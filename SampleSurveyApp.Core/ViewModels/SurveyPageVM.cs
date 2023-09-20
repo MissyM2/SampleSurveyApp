@@ -324,12 +324,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 if (CurrentQuestion.QType == "Text")
                 {
                     //  there is only one answer option for a text q
-                    
                     CurrentlySelectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode);
-                    CurrentlySelectedAnswer.IsSelected = true;
-                    CurrentlySelectedAnswer.AText = UserTextAnswer;
-                    CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
-                    CurrentNavRule = CurrentlySelectedAnswer.NavRule;
                 }
 
 
@@ -459,6 +454,7 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task UserTextAnswerChanged()
         {
+
             Debug.WriteLine("User Text Answer");
             TextLen = UserTextAnswer.Length;
             if (TextLen == 0)
@@ -474,6 +470,7 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 Debug.WriteLine("more than 1 character" + TextLen);
             }
+
 
 
         }
@@ -517,12 +514,22 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task AnswerSelected() //Single Answer
         {
+            
             var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode == CurrentlySelectedAnswer.ACode);
-            var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
-
             selectedAnswer.IsSelected = true;
+            if (CurrentQuestion.QType == "Text")
+            {
+                selectedAnswer.AText = UserTextAnswer;
+            }
+
+            if (CurrentQuestion.QType != "Text")
+            {
+                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
+                otherAnswer.IsSelected = false;
+            }
+
             CurrentNavRule = selectedAnswer.NavRule;
-            otherAnswer.IsSelected = false;
+            
 
             if (CurrentlySelectedAnswer.NavRule != -1)
             {

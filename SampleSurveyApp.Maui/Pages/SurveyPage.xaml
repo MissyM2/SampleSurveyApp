@@ -58,13 +58,14 @@
         <StackLayout>
              <!--QType is SingleAnswer-->
              <CollectionView x:Name="listSingleCv"
-                         ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                                 SelectionMode="Single"
                                 SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
                                 SelectionChangedCommand="{Binding AnswerSelectedCommand}"
                                 SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
                                 Margin="12,8,12,0"
-                                IsVisible="{Binding IsVisibleRuleTypeSingle}">
+                                IsVisible="{Binding IsVisibleRuleTypeSingle}"
+                                IsEnabled="{Binding IsVisibleRuleTypeSingle}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:SurveyAnswerModel">
                             <controls:AnswerOptionCardView />
@@ -87,26 +88,13 @@
             </CollectionView>
 
              <!--QuestionType is Text-->
-            <Frame HeightRequest="200"
-                    BorderColor="LightGray"
-                    Padding="0"
-                    IsVisible="{Binding IsVisibleQTypeText}">
-                <Frame.Triggers>
-                    <Trigger TargetType="Frame"
-                                Property="IsVisible"
-                                Value="False">
-                        <Setter Property="HeightRequest"
-                                Value="0"/>
-                    </Trigger>
-                    <Trigger TargetType="Frame"
-                                Property="IsVisible"
-                                Value="True">
-                        <Setter Property="HeightRequest"
-                                Value="450"/>
-                        </Trigger>
-                </Frame.Triggers>
-                <controls:TextEditorCardView />
-            </Frame>
+            <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
+                <Frame HeightRequest="200"
+                        BorderColor="LightGray"
+                        Padding="0">
+                    <controls:TextEditorCardView />
+                </Frame>
+             </StackLayout>
 
           <!--REVIEW ANSWERS-->
            <CollectionView x:Name="responseCV"
