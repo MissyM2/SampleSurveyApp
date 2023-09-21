@@ -165,4 +165,13 @@
   <data name="ScreenNameLblReview" xml:space="preserve">
     <value>Review</value>
   </data>
+  <data name="ScreenNameLblStart" xml:space="preserve">
+    <value>Survey Start Page</value>
+  </data>
+  <data name="StartSurveyLbl" xml:space="preserve">
+    <value>Start Survey</value>
+  </data>
+  <data name="TextInstructionLbl" xml:space="preserve">
+    <value>The maximum character allowed is</value>
+  </data>
 </root>

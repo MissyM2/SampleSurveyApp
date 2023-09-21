@@ -6,6 +6,8 @@ using SampleSurveyApp.Core.Services;
 using SampleSurveyApp.Core.Domain;
 using SampleSurveyApp.Core.ViewModels.Base;
 using System.Diagnostics;
+using SampleSurveyApp.Core.Localization;
+using System.Globalization;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
@@ -15,6 +17,8 @@ namespace SampleSurveyApp.Core.ViewModels
         private readonly INavigationService _navigationService;
         private readonly IMessageService _messageService;
 
+        public LocalizationResourceManager LocalizationResourceManager => LocalizationResourceManager.Instance;
+
         private readonly IAsyncRepository<SurveyModel> _surveyModelRepository;
         private readonly IAsyncRepository<SurveyResponseModel> _surveyResponseModelRepository;
 
@@ -23,6 +27,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         public SurveyModel insertedSurvey;
+
+        [ObservableProperty]
+        string selCulture;
 
         public ObservableCollection<SurveyModel> SurveyList { get; set; } = new();
         public ObservableCollection<SurveyResponseModel> SurveyResponseList { get; set; } = new();
@@ -37,6 +44,7 @@ namespace SampleSurveyApp.Core.ViewModels
             _messageService = messageService;
             _surveyModelRepository = surveyModelRepository;
             _surveyResponseModelRepository = surveyResponseModelRepository;
+
         }
 
         [RelayCommand]
@@ -99,7 +107,19 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 IsBusy = false;
             }
-        }       
+        }
+
+        [RelayCommand]
+        public void ChangeLanguage()
+        {
+            var switchToCulture = AppResources.Culture.TwoLetterISOLanguageName
+            .Equals("es", StringComparison.InvariantCultureIgnoreCase) ?
+            new CultureInfo("en-US") : new CultureInfo("es-ES");
+
+            LocalizationResourceManager.Instance.SetCulture(switchToCulture);
+
+        }
+
 
     }
 }

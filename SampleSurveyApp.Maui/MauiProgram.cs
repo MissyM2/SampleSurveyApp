@@ -28,9 +28,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IMessageService, MessageService>();
 
-        /*builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddSingleton<MainPageVM>();*/
-
         builder.Services.AddSingleton<SurveyPage>();
         builder.Services.AddSingleton<SurveyPageVM>();
 

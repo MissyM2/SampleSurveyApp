@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SampleSurveyApp.Maui.Pages.SurveyPage"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:translate="clr-namespace:SampleSurveyApp.Core.Localization;assembly=SampleSurveyApp.Core"
              xmlns:vm="clr-namespace:SampleSurveyApp.Core.ViewModels;assembly=SampleSurveyApp.Core"
              xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
              xmlns:controls="clr-namespace:SampleSurveyApp.Maui.Controls"
@@ -37,7 +38,7 @@
 
     <StackLayout>
         <StackLayout IsVisible="{Binding IsVisibleSurveyStartButton}" Padding="0,10,0,10">
-            <Button Text="Start a survey"
+            <Button Text="{translate:Translate StartSurveyLbl}"
                         WidthRequest="200"
                         HeightRequest="{OnPlatform Android=50, iOS=30}"
                         FontSize="{OnPlatform Android=16, iOS=20}"

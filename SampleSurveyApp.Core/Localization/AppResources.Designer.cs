@@ -22,7 +22,7 @@ namespace SampleSurveyApp.Core.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AppResources {
+    public class AppResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SampleSurveyApp.Core.Localization {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SampleSurveyApp.Core.Localization.AppResources", typeof(AppResources).Assembly);
@@ -51,7 +51,7 @@ namespace SampleSurveyApp.Core.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Q1.
         /// </summary>
-        internal static string CurrQCodeDescQ1 {
+        public static string CurrQCodeDescQ1 {
             get {
                 return ResourceManager.GetString("CurrQCodeDescQ1", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Q2.
         /// </summary>
-        internal static string CurrQCodeDescQ2 {
+        public static string CurrQCodeDescQ2 {
             get {
                 return ResourceManager.GetString("CurrQCodeDescQ2", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Q3.
         /// </summary>
-        internal static string CurrQCodeDescQ3 {
+        public static string CurrQCodeDescQ3 {
             get {
                 return ResourceManager.GetString("CurrQCodeDescQ3", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Prev.
         /// </summary>
-        internal static string LeftBtnLblPrev {
+        public static string LeftBtnLblPrev {
             get {
                 return ResourceManager.GetString("LeftBtnLblPrev", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Select all that apply. (multiple answers).
         /// </summary>
-        internal static string MainInstructionLblMultipleAnswers {
+        public static string MainInstructionLblMultipleAnswers {
             get {
                 return ResourceManager.GetString("MainInstructionLblMultipleAnswers", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to When you have finished your review, click here..
         /// </summary>
-        internal static string MainInstructionLblReview {
+        public static string MainInstructionLblReview {
             get {
                 return ResourceManager.GetString("MainInstructionLblReview", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Select an option. (single answer).
         /// </summary>
-        internal static string MainInstructionLblSingleAnswer {
+        public static string MainInstructionLblSingleAnswer {
             get {
                 return ResourceManager.GetString("MainInstructionLblSingleAnswer", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Please review your answers here..
         /// </summary>
-        internal static string MainQuestionLblReview {
+        public static string MainQuestionLblReview {
             get {
                 return ResourceManager.GetString("MainQuestionLblReview", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Question 1: Single Answer.
         /// </summary>
-        internal static string QTextQ1 {
+        public static string QTextQ1 {
             get {
                 return ResourceManager.GetString("QTextQ1", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Question 2: Single Answer.
         /// </summary>
-        internal static string QTextQ2 {
+        public static string QTextQ2 {
             get {
                 return ResourceManager.GetString("QTextQ2", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Question 3: Single Answer.
         /// </summary>
-        internal static string QTextQ3 {
+        public static string QTextQ3 {
             get {
                 return ResourceManager.GetString("QTextQ3", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Next.
         /// </summary>
-        internal static string RightBtnLblNext {
+        public static string RightBtnLblNext {
             get {
                 return ResourceManager.GetString("RightBtnLblNext", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Review.
         /// </summary>
-        internal static string RightBtnLblReview {
+        public static string RightBtnLblReview {
             get {
                 return ResourceManager.GetString("RightBtnLblReview", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Save Survey.
         /// </summary>
-        internal static string SaveSurveyBtnLbl {
+        public static string SaveSurveyBtnLbl {
             get {
                 return ResourceManager.GetString("SaveSurveyBtnLbl", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to End of Survey.
         /// </summary>
-        internal static string ScreenNameLblEndOfSurvey {
+        public static string ScreenNameLblEndOfSurvey {
             get {
                 return ResourceManager.GetString("ScreenNameLblEndOfSurvey", resourceCulture);
             }
@@ -198,9 +198,36 @@ namespace SampleSurveyApp.Core.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Review.
         /// </summary>
-        internal static string ScreenNameLblReview {
+        public static string ScreenNameLblReview {
             get {
                 return ResourceManager.GetString("ScreenNameLblReview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Start Page.
+        /// </summary>
+        public static string ScreenNameLblStart {
+            get {
+                return ResourceManager.GetString("ScreenNameLblStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Survey.
+        /// </summary>
+        public static string StartSurveyLbl {
+            get {
+                return ResourceManager.GetString("StartSurveyLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The maximum character allowed is.
+        /// </summary>
+        public static string TextInstructionLbl {
+            get {
+                return ResourceManager.GetString("TextInstructionLbl", resourceCulture);
             }
         }
     }

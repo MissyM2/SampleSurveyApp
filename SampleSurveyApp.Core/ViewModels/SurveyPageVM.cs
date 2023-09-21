@@ -7,9 +7,9 @@ using SampleSurveyApp.Core.Database;
 using SampleSurveyApp.Core.Domain;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
-using System.Collections;
 using System.Reflection;
 using System.Windows.Input;
+using System.Globalization;
 using SampleSurveyApp.Core.Localization;
 
 namespace SampleSurveyApp.Core.ViewModels
@@ -38,6 +38,8 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public ObservableCollection<SurveyQuestionModel> AllPossibleQuestionsCollection { get; set; }
         public ObservableCollection<SurveyAnswerModel> AllPossibleAnswerOptionsCollection { get; set; }
+
+        public LocalizationResourceManager LocalizationResourceManager => LocalizationResourceManager.Instance;
 
         #endregion
 
@@ -88,7 +90,7 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isVisibleMainInstructionLbl;
 
         [ObservableProperty]
-        string textInstructionLbl = "The maximum character allowed is ";
+        string textInstructionLbl;
 
         [ObservableProperty]
         bool isVisibleTextInstructionLbl;
@@ -97,7 +99,7 @@ namespace SampleSurveyApp.Core.ViewModels
         int count;
 
         [ObservableProperty]
-        string screenNameLbl = "Survey Start Page";
+        string screenNameLbl;
 
         [ObservableProperty]
         string leftBtnLbl;
@@ -156,6 +158,9 @@ namespace SampleSurveyApp.Core.ViewModels
         string selectedItem;
 
         [ObservableProperty]
+        string selectedLanguage;
+
+        [ObservableProperty]
         int id;
 
         [ObservableProperty]
@@ -186,7 +191,7 @@ namespace SampleSurveyApp.Core.ViewModels
         public SurveyModel insertedSurvey;
 
         [ObservableProperty]
-        string saveSurveyLbl = AppResources.SaveSurveyBtnLbl;
+        string saveSurveyLbl;
 
         [ObservableProperty]
         bool surveyIsSaved = false;
@@ -197,6 +202,8 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         public SurveyResponseModel insertedResponse;
 
+        [ObservableProperty]
+        string selCulture;
 
 
 
@@ -224,6 +231,9 @@ namespace SampleSurveyApp.Core.ViewModels
             AllPossibleAnswerOptionsCollection = new ObservableCollection<SurveyAnswerModel>();
             AnswerOptionsForCurrentQuestionCollection = new ObservableCollection<SurveyAnswerModel>();
             CheckMarkImage = ImageSource.FromResource("SampleSurveyApp.Maui.Resources.Images.check.png", typeof(SurveyPageVM).GetTypeInfo().Assembly);
+            TextInstructionLbl = AppResources.TextInstructionLbl;
+            ScreenNameLbl = AppResources.ScreenNameLblStart;
+            SaveSurveyLbl = AppResources.SaveSurveyBtnLbl;
 
         }
 
@@ -281,6 +291,7 @@ namespace SampleSurveyApp.Core.ViewModels
             IsVisibleSurveyHeader = false;
 
             // set screen values based on properties in CurrentQuestion
+           
             SetTitleViewValuesOnOpen();
             SetScreenValuesOnOpen();
 
@@ -775,6 +786,27 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
         #endregion
+
+        public void OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            Debug.WriteLine("e is" + SelectedLanguage);
+            // do stuff
+            switch (SelectedLanguage)
+            {
+                case "English":
+                    SelCulture = "en";
+                    break;
+                case "Spanish":
+                    SelCulture = "es";
+                    break;
+                default:
+                    break;
+            }
+
+            CultureInfo.CurrentUICulture = new CultureInfo(SelCulture, false);
+            // Settings.Language = App.Language;
+
+        }
 
     }
 }

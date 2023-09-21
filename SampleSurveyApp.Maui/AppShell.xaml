@@ -16,7 +16,9 @@
               Command="{Binding DeleteAllSurveysCommand}"/>
     <MenuItem Text="Delete Response"
               Command="{Binding DeleteAllResponsesCommand}"/>
-     <FlyoutItem Title="Overview Page">
+    <MenuItem Text="Change Language"
+          Command="{Binding ChangeLanguageCommand}"/>
+    <FlyoutItem Title="Overview Page">
         <ShellContent ContentTemplate="{DataTemplate pages:OverviewPage}" Route="OverviewPage" />
     </FlyoutItem>
 

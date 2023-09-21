@@ -5,9 +5,9 @@
 
     <Grid HeightRequest="600">
         <Label Text="Thank you for participating in this survey."
-                         FontSize="{OnPlatform Android=18, iOS=20}"
-                   VerticalOptions="Center"
-                             HorizontalTextAlignment="Center"/>
+               FontSize="{OnPlatform Android=18, iOS=20}"
+               VerticalOptions="Center"
+               HorizontalTextAlignment="Center"/>
     </Grid>
 </ContentView>
 
