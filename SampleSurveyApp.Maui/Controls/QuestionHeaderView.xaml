@@ -14,9 +14,20 @@
                     Margin="10,0,10,0"/>
         </StackLayout>
 
-        <StackLayout Grid.Row="2" BackgroundColor="LightYellow" Padding="0,10,0,10">
-            <Label Text="{Binding InstructionLbl}" Margin="10,0,0,0"
-                    TextColor="gray"/>
+        <StackLayout BackgroundColor="LightYellow" Padding="0,10,0,10">
+            <Label Text="{Binding InstructionLbl}" Margin="10,0,20,0"
+                    TextColor="gray"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"/>
+            <StackLayout IsVisible="{Binding IsVisibleAnswerReview}" Padding="0,10,0,10">
+                <Button Text="{Binding SaveSurveyLbl}"
+                        WidthRequest="200"
+                        HeightRequest="30"
+                        FontSize="Micro"
+                        BackgroundColor="CornflowerBlue"
+                        Command="{Binding SaveSurveyCommand}"
+                        VerticalOptions="Center" />
+            </StackLayout>
         </StackLayout>
         <BoxView BackgroundColor="LightBlue" HeightRequest="2"/>
     </StackLayout >

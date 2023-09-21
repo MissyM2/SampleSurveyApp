@@ -111,6 +111,9 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isVisibleAnswerReview;
 
         [ObservableProperty]
+        bool isVisibleThankYouText;
+
+       [ObservableProperty]
         bool isAnswerReview = false;
 
         [ObservableProperty]
@@ -118,6 +121,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         bool isVisibleSurveyHeader = false;
+
         [ObservableProperty]
         bool isVisibleSurveyStartButton = true;
 
@@ -174,6 +178,18 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         public SurveyModel insertedSurvey;
 
+        [ObservableProperty]
+        string saveSurveyLbl = "Save Survey";
+
+        [ObservableProperty]
+        bool surveyIsSaved = false;
+
+        [ObservableProperty]
+        public SurveyResponseModel newResponse;
+
+        [ObservableProperty]
+        public SurveyResponseModel insertedResponse;
+
 
 
 
@@ -205,25 +221,7 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
 
-        [RelayCommand]
-        public async Task CreateSurvey()
-        {
-            if (IsBusy) return;
-
-            IsBusy = true;
-            NewSurvey = new SurveyModel();
-            NewSurvey.SurveyDate = DateTime.Now;
-            NewSurvey.SurveyStatus = "I";
-            NewSurvey.SyncStatus = "I";
-
-
-            // insert a new record
-            await _surveyModelRepository.InsertAsync(NewSurvey);
-            InsertedSurvey = NewSurvey;
-            await Init();
-            IsBusy = false;
-
-        }
+       
 
         [RelayCommand]
         public async Task Init()
@@ -553,37 +551,48 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public void SetTitleViewValuesOnOpen()
         {
-            if (IsAnswerReview == false)
+            if (SurveyIsSaved == true)
             {
-                IsWorkingRightBtn = true;
-                ScreenNameLbl = CurrentQuestion.CurrQCodeDesc;
-                if (CurrentQuestion.PrevQCode == 0)
-                {
-                    LeftBtnLbl = "";
-                    IsWorkingLeftBtn = false;
-                }
-                else
-                {
-                    LeftBtnLbl = "Prev";
-                    IsWorkingLeftBtn = true;
-                }
-
-                if(CurrentQuestion.NextQCode == -1)
-                {
-                    RightBtnLbl = "Review";
-                }
-                else
-                {
-                    RightBtnLbl = "Next";
-                }
+                LeftBtnLbl = "";
+                IsWorkingLeftBtn = false;
+                RightBtnLbl = "";
+                IsWorkingRightBtn = false;
+                ScreenNameLbl = "End of Survey";
             }
             else
             {
-                ScreenNameLbl = "Review";
-                LeftBtnLbl = "Prev";
-                RightBtnLbl = "";
-                IsWorkingRightBtn = false;
+                if (IsAnswerReview == false)
+                {
+                    IsWorkingRightBtn = true;
+                    ScreenNameLbl = CurrentQuestion.CurrQCodeDesc;
+                    if (CurrentQuestion.PrevQCode == 0)
+                    {
+                        LeftBtnLbl = "";
+                        IsWorkingLeftBtn = false;
+                    }
+                    else
+                    {
+                        LeftBtnLbl = "Prev";
+                        IsWorkingLeftBtn = true;
+                    }
 
+                    if (CurrentQuestion.NextQCode == -1)
+                    {
+                        RightBtnLbl = "Review";
+                    }
+                    else
+                    {
+                        RightBtnLbl = "Next";
+                    }
+                }
+                else
+                {
+                    ScreenNameLbl = "Review";
+                    LeftBtnLbl = "Prev";
+                    RightBtnLbl = "";
+                    IsWorkingRightBtn = false;
+
+                }
             }
         }
 
@@ -592,52 +601,68 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             SPID = "987654";
             IsVisibleSurveyStartButton = false;
-            IsVisibleSurveyHeader = true;
 
-            if (IsAnswerReview == false)
+            if (SurveyIsSaved == true)
             {
-                CurrentQuestionLbl = CurrentQuestion.QText;
-                IsVisibleRuleTypeSingle = true;
+                IsVisibleSurveyHeader = false;
+                IsVisibleRuleTypeSingle = false;
                 IsVisibleRuleTypeMultiple = false;
-                IsVisibleQTypeText = false;
                 IsVisibleAnswerReview = false;
+                IsVisibleQTypeText = false;
+                IsVisibleThankYouText = true;
+            }
+            else
+            {
+                IsVisibleSurveyHeader = true;
 
-                if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
+                if (IsAnswerReview == false)
                 {
+                    CurrentQuestionLbl = CurrentQuestion.QText;
                     IsVisibleRuleTypeSingle = true;
                     IsVisibleRuleTypeMultiple = false;
                     IsVisibleQTypeText = false;
                     IsVisibleAnswerReview = false;
-                    InstructionLbl = "SINGLE Select an option.";
-                }
-                else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
-                {
-                    IsVisibleRuleTypeSingle = false;
-                    IsVisibleRuleTypeMultiple = true;
-                    IsVisibleQTypeText = false;
-                    IsVisibleAnswerReview = false;
+                    IsVisibleThankYouText = false;
 
-                    InstructionLbl = "MULTIPLE: Select all that apply.";
+                    if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
+                    {
+                        IsVisibleRuleTypeSingle = true;
+                        IsVisibleRuleTypeMultiple = false;
+                        IsVisibleQTypeText = false;
+                        IsVisibleAnswerReview = false;
+                        IsVisibleThankYouText = false;
+                        InstructionLbl = "SINGLE Select an option.";
+                    }
+                    else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
+                    {
+                        IsVisibleRuleTypeSingle = false;
+                        IsVisibleRuleTypeMultiple = true;
+                        IsVisibleQTypeText = false;
+                        IsVisibleAnswerReview = false;
+                        IsVisibleThankYouText = false;
+                        InstructionLbl = "MULTIPLE: Select all that apply.";
+                    }
+                    else // CurrentQuestion.QType must be Text
+                    {
+                        IsVisibleRuleTypeSingle = false;
+                        IsVisibleRuleTypeMultiple = false;
+                        IsVisibleAnswerReview = false;
+                        IsVisibleQTypeText = true;
+                        IsVisibleThankYouText = false;
+                        InstructionLbl = "TEXT: Shat shouild text label be.  Checking character cound.";
+                    }
                 }
-                else // CurrentQuestion.QType must be Text
+                else
                 {
+                    CurrentQuestionLbl = "Please review your answers here.";
+                    InstructionLbl = "When you have finished your review, click here.";
                     IsVisibleRuleTypeSingle = false;
                     IsVisibleRuleTypeMultiple = false;
-                    IsVisibleAnswerReview = false;
-                    IsVisibleQTypeText = true;
-                        
-                    InstructionLbl = "TEXT: Shat shouild text label be.  Checking character cound.";
+                    IsVisibleAnswerReview = true;
+                    IsVisibleQTypeText = false;
+                    IsVisibleThankYouText = false;
+
                 }
-            }
-            else
-            {
-                CurrentQuestionLbl = "Please review your answers here.";
-                InstructionLbl = "";
-                IsVisibleRuleTypeSingle = false;
-                IsVisibleRuleTypeMultiple = false;
-                IsVisibleAnswerReview = true;
-                IsVisibleQTypeText = false;
-                    
             }
         }
 
@@ -671,6 +696,57 @@ namespace SampleSurveyApp.Core.ViewModels
                 CurrQCode = qCode;
                 QText = qText;
             }
+        }
+
+        #endregion
+
+
+        #region CRUD Operations
+
+        [RelayCommand]
+        public async Task CreateSurvey()
+        {
+            if (IsBusy) return;
+
+            IsBusy = true;
+            NewSurvey = new SurveyModel();
+            NewSurvey.SurveyDate = DateTime.Now;
+            NewSurvey.SurveyStatus = "I";
+            NewSurvey.SyncStatus = "I";
+
+
+            // insert a new record
+            await _surveyModelRepository.InsertAsync(NewSurvey);
+            InsertedSurvey = NewSurvey;
+            await Init();
+            IsBusy = false;
+
+        }
+
+        [RelayCommand]
+        public async Task SaveSurvey()
+        {
+            // save survey responses
+            var answerList = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true));
+            foreach (var item in answerList)
+            {
+
+                NewResponse = new SurveyResponseModel();
+                NewResponse.SurveyId = InsertedSurvey.Id;
+                NewResponse.CurrQCode = item.CurrQCode;
+                var founditem = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode == item.CurrQCode);
+                NewResponse.QText = founditem.QText;
+                NewResponse.ACode = item.ACode;
+                NewResponse.AText = item.AText;
+
+                await _surveyResponseModelRepository.InsertAsync(NewResponse);
+            }
+
+            SurveyIsSaved = true;
+
+            SetTitleViewValuesOnOpen();
+            SetScreenValuesOnOpen();
+
         }
 
         #endregion

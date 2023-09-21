@@ -56,6 +56,7 @@
 
         <!-- Container for Answers -->
         <StackLayout>
+
              <!--QType is SingleAnswer-->
              <CollectionView x:Name="listSingleCv"
                                 ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
@@ -94,10 +95,10 @@
                         Padding="0">
                     <controls:TextEditorCardView />
                 </Frame>
-             </StackLayout>
+            </StackLayout>
 
-          <!--REVIEW ANSWERS-->
-           <CollectionView x:Name="responseCV"
+            <!--REVIEW ANSWERS-->
+            <CollectionView x:Name="responseCV"
                             ItemsSource="{Binding UserAnswerGroups}"
                             IsGrouped="True"
                             IsVisible="{Binding IsVisibleAnswerReview}"
@@ -135,6 +136,15 @@
                 </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+            <!--QuestionType is Text-->
+            <StackLayout IsVisible="{Binding IsVisibleThankYouText}"
+                         >
+                <Label Text="Thank you for participating in this survey."
+                       VerticalOptions="CenterAndExpand"/>
+            </StackLayout>
+
+
         </StackLayout>
 
     </StackLayout>
