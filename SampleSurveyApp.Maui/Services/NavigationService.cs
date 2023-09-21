@@ -15,10 +15,10 @@ namespace SampleSurveyApp.Maui.Services
             await Shell.Current.GoToAsync("..");
         }
 
-        public async Task GoToMainPageAsync()
+       /* public async Task GoToMainPageAsync()
         {
             await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
-        }
+        }*/
 
         //public async Task GoToSurveyPageAsync(int id)
         //{

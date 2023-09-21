@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SampleSurveyApp.Maui.Controls.EndOfSurveyView">
-    <VerticalStackLayout HeightRequest="600" >
+             x:Class="SampleSurveyApp.Maui.Controls.EndOfSurveyView" >
+
+    <Grid HeightRequest="600">
         <Label Text="Thank you for participating in this survey."
-                VerticalOptions="CenterAndExpand"
-                HorizontalTextAlignment="Center"
-                FontSize="Large"
-                BackgroundColor="Transparent"/>
-    </VerticalStackLayout>
+                         FontSize="{OnPlatform Android=18, iOS=20}"
+                   VerticalOptions="Center"
+                             HorizontalTextAlignment="Center"/>
+    </Grid>
 </ContentView>
 

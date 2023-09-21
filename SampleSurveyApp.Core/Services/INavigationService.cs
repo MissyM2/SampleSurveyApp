@@ -6,7 +6,7 @@ namespace SampleSurveyApp.Core.Services
 	public interface INavigationService
 	{
         Task GoBackAsync();
-        Task GoToMainPageAsync();
+        //Task GoToMainPageAsync();
         //Task GoToSurveyPageAsync(int id);
         Task GoToSurveyPageAsync();
     }

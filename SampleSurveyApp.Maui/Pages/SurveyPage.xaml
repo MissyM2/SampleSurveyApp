@@ -118,7 +118,7 @@
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                         <VerticalStackLayout>
-                            <StackLayout BackgroundColor="LightYellow" Padding="5,10,5,9">
+                            <StackLayout BackgroundColor="{StaticResource Yellow300Accent}" Padding="5,10,5,9">
                                 <Label Text="{Binding QText}" />
                             </StackLayout>
                             <BoxView BackgroundColor="LightBlue" HeightRequest="1"/>

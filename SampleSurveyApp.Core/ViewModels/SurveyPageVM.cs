@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Reflection;
 using System.Windows.Input;
+using SampleSurveyApp.Core.Localization;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
@@ -185,7 +186,7 @@ namespace SampleSurveyApp.Core.ViewModels
         public SurveyModel insertedSurvey;
 
         [ObservableProperty]
-        string saveSurveyLbl = "Save Survey";
+        string saveSurveyLbl = AppResources.SaveSurveyBtnLbl;
 
         [ObservableProperty]
         bool surveyIsSaved = false;
@@ -495,13 +496,13 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
                     CurrentQuestion.NextQCode = selectedItems.NavRule;
                     //AnswerReviewIsNext = false;
-                    RightBtnLbl = "Next";
+                    RightBtnLbl = AppResources.RightBtnLblNext;
                 }
                 else
                 {
                     CurrentQuestion.NextQCode = -1;
                     AnswerReviewIsNext = true;
-                    RightBtnLbl = "Review";
+                    RightBtnLbl = AppResources.RightBtnLblReview;
                 }
 
             }
@@ -538,13 +539,13 @@ namespace SampleSurveyApp.Core.ViewModels
             if (CurrentlySelectedAnswer.NavRule != -1)
             {
                 CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
-                RightBtnLbl = "Next";
+                RightBtnLbl = AppResources.RightBtnLblNext;
             }
             else
             {
                 CurrentQuestion.NextQCode = -1;
                 AnswerReviewIsNext = true;
-                RightBtnLbl = "Review";
+                RightBtnLbl = AppResources.RightBtnLblReview;
             }
 
             AnswerHasBeenSelected = true;
@@ -563,7 +564,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 IsWorkingLeftBtn = false;
                 RightBtnLbl = "";
                 IsWorkingRightBtn = false;
-                ScreenNameLbl = "End of Survey";
+                ScreenNameLbl = AppResources.ScreenNameLblEndOfSurvey;
             }
             else
             {
@@ -578,23 +579,23 @@ namespace SampleSurveyApp.Core.ViewModels
                     }
                     else
                     {
-                        LeftBtnLbl = "Prev";
+                        LeftBtnLbl = AppResources.LeftBtnLblPrev;
                         IsWorkingLeftBtn = true;
                     }
 
                     if (CurrentQuestion.NextQCode == -1)
                     {
-                        RightBtnLbl = "Review";
+                        RightBtnLbl = AppResources.RightBtnLblReview;
                     }
                     else
                     {
-                        RightBtnLbl = "Next";
+                        RightBtnLbl = AppResources.RightBtnLblNext;
                     }
                 }
                 else
                 {
-                    ScreenNameLbl = "Review";
-                    LeftBtnLbl = "Prev";
+                    ScreenNameLbl = AppResources.ScreenNameLblReview;
+                    LeftBtnLbl = AppResources.LeftBtnLblPrev;
                     RightBtnLbl = "";
                     IsWorkingRightBtn = false;
 
@@ -641,7 +642,7 @@ namespace SampleSurveyApp.Core.ViewModels
                         IsVisibleQTypeText = false;
                         IsVisibleAnswerReview = false;
                         IsVisibleThankYouText = false;
-                        MainInstructionLbl = "Select an option. (single answer)";
+                        MainInstructionLbl = AppResources.MainInstructionLblSingleAnswer;
                         IsVisibleMainInstructionLbl = true;
                         IsVisibleTextInstructionLbl = false;
                     }
@@ -654,7 +655,7 @@ namespace SampleSurveyApp.Core.ViewModels
                         IsVisibleQTypeText = false;
                         IsVisibleAnswerReview = false;
                         IsVisibleThankYouText = false;
-                        MainInstructionLbl = "Select all that apply. (multiple answers)";
+                        MainInstructionLbl = AppResources.MainInstructionLblMultipleAnswers;
                         IsVisibleMainInstructionLbl = true;
                         IsVisibleTextInstructionLbl = false;
                     }
@@ -674,8 +675,8 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
                 else
                 {
-                    MainQuestionLbl = "Please review your answers here.";
-                    MainInstructionLbl = "When you have finished your review, click here.";
+                    MainQuestionLbl = AppResources.MainQuestionLblReview;
+                    MainInstructionLbl = AppResources.MainInstructionLblReview;
                     IsVisibleMainInstructionLbl = true;
                     IsVisibleTextInstructionLbl = false;
                     IsVisibleTextInstructionLbl = false;
