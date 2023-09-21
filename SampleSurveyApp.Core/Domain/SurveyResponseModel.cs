@@ -5,7 +5,7 @@ namespace SampleSurveyApp.Core.Domain
 {
 	public class SurveyResponseModel : BaseDatabaseItem
 	{
-        public int SurveyId { get; set; }
+        public Guid SurveyId { get; set; }
 
         public int CurrQCode { get; set; }
 

@@ -42,7 +42,7 @@
                         HeightRequest="30"
                         FontSize="Micro"
                         Command="{Binding CreateSurveyCommand}"
-                        BackgroundColor="CornflowerBlue"
+                        BackgroundColor="{StaticResource Tertiary}"
                         VerticalOptions="Center"/>
         </StackLayout>
 
@@ -90,11 +90,9 @@
 
              <!--QuestionType is Text-->
             <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
-                <Frame HeightRequest="200"
-                        BorderColor="LightGray"
-                        Padding="0">
+               
                     <controls:TextEditorCardView />
-                </Frame>
+                
             </StackLayout>
 
             <!--REVIEW ANSWERS-->
@@ -138,10 +136,8 @@
             </CollectionView>
 
             <!--QuestionType is Text-->
-            <StackLayout IsVisible="{Binding IsVisibleThankYouText}"
-                         >
-                <Label Text="Thank you for participating in this survey."
-                       VerticalOptions="CenterAndExpand"/>
+            <StackLayout IsVisible="{Binding IsVisibleThankYouText}">
+                <controls:EndOfSurveyView />
             </StackLayout>
 
 

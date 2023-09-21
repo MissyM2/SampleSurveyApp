@@ -78,16 +78,22 @@ namespace SampleSurveyApp.Core.ViewModels
         ImageSource checkMarkImage;
 
         [ObservableProperty]
-        string currentQuestionLbl;
+        string mainQuestionLbl;
 
         [ObservableProperty]
-        string instructionLbl;
+        string mainInstructionLbl;
+
+        [ObservableProperty]
+        bool isVisibleMainInstructionLbl;
+
+        [ObservableProperty]
+        string textInstructionLbl = "The maximum character allowed is ";
+
+        [ObservableProperty]
+        bool isVisibleTextInstructionLbl;
 
         [ObservableProperty]
         int count;
-
-        [ObservableProperty]
-        bool isMissySelectedAnswer;
 
         [ObservableProperty]
         string screenNameLbl = "Survey Start Page";
@@ -152,7 +158,7 @@ namespace SampleSurveyApp.Core.ViewModels
         int id;
 
         [ObservableProperty]
-        string sPID;
+        string surveyId;
 
         [ObservableProperty]
         int textLen = 0;
@@ -599,7 +605,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public void SetScreenValuesOnOpen()
         {
-            SPID = "987654";
+            SurveyId = InsertedSurvey.Suid.ToString();
             IsVisibleSurveyStartButton = false;
 
             if (SurveyIsSaved == true)
@@ -617,7 +623,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
                 if (IsAnswerReview == false)
                 {
-                    CurrentQuestionLbl = CurrentQuestion.QText;
+                    IsVisibleMainInstructionLbl = false;
+                    IsVisibleTextInstructionLbl = false;
+                    MainQuestionLbl = CurrentQuestion.QText;
                     IsVisibleRuleTypeSingle = true;
                     IsVisibleRuleTypeMultiple = false;
                     IsVisibleQTypeText = false;
@@ -626,36 +634,51 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
                     {
+                        IsVisibleMainInstructionLbl = true;
+                        IsVisibleTextInstructionLbl = false;
                         IsVisibleRuleTypeSingle = true;
                         IsVisibleRuleTypeMultiple = false;
                         IsVisibleQTypeText = false;
                         IsVisibleAnswerReview = false;
                         IsVisibleThankYouText = false;
-                        InstructionLbl = "SINGLE Select an option.";
+                        MainInstructionLbl = "Select an option. (single answer)";
+                        IsVisibleMainInstructionLbl = true;
+                        IsVisibleTextInstructionLbl = false;
                     }
                     else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
                     {
+                        IsVisibleMainInstructionLbl = false;
+                        IsVisibleTextInstructionLbl = false;
                         IsVisibleRuleTypeSingle = false;
                         IsVisibleRuleTypeMultiple = true;
                         IsVisibleQTypeText = false;
                         IsVisibleAnswerReview = false;
                         IsVisibleThankYouText = false;
-                        InstructionLbl = "MULTIPLE: Select all that apply.";
+                        MainInstructionLbl = "Select all that apply. (multiple answers)";
+                        IsVisibleMainInstructionLbl = true;
+                        IsVisibleTextInstructionLbl = false;
                     }
                     else // CurrentQuestion.QType must be Text
                     {
+                        IsVisibleMainInstructionLbl = false;
+                        IsVisibleTextInstructionLbl = true;
                         IsVisibleRuleTypeSingle = false;
                         IsVisibleRuleTypeMultiple = false;
                         IsVisibleAnswerReview = false;
                         IsVisibleQTypeText = true;
                         IsVisibleThankYouText = false;
-                        InstructionLbl = "TEXT: Shat shouild text label be.  Checking character cound.";
+                        IsVisibleMainInstructionLbl=false;
+                        IsVisibleMainInstructionLbl = true;
+                        IsVisibleTextInstructionLbl = true;
                     }
                 }
                 else
                 {
-                    CurrentQuestionLbl = "Please review your answers here.";
-                    InstructionLbl = "When you have finished your review, click here.";
+                    MainQuestionLbl = "Please review your answers here.";
+                    MainInstructionLbl = "When you have finished your review, click here.";
+                    IsVisibleMainInstructionLbl = true;
+                    IsVisibleTextInstructionLbl = false;
+                    IsVisibleTextInstructionLbl = false;
                     IsVisibleRuleTypeSingle = false;
                     IsVisibleRuleTypeMultiple = false;
                     IsVisibleAnswerReview = true;
@@ -713,6 +736,7 @@ namespace SampleSurveyApp.Core.ViewModels
             NewSurvey.SurveyDate = DateTime.Now;
             NewSurvey.SurveyStatus = "I";
             NewSurvey.SyncStatus = "I";
+            NewSurvey.Suid = Guid.NewGuid(); ;
 
 
             // insert a new record
@@ -732,7 +756,7 @@ namespace SampleSurveyApp.Core.ViewModels
             {
 
                 NewResponse = new SurveyResponseModel();
-                NewResponse.SurveyId = InsertedSurvey.Id;
+                NewResponse.SurveyId = InsertedSurvey.Suid;
                 NewResponse.CurrQCode = item.CurrQCode;
                 var founditem = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode == item.CurrQCode);
                 NewResponse.QText = founditem.QText;
