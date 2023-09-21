@@ -5,7 +5,7 @@
     <StackLayout Margin="0,0,0,20">
         <StackLayout BackgroundColor="{StaticResource Tertiary}" Padding="0,10,0,10">
                 <Label Text="{Binding SurveyId}"
-                       TextColor="{StaticResource Secondary}"
+                       TextColor="White"
                        HorizontalTextAlignment="Center"
                         VerticalTextAlignment="Center"/>
         </StackLayout>
@@ -45,9 +45,9 @@
             <StackLayout IsVisible="{Binding IsVisibleAnswerReview}" Padding="0,10,0,10">
                 <Button Text="{Binding SaveSurveyLbl}"
                         WidthRequest="200"
-                        HeightRequest="30"
-                        FontSize="Micro"
-                        BackgroundColor="CornflowerBlue"
+                        HeightRequest="{OnPlatform Android=45, iOS=30}"
+                        FontSize="{OnPlatform Android=14, iOS=16}"
+                        BackgroundColor="{StaticResource Tertiary}"
                         Command="{Binding SaveSurveyCommand}"
                         VerticalOptions="Center" />
             </StackLayout>
