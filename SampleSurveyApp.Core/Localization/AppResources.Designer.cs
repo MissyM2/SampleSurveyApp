@@ -142,7 +142,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 1: Single Answer.
+        ///   Looks up a localized string similar to Question 01: Single Answer.
         /// </summary>
         public static string Q01QText {
             get {
@@ -160,7 +160,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 2: Single Answer.
+        ///   Looks up a localized string similar to Question 02: Single Answer.
         /// </summary>
         public static string Q02QText {
             get {
@@ -178,7 +178,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 3: Single Answer.
+        ///   Looks up a localized string similar to Question 03: Single Answer.
         /// </summary>
         public static string Q03QText {
             get {
@@ -196,7 +196,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 4: Single Answer.
+        ///   Looks up a localized string similar to Question 04: Single Answer.
         /// </summary>
         public static string Q04QText {
             get {
@@ -214,7 +214,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 5: Multiple Answers.
+        ///   Looks up a localized string similar to Question 05: Multiple Answers.
         /// </summary>
         public static string Q05QText {
             get {
@@ -232,7 +232,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 6: Single Answer.
+        ///   Looks up a localized string similar to Question 06: Single Answer.
         /// </summary>
         public static string Q06QText {
             get {
@@ -250,7 +250,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 7: Single Answer.
+        ///   Looks up a localized string similar to Question 07: Single Answer.
         /// </summary>
         public static string Q07QText {
             get {
@@ -268,7 +268,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 8 : Single Answer.
+        ///   Looks up a localized string similar to Question 08 : Single Answer.
         /// </summary>
         public static string Q08QText {
             get {
@@ -286,7 +286,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question 9: Single Answer.
+        ///   Looks up a localized string similar to Question 09: Single Answer.
         /// </summary>
         public static string Q09QText {
             get {

@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Windows.Input;
 using System.Globalization;
 using SampleSurveyApp.Core.Localization;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
@@ -40,6 +41,8 @@ namespace SampleSurveyApp.Core.ViewModels
         public ObservableCollection<SurveyAnswerModel> AllPossibleAnswerOptionsCollection { get; set; }
 
         public LocalizationResourceManager LocalizationResourceManager => LocalizationResourceManager.Instance;
+
+        public List<SurveyQuestionModelLocalized> AllQuestionsLocalized { get; private set; } = new List<SurveyQuestionModelLocalized>();
 
         #endregion
 
@@ -269,6 +272,9 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 AllPossibleQuestionsCollection.Add(question);
             }
+
+            // create localized list
+            CreateLocalizedQuestionCollection();
 
 
             //get curr q
@@ -713,8 +719,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 .ToDictionary(g => g.Key, g => g.ToList());
 
             foreach (KeyValuePair<int, List<SurveyAnswerModel>> item in dict)
-            {
-                        
+            {          
                 var q = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode == item.Key);
                 UserAnswerGroups.Add(new AnswerGroup(item.Key, q.QText, new List<SurveyAnswerModel>(item.Value)));
             }
@@ -807,6 +812,40 @@ namespace SampleSurveyApp.Core.ViewModels
             // Settings.Language = App.Language;
 
         }
+
+        public class SurveyQuestionModelLocalized
+        {
+            public int CurrQCode { get; set; }
+            public string CurrQCodeDesc { get; set; }
+            public string CurrQCodeDescLocal { get; set; }
+            public string QText { get; set; }
+            public string QTextLocal { get; set; }
+
+           
+        }
+
+        private void CreateLocalizedQuestionCollection()
+        {
+            AllQuestionsLocalized.Clear();
+            var originalQuestionList = AllPossibleQuestionsCollection.ToList();
+
+            foreach (var item in originalQuestionList)
+            {
+                var currQCodeDescLocalTemp = "AppResources" + "." + item.CurrQCodeDesc + "CurrQCodeDesc";
+                var currQTextLocalTemp = "AppResources" + "." + item.CurrQCode + "QText";
+                AllQuestionsLocalized.Add(new SurveyQuestionModelLocalized
+                        { 
+                            CurrQCode = item.CurrQCode,
+                            CurrQCodeDesc=item.CurrQCodeDesc,
+                            CurrQCodeDescLocal= currQCodeDescLocalTemp,
+                            QText = item.QText,
+                            QTextLocal= currQTextLocalTemp
+                        }
+                );
+            }
+        }
+
+
 
     }
 }
