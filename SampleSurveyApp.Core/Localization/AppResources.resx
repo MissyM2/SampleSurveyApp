@@ -141,14 +141,95 @@
   <data name="MainQuestionLblReview" xml:space="preserve">
     <value>Please review your answers here.</value>
   </data>
-  <data name="QTextQ1" xml:space="preserve">
+  <data name="Q01CurrQCodeDesc" xml:space="preserve">
+    <value>Q01</value>
+  </data>
+  <data name="Q01QText" xml:space="preserve">
     <value>Question 1: Single Answer</value>
   </data>
-  <data name="QTextQ2" xml:space="preserve">
+  <data name="Q02CurrQCodeDesc" xml:space="preserve">
+    <value>Q02</value>
+  </data>
+  <data name="Q02QText" xml:space="preserve">
     <value>Question 2: Single Answer</value>
   </data>
-  <data name="QTextQ3" xml:space="preserve">
+  <data name="Q03CurrQCodeDesc" xml:space="preserve">
+    <value>Q03</value>
+  </data>
+  <data name="Q03QText" xml:space="preserve">
     <value>Question 3: Single Answer</value>
+  </data>
+  <data name="Q04CurrQCodeDesc" xml:space="preserve">
+    <value>Q04</value>
+  </data>
+  <data name="Q04QText" xml:space="preserve">
+    <value>Question 4: Single Answer</value>
+  </data>
+  <data name="Q05CurrQCodeDesc" xml:space="preserve">
+    <value>Q05</value>
+  </data>
+  <data name="Q05QText" xml:space="preserve">
+    <value>Question 5: Multiple Answers</value>
+  </data>
+  <data name="Q06CurrQCodeDesc" xml:space="preserve">
+    <value>Q06</value>
+  </data>
+  <data name="Q06QText" xml:space="preserve">
+    <value>Question 6: Single Answer</value>
+  </data>
+  <data name="Q07CurrQCodeDesc" xml:space="preserve">
+    <value>Q07</value>
+  </data>
+  <data name="Q07QText" xml:space="preserve">
+    <value>Question 7: Single Answer</value>
+  </data>
+  <data name="Q08CurrQCodeDesc" xml:space="preserve">
+    <value>Q08</value>
+  </data>
+  <data name="Q08QText" xml:space="preserve">
+    <value>Question 8 : Single Answer</value>
+  </data>
+  <data name="Q09CurrQCodeDesc" xml:space="preserve">
+    <value>Q09</value>
+  </data>
+  <data name="Q09QText" xml:space="preserve">
+    <value>Question 9: Single Answer</value>
+  </data>
+  <data name="Q10CurrQCodeDesc" xml:space="preserve">
+    <value>Q10</value>
+  </data>
+  <data name="Q10QText" xml:space="preserve">
+    <value>Question 10: Single Answer</value>
+  </data>
+  <data name="Q11CurrQCodeDesc" xml:space="preserve">
+    <value>Q11</value>
+  </data>
+  <data name="Q11QText" xml:space="preserve">
+    <value>Question 11: Single Answer</value>
+  </data>
+  <data name="Q12CurrQCodeDesc" xml:space="preserve">
+    <value>Q12</value>
+  </data>
+  <data name="Q12QText" xml:space="preserve">
+    <value>Question 12: Single Answer</value>
+  </data>
+  <data name="Q13CurrQCodeDesc" xml:space="preserve">
+    <value>Q13</value>
+  </data>
+  <data name="Q13QText" xml:space="preserve">
+    <value>Question 13: Text</value>
+  </data>
+  <data name="Q14CurrQCodeDesc" xml:space="preserve">
+    <value>Q14</value>
+  </data>
+  <data name="Q14QText" xml:space="preserve">
+    <value>Question 14: Single Answer</value>
+  </data>
+  <data name="Q15CurrQCodeDesc" xml:space="preserve">
+    <value>Q15</value>
+  </data>
+  <data name="Q15QText" xml:space="preserve">
+    <value>Question 15: Text</value>
   </data>
   <data name="RightBtnLblNext" xml:space="preserve">
     <value>Next</value>
@@ -164,6 +245,7 @@
   </data>
   <data name="ScreenNameLblReview" xml:space="preserve">
     <value>Review</value>
+    <comment>6</comment>
   </data>
   <data name="ScreenNameLblStart" xml:space="preserve">
     <value>Sample Survey App</value>

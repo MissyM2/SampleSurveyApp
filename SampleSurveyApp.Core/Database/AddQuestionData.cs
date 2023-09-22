@@ -16,21 +16,21 @@ namespace SampleSurveyApp.Core.Database
 
             SurveyQuestionList=new List<SurveyQuestionModel>()
             {
-                new SurveyQuestionModel () { CurrQCode=1, CurrQCodeDesc="Q1", QText="Question 1: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=2, CurrQCodeDesc ="Q2", QText="Question 2: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=3, CurrQCodeDesc ="Q3", QText="Question 3: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=4, CurrQCodeDesc ="Q4", QText="Question 4: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=5, CurrQCodeDesc ="Q5a", QText="Question 5: Multiple Answers", QType="MultipleAnswers"},
-                new SurveyQuestionModel () { CurrQCode=6, CurrQCodeDesc ="Q5b", QText="Question 6: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=7, CurrQCodeDesc ="Q6a", QText="Question 8: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=8, CurrQCodeDesc ="Q6b", QText="Question 9: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=9, CurrQCodeDesc ="Q6c", QText="Question 10: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=10, CurrQCodeDesc ="Q6d", QText="Question 11: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=11, CurrQCodeDesc ="Q6e", QText ="Question 12: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=12, CurrQCodeDesc ="Q6f", QText="Question 13: Single Answer", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=13, CurrQCodeDesc ="Q7", QText="Question 14: Text", QType="Text"},
-                new SurveyQuestionModel () { CurrQCode=14, CurrQCodeDesc ="Q5c", QText="Question 14", QType="SingleAnswer"},
-                new SurveyQuestionModel () { CurrQCode=15, CurrQCodeDesc ="Q15", QText="Question 14: Text", QType="Text"}
+                new SurveyQuestionModel () { CurrQCode=01, CurrQCodeDesc="Q01", QText="Question 1: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=02, CurrQCodeDesc ="Q02", QText="Question 2: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=03, CurrQCodeDesc ="Q03", QText="Question 3: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=04, CurrQCodeDesc ="Q04", QText="Question 4: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=05, CurrQCodeDesc ="Q05", QText="Question 5: Multiple Answers", QType="MultipleAnswers"},
+                new SurveyQuestionModel () { CurrQCode=06, CurrQCodeDesc ="Q06", QText="Question 6: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=07, CurrQCodeDesc ="Q07", QText="Question 7: Single Answer", QType="Singlenswer"},
+                new SurveyQuestionModel () { CurrQCode=08, CurrQCodeDesc ="Q08", QText="Question 8: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=09, CurrQCodeDesc ="Q09", QText="Question 9: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=10, CurrQCodeDesc ="Q10", QText="Question 10: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=11, CurrQCodeDesc ="Q11", QText ="Question 11: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=12, CurrQCodeDesc ="Q12", QText="Question 12: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=13, CurrQCodeDesc ="Q13", QText="Question 13: Text", QType="Text"},
+                new SurveyQuestionModel () { CurrQCode=14, CurrQCodeDesc ="Q14", QText="Question 14: Single Answer", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=15, CurrQCodeDesc ="Q15", QText="Question 15: Text", QType="Text"}
 
             };
         }

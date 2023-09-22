@@ -133,29 +133,272 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Q01.
+        /// </summary>
+        public static string Q01CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q01CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question 1: Single Answer.
         /// </summary>
-        public static string QTextQ1 {
+        public static string Q01QText {
             get {
-                return ResourceManager.GetString("QTextQ1", resourceCulture);
+                return ResourceManager.GetString("Q01QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q02.
+        /// </summary>
+        public static string Q02CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q02CurrQCodeDesc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Question 2: Single Answer.
         /// </summary>
-        public static string QTextQ2 {
+        public static string Q02QText {
             get {
-                return ResourceManager.GetString("QTextQ2", resourceCulture);
+                return ResourceManager.GetString("Q02QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q03.
+        /// </summary>
+        public static string Q03CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q03CurrQCodeDesc", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Question 3: Single Answer.
         /// </summary>
-        public static string QTextQ3 {
+        public static string Q03QText {
             get {
-                return ResourceManager.GetString("QTextQ3", resourceCulture);
+                return ResourceManager.GetString("Q03QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q04.
+        /// </summary>
+        public static string Q04CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q04CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 4: Single Answer.
+        /// </summary>
+        public static string Q04QText {
+            get {
+                return ResourceManager.GetString("Q04QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q05.
+        /// </summary>
+        public static string Q05CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q05CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 5: Multiple Answers.
+        /// </summary>
+        public static string Q05QText {
+            get {
+                return ResourceManager.GetString("Q05QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q06.
+        /// </summary>
+        public static string Q06CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q06CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 6: Single Answer.
+        /// </summary>
+        public static string Q06QText {
+            get {
+                return ResourceManager.GetString("Q06QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q07.
+        /// </summary>
+        public static string Q07CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q07CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 7: Single Answer.
+        /// </summary>
+        public static string Q07QText {
+            get {
+                return ResourceManager.GetString("Q07QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q08.
+        /// </summary>
+        public static string Q08CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q08CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 8 : Single Answer.
+        /// </summary>
+        public static string Q08QText {
+            get {
+                return ResourceManager.GetString("Q08QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q09.
+        /// </summary>
+        public static string Q09CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q09CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 9: Single Answer.
+        /// </summary>
+        public static string Q09QText {
+            get {
+                return ResourceManager.GetString("Q09QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q10.
+        /// </summary>
+        public static string Q10CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q10CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 10: Single Answer.
+        /// </summary>
+        public static string Q10QText {
+            get {
+                return ResourceManager.GetString("Q10QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q11.
+        /// </summary>
+        public static string Q11CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q11CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 11: Single Answer.
+        /// </summary>
+        public static string Q11QText {
+            get {
+                return ResourceManager.GetString("Q11QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q12.
+        /// </summary>
+        public static string Q12CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q12CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 12: Single Answer.
+        /// </summary>
+        public static string Q12QText {
+            get {
+                return ResourceManager.GetString("Q12QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q13.
+        /// </summary>
+        public static string Q13CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q13CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 13: Text.
+        /// </summary>
+        public static string Q13QText {
+            get {
+                return ResourceManager.GetString("Q13QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q14.
+        /// </summary>
+        public static string Q14CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q14CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 14: Single Answer.
+        /// </summary>
+        public static string Q14QText {
+            get {
+                return ResourceManager.GetString("Q14QText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Q15.
+        /// </summary>
+        public static string Q15CurrQCodeDesc {
+            get {
+                return ResourceManager.GetString("Q15CurrQCodeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 15: Text.
+        /// </summary>
+        public static string Q15QText {
+            get {
+                return ResourceManager.GetString("Q15QText", resourceCulture);
             }
         }
         
