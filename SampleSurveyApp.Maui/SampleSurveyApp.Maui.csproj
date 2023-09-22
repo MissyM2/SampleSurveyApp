@@ -42,7 +42,7 @@
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Images\splashold.svg" Color="Green" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#f7c59f" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -63,7 +63,6 @@
 	<ItemGroup>
 	  <None Remove="Controls\" />
 	  <None Remove="Pages\" />
-	  <None Remove="Resources\Splash\splash.svg" />
 	  <None Remove="Services\" />
 	  <None Remove="Resources\Images\check.png" />
 	</ItemGroup>
@@ -77,8 +76,5 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Include="Resources\Images\check.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <MauiSplashScreen Include="Resources\Splash\splash.svg" />
 	</ItemGroup>
 </Project>
