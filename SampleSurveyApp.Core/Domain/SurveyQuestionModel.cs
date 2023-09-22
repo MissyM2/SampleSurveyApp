@@ -10,8 +10,11 @@ namespace SampleSurveyApp.Core.Domain
         public int CurrQCode { get; set; }
 
         public string CurrQCodeDesc { get; set; }
+        public string CurrQCodeDescLocal { get; set; }  
 
         public string QText { get; set; }
+
+        public string QTextLocal { get; set; }
 
         public int PrevQCode { get; set; }
 

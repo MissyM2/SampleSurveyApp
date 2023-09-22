@@ -42,8 +42,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public LocalizationResourceManager LocalizationResourceManager => LocalizationResourceManager.Instance;
 
-        public List<SurveyQuestionModelLocalized> AllQuestionsLocalized { get; private set; } = new List<SurveyQuestionModelLocalized>();
-
         #endregion
 
         #region Current Question and Current Answers
@@ -125,7 +123,7 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         bool isVisibleThankYouText;
 
-       [ObservableProperty]
+        [ObservableProperty]
         bool isAnswerReview = false;
 
         [ObservableProperty]
@@ -208,6 +206,7 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         string selCulture;
 
+        public CultureInfo currCulture = new("en");
 
 
         public SurveyPageVM(
@@ -241,7 +240,7 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
 
-       
+
 
         [RelayCommand]
         public async Task Init()
@@ -273,8 +272,14 @@ namespace SampleSurveyApp.Core.ViewModels
                 AllPossibleQuestionsCollection.Add(question);
             }
 
-            // create localized list
-            CreateLocalizedQuestionCollection();
+            if (SelCulture == "en")
+            {
+                    currCulture = new CultureInfo("en-US");
+            }
+            else
+            {
+                currCulture = new CultureInfo("es-ES");
+            }
 
 
             //get curr q
@@ -638,12 +643,15 @@ namespace SampleSurveyApp.Core.ViewModels
             else
             {
                 IsVisibleSurveyHeader = true;
-
+                
                 if (IsAnswerReview == false)
                 {
+
+                    //var mainQLocal = CurrentQuestion.QTextLocal;
                     IsVisibleMainInstructionLbl = false;
                     IsVisibleTextInstructionLbl = false;
-                    MainQuestionLbl = CurrentQuestion.QText;
+                    /*MainQuestionLbl = CurrentQuestion.QText*/
+                    MainQuestionLbl = AppResources.ResourceManager.GetString(CurrentQuestion.QTextLocal, currCulture);
                     IsVisibleRuleTypeSingle = true;
                     IsVisibleRuleTypeMultiple = false;
                     IsVisibleQTypeText = false;
@@ -812,40 +820,6 @@ namespace SampleSurveyApp.Core.ViewModels
             // Settings.Language = App.Language;
 
         }
-
-        public class SurveyQuestionModelLocalized
-        {
-            public int CurrQCode { get; set; }
-            public string CurrQCodeDesc { get; set; }
-            public string CurrQCodeDescLocal { get; set; }
-            public string QText { get; set; }
-            public string QTextLocal { get; set; }
-
-           
-        }
-
-        private void CreateLocalizedQuestionCollection()
-        {
-            AllQuestionsLocalized.Clear();
-            var originalQuestionList = AllPossibleQuestionsCollection.ToList();
-
-            foreach (var item in originalQuestionList)
-            {
-                var currQCodeDescLocalTemp = "AppResources" + "." + item.CurrQCodeDesc + "CurrQCodeDesc";
-                var currQTextLocalTemp = "AppResources" + "." + item.CurrQCode + "QText";
-                AllQuestionsLocalized.Add(new SurveyQuestionModelLocalized
-                        { 
-                            CurrQCode = item.CurrQCode,
-                            CurrQCodeDesc=item.CurrQCodeDesc,
-                            CurrQCodeDescLocal= currQCodeDescLocalTemp,
-                            QText = item.QText,
-                            QTextLocal= currQTextLocalTemp
-                        }
-                );
-            }
-        }
-
-
 
     }
 }

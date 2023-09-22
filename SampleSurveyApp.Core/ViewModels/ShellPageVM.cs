@@ -110,13 +110,15 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
         [RelayCommand]
-        public void ChangeLanguage()
+        public async Task ChangeLanguage()
         {
             var switchToCulture = AppResources.Culture.TwoLetterISOLanguageName
             .Equals("es", StringComparison.InvariantCultureIgnoreCase) ?
             new CultureInfo("en-US") : new CultureInfo("es-ES");
 
             LocalizationResourceManager.Instance.SetCulture(switchToCulture);
+
+            await _messageService.CustomAlert("Language", "Current language is now " + CultureInfo.CurrentCulture, "OK");
 
         }
 

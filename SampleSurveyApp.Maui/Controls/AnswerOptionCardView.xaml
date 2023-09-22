@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localize="clr-namespace:SampleSurveyApp.Core.Localization;assembly=SampleSurveyApp.Core"
              xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
              x:DataType="models:SurveyAnswerModel"
              x:Class="SampleSurveyApp.Maui.Controls.AnswerOptionCardView"
@@ -32,7 +33,7 @@
             RowDefinitions="40, 20">
 
             <VerticalStackLayout VerticalOptions="Center">
-                <Label Text="{Binding AText}" Margin="10,4,4,4" />
+                <Label Text="{localize:Translate ATextLocal}" Margin="10,4,4,4" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">

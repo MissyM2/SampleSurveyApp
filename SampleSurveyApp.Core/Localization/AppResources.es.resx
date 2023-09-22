@@ -117,6 +117,165 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CurrQCode01ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode01ACode02AText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CurrQCode02ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode02ACode02AText" xml:space="preserve">
+    <value>No (va a revisión)</value>
+  </data>
+  <data name="CurrQCode03ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode03ACode02AText" xml:space="preserve">
+    <value>No (va al texto)</value>
+  </data>
+  <data name="CurrQCode04ACode01AText" xml:space="preserve">
+    <value>Opción de selección única 1</value>
+  </data>
+  <data name="CurrQCode04ACode02AText" xml:space="preserve">
+    <value>Opción de selección única 2 (Goes to Review)</value>
+  </data>
+  <data name="CurrQCode05ACode012AText" xml:space="preserve">
+    <value>Multiple Selection Option 12</value>
+  </data>
+  <data name="CurrQCode05ACode01AText" xml:space="preserve">
+    <value>Opción de selección múltiple 1</value>
+  </data>
+  <data name="CurrQCode05ACode02AText" xml:space="preserve">
+    <value>Opción de selección múltiple 2</value>
+  </data>
+  <data name="CurrQCode05ACode03AText" xml:space="preserve">
+    <value>Opción de selección múltiple 3</value>
+  </data>
+  <data name="CurrQCode05ACode04AText" xml:space="preserve">
+    <value>Opción de selección múltiple 4</value>
+  </data>
+  <data name="CurrQCode05ACode05AText" xml:space="preserve">
+    <value>Opción de selección múltiple 5</value>
+  </data>
+  <data name="CurrQCode05ACode06AText" xml:space="preserve">
+    <value>Opción de selección múltiple 6</value>
+  </data>
+  <data name="CurrQCode05ACode07AText" xml:space="preserve">
+    <value>Opción de selección múltiple 7</value>
+  </data>
+  <data name="CurrQCode05ACode08AText" xml:space="preserve">
+    <value>Opción de selección múltiple 8</value>
+  </data>
+  <data name="CurrQCode05ACode09AText" xml:space="preserve">
+    <value>Opción de selección múltiple 9</value>
+  </data>
+  <data name="CurrQCode05ACode10AText" xml:space="preserve">
+    <value>Opción de selección múltiple 10</value>
+  </data>
+  <data name="CurrQCode05ACode11AText" xml:space="preserve">
+    <value>Opción de selección múltiple 11</value>
+  </data>
+  <data name="CurrQCode05ACode13AText" xml:space="preserve">
+    <value>Opción de selección múltiple 13</value>
+  </data>
+  <data name="CurrQCode05ACode14AText" xml:space="preserve">
+    <value>Opción de selección múltiple 14</value>
+  </data>
+  <data name="CurrQCode05ACode15AText" xml:space="preserve">
+    <value>Opción de selección múltiple 15</value>
+  </data>
+  <data name="CurrQCode05ACode16AText" xml:space="preserve">
+    <value>Opción de selección múltiple 16</value>
+  </data>
+  <data name="CurrQCode05ACode17AText" xml:space="preserve">
+    <value>Opción de selección múltiple 17</value>
+  </data>
+  <data name="CurrQCode05ACode18AText" xml:space="preserve">
+    <value>Opción de selección múltiple 18</value>
+  </data>
+  <data name="CurrQCode06ACode01AText" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="CurrQCode06ACode02AText" xml:space="preserve">
+    <value>Un poco</value>
+  </data>
+  <data name="CurrQCode06ACode03AText" xml:space="preserve">
+    <value>Alguno</value>
+  </data>
+  <data name="CurrQCode06ACode04AText" xml:space="preserve">
+    <value>Mucho</value>
+  </data>
+  <data name="CurrQCode06ACode05AText" xml:space="preserve">
+    <value>No se pudo observar</value>
+  </data>
+  <data name="CurrQCode07ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode07ACode02AText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CurrQCode07ACode03AText" xml:space="preserve">
+    <value>No se pudo observar</value>
+  </data>
+  <data name="CurrQCode08ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode08ACode02AText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CurrQCode08ACode03AText" xml:space="preserve">
+    <value>No se pudo observar</value>
+  </data>
+  <data name="CurrQCode09ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode09ACode02AText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CurrQCode09ACode03AText" xml:space="preserve">
+    <value>No se pudo observar</value>
+  </data>
+  <data name="CurrQCode10ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode10ACode02AText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CurrQCode10ACode03AText" xml:space="preserve">
+    <value>No se pudo observar</value>
+  </data>
+  <data name="CurrQCode11ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode11ACode02AText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CurrQCode11ACode03AText" xml:space="preserve">
+    <value>No se pudo observar</value>
+  </data>
+  <data name="CurrQCode12ACode01AText" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="CurrQCode12ACode02AText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CurrQCode12ACode03AText" xml:space="preserve">
+    <value>No se pudo observar</value>
+  </data>
+  <data name="CurrQCode13ACode01AText" xml:space="preserve">
+    <value>Rojo</value>
+  </data>
+  <data name="CurrQCode13ACode02AText" xml:space="preserve">
+    <value>Azul</value>
+  </data>
+  <data name="CurrQCode14ACode01AText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CurrQCode15ACode02AText" xml:space="preserve">
+    <value />
+  </data>
   <data name="CurrQCodeDescQ1" xml:space="preserve">
     <value>Q1</value>
   </data>
@@ -229,7 +388,7 @@
     <value>Q15</value>
   </data>
   <data name="Q15QText" xml:space="preserve">
-    <value>Question 15: Text</value>
+    <value>Pregunta 13: Texto</value>
   </data>
   <data name="QTextQ1" xml:space="preserve">
     <value>Pregunta 1: Respuesta única</value>

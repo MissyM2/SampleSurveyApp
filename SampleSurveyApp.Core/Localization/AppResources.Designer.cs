@@ -61,6 +61,483 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode01ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode01ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string CurrQCode01ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode01ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode02ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode02ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No (goes to Review).
+        /// </summary>
+        public static string CurrQCode02ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode02ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode03ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode03ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No (Goes to Text).
+        /// </summary>
+        public static string CurrQCode03ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode03ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single Selection Option 1.
+        /// </summary>
+        public static string CurrQCode04ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode04ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single Selection Option 2 (Goes to Review).
+        /// </summary>
+        public static string CurrQCode04ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode04ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 12.
+        /// </summary>
+        public static string CurrQCode05ACode012AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode012AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 1.
+        /// </summary>
+        public static string CurrQCode05ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 2.
+        /// </summary>
+        public static string CurrQCode05ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 3.
+        /// </summary>
+        public static string CurrQCode05ACode03AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode03AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 4.
+        /// </summary>
+        public static string CurrQCode05ACode04AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode04AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 5.
+        /// </summary>
+        public static string CurrQCode05ACode05AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode05AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 6.
+        /// </summary>
+        public static string CurrQCode05ACode06AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode06AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 7.
+        /// </summary>
+        public static string CurrQCode05ACode07AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode07AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 8.
+        /// </summary>
+        public static string CurrQCode05ACode08AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode08AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 9.
+        /// </summary>
+        public static string CurrQCode05ACode09AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode09AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 10.
+        /// </summary>
+        public static string CurrQCode05ACode10AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode10AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 11.
+        /// </summary>
+        public static string CurrQCode05ACode11AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode11AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 13.
+        /// </summary>
+        public static string CurrQCode05ACode13AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode13AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 14.
+        /// </summary>
+        public static string CurrQCode05ACode14AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode14AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 15.
+        /// </summary>
+        public static string CurrQCode05ACode15AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode15AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 16.
+        /// </summary>
+        public static string CurrQCode05ACode16AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode16AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 17.
+        /// </summary>
+        public static string CurrQCode05ACode17AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode17AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple Selection Option 18.
+        /// </summary>
+        public static string CurrQCode05ACode18AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode18AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string CurrQCode06ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode06ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A little.
+        /// </summary>
+        public static string CurrQCode06ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode06ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some.
+        /// </summary>
+        public static string CurrQCode06ACode03AText {
+            get {
+                return ResourceManager.GetString("CurrQCode06ACode03AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A lot.
+        /// </summary>
+        public static string CurrQCode06ACode04AText {
+            get {
+                return ResourceManager.GetString("CurrQCode06ACode04AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not observe.
+        /// </summary>
+        public static string CurrQCode06ACode05AText {
+            get {
+                return ResourceManager.GetString("CurrQCode06ACode05AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode07ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode07ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string CurrQCode07ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode07ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not observe.
+        /// </summary>
+        public static string CurrQCode07ACode03AText {
+            get {
+                return ResourceManager.GetString("CurrQCode07ACode03AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode08ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode08ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string CurrQCode08ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode08ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not observe.
+        /// </summary>
+        public static string CurrQCode08ACode03AText {
+            get {
+                return ResourceManager.GetString("CurrQCode08ACode03AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode09ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode09ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string CurrQCode09ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode09ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not observe.
+        /// </summary>
+        public static string CurrQCode09ACode03AText {
+            get {
+                return ResourceManager.GetString("CurrQCode09ACode03AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode10ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode10ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string CurrQCode10ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode10ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not observe.
+        /// </summary>
+        public static string CurrQCode10ACode03AText {
+            get {
+                return ResourceManager.GetString("CurrQCode10ACode03AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode11ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode11ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string CurrQCode11ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode11ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not observe.
+        /// </summary>
+        public static string CurrQCode11ACode03AText {
+            get {
+                return ResourceManager.GetString("CurrQCode11ACode03AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string CurrQCode12ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode12ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string CurrQCode12ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode12ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not observe.
+        /// </summary>
+        public static string CurrQCode12ACode03AText {
+            get {
+                return ResourceManager.GetString("CurrQCode12ACode03AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Red.
+        /// </summary>
+        public static string CurrQCode13ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode13ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blue.
+        /// </summary>
+        public static string CurrQCode13ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode13ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CurrQCode14ACode01AText {
+            get {
+                return ResourceManager.GetString("CurrQCode14ACode01AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string CurrQCode15ACode02AText {
+            get {
+                return ResourceManager.GetString("CurrQCode15ACode02AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Q1.
         /// </summary>
         public static string CurrQCodeDescQ1 {

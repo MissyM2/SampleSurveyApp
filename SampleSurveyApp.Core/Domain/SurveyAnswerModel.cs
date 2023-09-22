@@ -18,6 +18,9 @@ namespace SampleSurveyApp.Core.Domain
         string aText;
 
         [ObservableProperty]
+        string aTextLocal;
+
+        [ObservableProperty]
         int navRule;
 
         [ObservableProperty]
