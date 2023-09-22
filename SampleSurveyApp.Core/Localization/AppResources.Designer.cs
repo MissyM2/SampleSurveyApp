@@ -205,7 +205,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey Start Page.
+        ///   Looks up a localized string similar to Sample Survey App.
         /// </summary>
         public static string ScreenNameLblStart {
             get {
