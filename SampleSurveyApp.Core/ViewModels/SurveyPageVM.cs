@@ -286,18 +286,8 @@ namespace SampleSurveyApp.Core.ViewModels
             CurrentQuestion = AllPossibleQuestionsCollection[0];
 
             // get answers for curr q
-            AnswerOptionsForCurrentQuestionCollection.Clear();
-            foreach (var answer in answerSource)
-            {
-                if (answer.CurrQCode == CurrentQuestion.CurrQCode)
-                {
-                    answer.AText=AppResources.ResourceManager.GetString(answer.ATextLocal, currCulture);
-                    AnswerOptionsForCurrentQuestionCollection.Add(answer);
-                }
-            }
+            GetAnswerOptionsForCurrentQuestion();
 
-
-           // MainQuestionLbl = AppResources.ResourceManager.GetString(CurrentQuestion.QTextLocal, currCulture);
             // update question in q collection
             var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
             foundQ.IsSelected = true;
@@ -310,6 +300,19 @@ namespace SampleSurveyApp.Core.ViewModels
             SetTitleViewValuesOnOpen();
             SetScreenValuesOnOpen();
 
+        }
+
+        private void GetAnswerOptionsForCurrentQuestion()
+        {
+            AnswerOptionsForCurrentQuestionCollection.Clear();
+            foreach (var answer in answerSource)
+            {
+                if (answer.CurrQCode == CurrentQuestion.CurrQCode)
+                {
+                    answer.AText = AppResources.ResourceManager.GetString(answer.ATextLocal, currCulture);
+                    AnswerOptionsForCurrentQuestionCollection.Add(answer);
+                }
+            }
         }
 
 
@@ -401,15 +404,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
 
                     // get answers for current question
-                    AnswerOptionsForCurrentQuestionCollection.Clear();
-                    foreach (var i in AllPossibleAnswerOptionsCollection)
-                    {
-                        if (i.CurrQCode == CurrentQuestion.CurrQCode)
-                        {
-                            i.AText = AppResources.ResourceManager.GetString(i.ATextLocal, currCulture);
-                            AnswerOptionsForCurrentQuestionCollection.Add(i);
-                        }
-                    }
+                    GetAnswerOptionsForCurrentQuestion();
 
                     // set title view
                     SetTitleViewValuesOnOpen();
@@ -434,16 +429,9 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
                     // set current navigation rule
                     CurrentNavRule = CurrentQuestion.CurrQCode;
-                    
+
                     // get answers for current question
-                    AnswerOptionsForCurrentQuestionCollection.Clear();
-                    foreach (var i in AllPossibleAnswerOptionsCollection)
-                    {
-                        if (i.CurrQCode == CurrentQuestion.CurrQCode)
-                        {
-                            AnswerOptionsForCurrentQuestionCollection.Add(i);
-                        }
-                    }
+                    GetAnswerOptionsForCurrentQuestion();
 
                     // set title view
                     SetTitleViewValuesOnOpen();
@@ -459,14 +447,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
 
                     // get answers for current question
-                    AnswerOptionsForCurrentQuestionCollection.Clear();
-                    foreach (var i in AllPossibleAnswerOptionsCollection)
-                    {
-                        if (i.CurrQCode == CurrentQuestion.CurrQCode)
-                        {
-                            AnswerOptionsForCurrentQuestionCollection.Add(i);
-                        }
-                    }
+                    GetAnswerOptionsForCurrentQuestion();
 
                     // set title view
                     SetTitleViewValuesOnOpen();
@@ -652,10 +633,8 @@ namespace SampleSurveyApp.Core.ViewModels
                 if (IsAnswerReview == false)
                 {
 
-                    //var mainQLocal = CurrentQuestion.QTextLocal;
                     IsVisibleMainInstructionLbl = false;
                     IsVisibleTextInstructionLbl = false;
-                    /*MainQuestionLbl = CurrentQuestion.QText*/
                     MainQuestionLbl = AppResources.ResourceManager.GetString(CurrentQuestion.QTextLocal, currCulture);
                     IsVisibleRuleTypeSingle = true;
                     IsVisibleRuleTypeMultiple = false;
@@ -703,7 +682,7 @@ namespace SampleSurveyApp.Core.ViewModels
                         IsVisibleTextInstructionLbl = true;
                     }
                 }
-                else
+                else  // must be review page
                 {
                     MainQuestionLbl = AppResources.MainQuestionLblReview;
                     MainInstructionLbl = AppResources.MainInstructionLblReview;
@@ -742,8 +721,6 @@ namespace SampleSurveyApp.Core.ViewModels
         {
             public int CurrQCode { get; set; }
             public string QText { get; set; }
-
-            //public AnswerGroup(string qCode, string qText, List<SurveyResponseModel> userResponses) : base(userResponses)
             public AnswerGroup(int qCode, string qText, List<SurveyAnswerModel> userResponses) : base(userResponses)
             {
                 CurrQCode = qCode;
@@ -808,7 +785,6 @@ namespace SampleSurveyApp.Core.ViewModels
         public void OnSelectedIndexChanged(object sender, EventArgs e)
         {
             Debug.WriteLine("e is" + SelectedLanguage);
-            // do stuff
             switch (SelectedLanguage)
             {
                 case "English":
@@ -822,8 +798,6 @@ namespace SampleSurveyApp.Core.ViewModels
             }
 
             CultureInfo.CurrentUICulture = new CultureInfo(SelCulture, false);
-            // Settings.Language = App.Language;
-
         }
 
     }
