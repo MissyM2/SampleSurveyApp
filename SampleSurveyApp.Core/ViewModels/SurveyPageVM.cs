@@ -291,9 +291,13 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (answer.CurrQCode == CurrentQuestion.CurrQCode)
                 {
+                    answer.AText=AppResources.ResourceManager.GetString(answer.ATextLocal, currCulture);
                     AnswerOptionsForCurrentQuestionCollection.Add(answer);
                 }
             }
+
+
+           // MainQuestionLbl = AppResources.ResourceManager.GetString(CurrentQuestion.QTextLocal, currCulture);
             // update question in q collection
             var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
             foundQ.IsSelected = true;
@@ -402,6 +406,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     {
                         if (i.CurrQCode == CurrentQuestion.CurrQCode)
                         {
+                            i.AText = AppResources.ResourceManager.GetString(i.ATextLocal, currCulture);
                             AnswerOptionsForCurrentQuestionCollection.Add(i);
                         }
                     }

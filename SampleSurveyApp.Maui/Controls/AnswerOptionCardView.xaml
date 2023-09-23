@@ -33,7 +33,7 @@
             RowDefinitions="40, 20">
 
             <VerticalStackLayout VerticalOptions="Center">
-                <Label Text="{localize:Translate ATextLocal}" Margin="10,4,4,4" />
+                <Label Text="{Binding AText}" Margin="10,4,4,4" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">
