@@ -74,7 +74,6 @@
 	  <None Remove="Resources\Images\check.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Controls\" />
 	  <Folder Include="Pages\" />
 	  <Folder Include="Services\" />
 	</ItemGroup>
@@ -87,5 +86,13 @@
 	<ItemGroup>
 	  <MauiImage Include="Resources\AppIcon\appiconfg.svg" />
 	  <MauiImage Include="Resources\Splash\splashscreen.svg" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiXaml Update="Controls\FlyoutFooter.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\FlyoutHeader.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 </Project>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SampleSurveyApp.Maui.Controls.FlyoutHeader">
+    <Border BackgroundColor="#ddd"
+                StrokeThickness="0">
+        <Grid ColumnDefinitions="Auto, *"
+                    Padding="25"
+                  ColumnSpacing="20">
+            <Image Grid.Column="0"
+                Source="dotnet_bot.png"
+                   Aspect="AspectFill"
+                   HeightRequest="50"
+                   WidthRequest="50"/>
+
+            <Label Grid.Column="1"
+                   Text="Sample Survey App"
+                   VerticalTextAlignment="Center"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#333333"/>
+        </Grid>
+    </Border>
+</ContentView>

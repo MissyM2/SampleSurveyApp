@@ -34,7 +34,6 @@
 	<ItemGroup>
 	  <Folder Include="Converters\" />
 	  <Folder Include="Database\" />
-	  <Folder Include="Domain\" />
 	  <Folder Include="Extensions\" />
 	  <Folder Include="Services\" />
 	  <Folder Include="Validation\" />

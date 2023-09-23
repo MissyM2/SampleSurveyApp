@@ -19,6 +19,11 @@
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
 
+    <Style TargetType="Label" x:Key="MaterialIcons">
+        <Setter Property="FontFamily" Value="MaterialIcons"/>
+        <Setter Property="FontSize" Value="24"/>
+    </Style>
+
     <Style TargetType="BoxView">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
