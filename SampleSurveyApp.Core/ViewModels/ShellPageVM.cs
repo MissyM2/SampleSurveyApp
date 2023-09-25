@@ -35,6 +35,9 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         string currCultureString;
 
+        [ObservableProperty]
+        string currDate;
+
         public ObservableCollection<SurveyModel> SurveyList { get; set; } = new();
         public ObservableCollection<SurveyResponseModel> SurveyResponseList { get; set; } = new();
 
@@ -51,6 +54,11 @@ namespace SampleSurveyApp.Core.ViewModels
             _surveyModelRepository = surveyModelRepository;
             _surveyResponseModelRepository = surveyResponseModelRepository;
 
+            CurrDate = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.LongDatePattern, CultureInfo.CurrentCulture);
+
+            /*CultureInfo ci = CultureInfo.CurrentCulture;
+            CurrDate = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.LongDatePattern, ci);
+*/
         }
 
         [RelayCommand]
@@ -63,31 +71,36 @@ namespace SampleSurveyApp.Core.ViewModels
                 IsBusy = true;
                 if (SurveyList.Any()) SurveyList.Clear();
                 var surveys = new List<SurveyModel>();
-
                 surveys = await _surveyModelRepository.GetAllAsync();
-                foreach (var survey in surveys)
+                var deleteSurveys = await _messageService.DisplayAlert("Survey Count", "There are " + surveys.Count + ".  Delete?", "OK", "Cancel");
+                if (deleteSurveys == true)
                 {
-                    await _surveyModelRepository.DeleteAsync(survey);
+                    foreach (var survey in surveys)
+                    {
+                        await _surveyModelRepository.DeleteAsync(survey);
+                    }
                 }
-
+                else
+                {
+                    return;
+                }
+                surveys = await _surveyModelRepository.GetAllAsync();
+                await _messageService.CustomAlert("Surveys deleted", surveys.Count + " surveys in database.", "OK");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
                 await _messageService.CustomAlert("Error", "Failed to delete all surveys", "OK");
-
             }
             finally
             {
                 IsBusy = false;
             }
-
         }
 
         [RelayCommand]
         public async Task DeleteAllResponses()
         {
-
             if (IsBusy) return;
 
             try
@@ -95,12 +108,17 @@ namespace SampleSurveyApp.Core.ViewModels
                 IsBusy = true;
                 if (SurveyResponseList.Any()) SurveyResponseList.Clear();
                 var responses = new List<SurveyResponseModel>();
+                var deleteResponses = await _messageService.DisplayAlert("Response Count", "There are " + responses.Count + ".  Delete?", "OK", "Cancel");
 
                 responses = await _surveyResponseModelRepository.GetAllAsync();
                 foreach (var response in responses)
                 {
                     await _surveyResponseModelRepository.DeleteAsync(response);
                 }
+
+                responses = await _surveyResponseModelRepository.GetAllAsync();
+                await _messageService.CustomAlert("Responses deleted", responses.Count + " responses in database.", "OK");
+
 
             }
             catch (Exception ex)
@@ -124,7 +142,7 @@ namespace SampleSurveyApp.Core.ViewModels
                           CultureInfo.CurrentCulture.Name); 
 
     
-            CurrCultureString = "Current Language is " + CultureInfo.CurrentCulture.DisplayName;
+            CurrCultureString = "Lang " + CultureInfo.CurrentCulture.DisplayName;
 
         }
 
@@ -132,9 +150,13 @@ namespace SampleSurveyApp.Core.ViewModels
         public async Task ChangeLanguage()
         {
             await _cultureManager.ChangeLang(CultureInfo.CurrentCulture.Name);
-             CurrCultureString = "Current Language is " + CultureInfo.CurrentCulture.DisplayName;
+             CurrCultureString = "Lang: " + CultureInfo.CurrentCulture.DisplayName;
 
-            
+            //CultureInfo ci = CultureInfo.CurrentCulture;
+            CurrDate = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.LongDatePattern, CultureInfo.CurrentCulture);
+
+
+
         }
 
 

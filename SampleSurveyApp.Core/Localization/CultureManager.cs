@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Maui.Platform;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace SampleSurveyApp.Core.Localization
@@ -7,15 +8,24 @@ namespace SampleSurveyApp.Core.Localization
     {
         public async Task ChangeLang(string currCulture)
         {
+            
             if (currCulture == "en-US")
             {
-                CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("es-ES");
-                CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture;
+                CultureInfo cultureInfo = CultureInfo.GetCultureInfo("es-ES");
+                CultureInfo.CurrentCulture = cultureInfo;
+                Thread.CurrentThread.CurrentCulture = cultureInfo;
+                Thread.CurrentThread.CurrentUICulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             }
             else
             {
-                CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-                CultureInfo.CurrentCulture = CultureInfo.DefaultThreadCurrentCulture;
+                CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+                CultureInfo.CurrentCulture = cultureInfo;
+                Thread.CurrentThread.CurrentCulture = cultureInfo;
+                Thread.CurrentThread.CurrentUICulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             }
 
 

@@ -29,6 +29,8 @@ namespace SampleSurveyApp.Core.Localization
             CultureInfo.CurrentUICulture =
             culture;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
+
+
         }
     }
 }

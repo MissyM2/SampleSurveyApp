@@ -5,7 +5,7 @@
              x:Class="SampleSurveyApp.Maui.Controls.FlyoutFooter">
     <StackLayout BackgroundColor="{StaticResource Accent}" Padding="0,20,0,20">
        
-        <Label Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
+        <Label Text="{Binding CurrDate}"
                TextColor="{StaticResource Black}"
                HorizontalOptions="Center" />
         <Label Text="{Binding CurrCultureString}"
