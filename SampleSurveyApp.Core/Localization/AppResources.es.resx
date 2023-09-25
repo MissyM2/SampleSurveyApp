@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChangeLanguageLbl" xml:space="preserve">
+    <value>Cambiar idioma</value>
+  </data>
   <data name="CurrQCode01ACode01AText" xml:space="preserve">
     <value>Sí</value>
   </data>
@@ -276,14 +279,11 @@
   <data name="CurrQCode15ACode02AText" xml:space="preserve">
     <value />
   </data>
-  <data name="CurrQCodeDescQ1" xml:space="preserve">
-    <value>Q1</value>
+  <data name="DeleteResponsesLbl" xml:space="preserve">
+    <value>Eliminar respuestas</value>
   </data>
-  <data name="CurrQCodeDescQ2" xml:space="preserve">
-    <value>Q2</value>
-  </data>
-  <data name="CurrQCodeDescQ3" xml:space="preserve">
-    <value>Q3</value>
+  <data name="DeleteSurveysLbl" xml:space="preserve">
+    <value>Eliminar encuestas</value>
   </data>
   <data name="LeftBtnLblPrev" xml:space="preserve">
     <value>Previo</value>
@@ -300,92 +300,95 @@
   <data name="MainQuestionLblReview" xml:space="preserve">
     <value>Por favor revise sus respuestas aquí.</value>
   </data>
+  <data name="OverviewPageLbl" xml:space="preserve">
+    <value>Página de descripción general</value>
+  </data>
   <data name="Q01CurrQCodeDesc" xml:space="preserve">
-    <value>Q01</value>
+    <value>Pregunta 01</value>
   </data>
   <data name="Q01QText" xml:space="preserve">
     <value>Pregunta 01: Respuesta única</value>
   </data>
   <data name="Q02CurrQCodeDesc" xml:space="preserve">
-    <value>Q02</value>
+    <value>Pregunta 02</value>
   </data>
   <data name="Q02QText" xml:space="preserve">
     <value>Pregunta 02: Respuesta única</value>
   </data>
   <data name="Q03CurrQCodeDesc" xml:space="preserve">
-    <value>Q03</value>
+    <value>Pregunta 03</value>
   </data>
   <data name="Q03QText" xml:space="preserve">
     <value>Pregunta 03: Respuesta única</value>
   </data>
   <data name="Q04CurrQCodeDesc" xml:space="preserve">
-    <value>Q04</value>
+    <value>Pregunta 04</value>
   </data>
   <data name="Q04QText" xml:space="preserve">
     <value>Pregunta 04: Respuesta única</value>
   </data>
   <data name="Q05CurrQCodeDesc" xml:space="preserve">
-    <value>Q05</value>
+    <value>Pregunta 05</value>
   </data>
   <data name="Q05QText" xml:space="preserve">
     <value>Pregunta 05: Múltiples respuestas</value>
   </data>
   <data name="Q06CurrQCodeDesc" xml:space="preserve">
-    <value>Q06</value>
+    <value>Pregunta 06</value>
   </data>
   <data name="Q06QText" xml:space="preserve">
     <value>Pregunta 06: Respuesta única</value>
   </data>
   <data name="Q07CurrQCodeDesc" xml:space="preserve">
-    <value>Q07</value>
+    <value>Pregunta 07</value>
   </data>
   <data name="Q07QText" xml:space="preserve">
     <value>Pregunta 07: Respuesta única</value>
   </data>
   <data name="Q08CurrQCodeDesc" xml:space="preserve">
-    <value>Q08</value>
+    <value>Pregunta 08</value>
   </data>
   <data name="Q08QText" xml:space="preserve">
     <value>Pregunta 08: Respuesta única</value>
   </data>
   <data name="Q09CurrQCodeDesc" xml:space="preserve">
-    <value>Q09</value>
+    <value>Pregunta 09</value>
   </data>
   <data name="Q09QText" xml:space="preserve">
     <value>Pregunta 08: Respuesta única</value>
   </data>
   <data name="Q10CurrQCodeDesc" xml:space="preserve">
-    <value>Q10</value>
+    <value>Pregunta 10</value>
   </data>
   <data name="Q10QText" xml:space="preserve">
     <value>Pregunta 10: Respuesta única</value>
   </data>
   <data name="Q11CurrQCodeDesc" xml:space="preserve">
-    <value>Q11</value>
+    <value>Pregunta 11</value>
   </data>
   <data name="Q11QText" xml:space="preserve">
     <value>Pregunta 11: Respuesta única</value>
   </data>
   <data name="Q12CurrQCodeDesc" xml:space="preserve">
-    <value>Q12</value>
+    <value>Pregunta 12</value>
   </data>
   <data name="Q12QText" xml:space="preserve">
     <value>Pregunta 12: Respuesta única</value>
   </data>
   <data name="Q13CurrQCodeDesc" xml:space="preserve">
-    <value>Q13</value>
+    <value>Pregunta 13</value>
   </data>
   <data name="Q13QText" xml:space="preserve">
     <value>Pregunta 13: Texto</value>
   </data>
   <data name="Q14CurrQCodeDesc" xml:space="preserve">
-    <value>Q14</value>
+    <value>Pregunta 14</value>
   </data>
   <data name="Q14QText" xml:space="preserve">
     <value>Pregunta 14: Respuesta única</value>
   </data>
   <data name="Q15CurrQCodeDesc" xml:space="preserve">
-    <value>Q15</value>
+    <value>Pregunta 15</value>
   </data>
   <data name="Q15QText" xml:space="preserve">
     <value>Pregunta 13: Texto</value>
@@ -405,6 +408,9 @@
   <data name="RightBtnLblReview" xml:space="preserve">
     <value>Revisar</value>
   </data>
+  <data name="SampleSurveyAppLbl" xml:space="preserve">
+    <value>Aplicación de encuesta de muestra</value>
+  </data>
   <data name="SaveSurveyBtnLbl" xml:space="preserve">
     <value>Guardar encuesta</value>
   </data>
@@ -419,6 +425,9 @@
   </data>
   <data name="StartSurveyLbl" xml:space="preserve">
     <value>Empezar encuesta</value>
+  </data>
+  <data name="SurveyPageLbl" xml:space="preserve">
+    <value>Página de encuesta</value>
   </data>
   <data name="TextInstructionLbl" xml:space="preserve">
     <value>El carácter máximo permitido es</value>

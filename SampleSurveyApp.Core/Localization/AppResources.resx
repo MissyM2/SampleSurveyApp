@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChangeLanguageLbl" xml:space="preserve">
+    <value>Change Language</value>
+  </data>
   <data name="CurrQCode01ACode01AText" xml:space="preserve">
     <value>Yes</value>
   </data>
@@ -276,14 +279,11 @@
   <data name="CurrQCode15ACode02AText" xml:space="preserve">
     <value />
   </data>
-  <data name="CurrQCodeDescQ1" xml:space="preserve">
-    <value>Q1</value>
+  <data name="DeleteResponsesLbl" xml:space="preserve">
+    <value>Delete Responses</value>
   </data>
-  <data name="CurrQCodeDescQ2" xml:space="preserve">
-    <value>Q2</value>
-  </data>
-  <data name="CurrQCodeDescQ3" xml:space="preserve">
-    <value>Q3</value>
+  <data name="DeleteSurveysLbl" xml:space="preserve">
+    <value>Delete Surveys</value>
   </data>
   <data name="LeftBtnLblPrev" xml:space="preserve">
     <value>Prev</value>
@@ -300,92 +300,95 @@
   <data name="MainQuestionLblReview" xml:space="preserve">
     <value>Please review your answers here.</value>
   </data>
+  <data name="OverviewPageLbl" xml:space="preserve">
+    <value>Overview Page</value>
+  </data>
   <data name="Q01CurrQCodeDesc" xml:space="preserve">
-    <value>Q01</value>
+    <value>Question 01</value>
   </data>
   <data name="Q01QText" xml:space="preserve">
     <value>Question 01: Single Answer</value>
   </data>
   <data name="Q02CurrQCodeDesc" xml:space="preserve">
-    <value>Q02</value>
+    <value>Question 02</value>
   </data>
   <data name="Q02QText" xml:space="preserve">
     <value>Question 02: Single Answer</value>
   </data>
   <data name="Q03CurrQCodeDesc" xml:space="preserve">
-    <value>Q03</value>
+    <value>Question 03</value>
   </data>
   <data name="Q03QText" xml:space="preserve">
     <value>Question 03: Single Answer</value>
   </data>
   <data name="Q04CurrQCodeDesc" xml:space="preserve">
-    <value>Q04</value>
+    <value>Question 04</value>
   </data>
   <data name="Q04QText" xml:space="preserve">
     <value>Question 04: Single Answer</value>
   </data>
   <data name="Q05CurrQCodeDesc" xml:space="preserve">
-    <value>Q05</value>
+    <value>Question 05</value>
   </data>
   <data name="Q05QText" xml:space="preserve">
     <value>Question 05: Multiple Answers</value>
   </data>
   <data name="Q06CurrQCodeDesc" xml:space="preserve">
-    <value>Q06</value>
+    <value>Question 06</value>
   </data>
   <data name="Q06QText" xml:space="preserve">
     <value>Question 06: Single Answer</value>
   </data>
   <data name="Q07CurrQCodeDesc" xml:space="preserve">
-    <value>Q07</value>
+    <value>Question 07</value>
   </data>
   <data name="Q07QText" xml:space="preserve">
     <value>Question 07: Single Answer</value>
   </data>
   <data name="Q08CurrQCodeDesc" xml:space="preserve">
-    <value>Q08</value>
+    <value>Question 08</value>
   </data>
   <data name="Q08QText" xml:space="preserve">
     <value>Question 08 : Single Answer</value>
   </data>
   <data name="Q09CurrQCodeDesc" xml:space="preserve">
-    <value>Q09</value>
+    <value>Question 09</value>
   </data>
   <data name="Q09QText" xml:space="preserve">
     <value>Question 09: Single Answer</value>
   </data>
   <data name="Q10CurrQCodeDesc" xml:space="preserve">
-    <value>Q10</value>
+    <value>Question 10</value>
   </data>
   <data name="Q10QText" xml:space="preserve">
     <value>Question 10: Single Answer</value>
   </data>
   <data name="Q11CurrQCodeDesc" xml:space="preserve">
-    <value>Q11</value>
+    <value>Question 11</value>
   </data>
   <data name="Q11QText" xml:space="preserve">
     <value>Question 11: Single Answer</value>
   </data>
   <data name="Q12CurrQCodeDesc" xml:space="preserve">
-    <value>Q12</value>
+    <value>Question 12</value>
   </data>
   <data name="Q12QText" xml:space="preserve">
     <value>Question 12: Single Answer</value>
   </data>
   <data name="Q13CurrQCodeDesc" xml:space="preserve">
-    <value>Q13</value>
+    <value>Question 13</value>
   </data>
   <data name="Q13QText" xml:space="preserve">
     <value>Question 13: Text</value>
   </data>
   <data name="Q14CurrQCodeDesc" xml:space="preserve">
-    <value>Q14</value>
+    <value>Question 14</value>
   </data>
   <data name="Q14QText" xml:space="preserve">
     <value>Question 14: Single Answer</value>
   </data>
   <data name="Q15CurrQCodeDesc" xml:space="preserve">
-    <value>Q15</value>
+    <value>Question 15</value>
   </data>
   <data name="Q15QText" xml:space="preserve">
     <value>Question 15: Text</value>
@@ -395,6 +398,9 @@
   </data>
   <data name="RightBtnLblReview" xml:space="preserve">
     <value>Review</value>
+  </data>
+  <data name="SampleSurveyAppLbl" xml:space="preserve">
+    <value>Sample Survey App</value>
   </data>
   <data name="SaveSurveyBtnLbl" xml:space="preserve">
     <value>Save Survey</value>
@@ -411,6 +417,9 @@
   </data>
   <data name="StartSurveyLbl" xml:space="preserve">
     <value>Start Survey</value>
+  </data>
+  <data name="SurveyPageLbl" xml:space="preserve">
+    <value>Survey Page</value>
   </data>
   <data name="TextInstructionLbl" xml:space="preserve">
     <value>The maximum character allowed is</value>

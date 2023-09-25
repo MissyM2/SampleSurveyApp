@@ -9,8 +9,6 @@ namespace SampleSurveyApp.Maui.Pages;
 
 public partial class SurveyPage : ContentPage
 {
-    public LocalizationResourceManager LocalizationResourceManager => LocalizationResourceManager.Instance;
-
     public SurveyPage()
     {
         InitializeComponent();
@@ -25,18 +23,11 @@ public partial class SurveyPage : ContentPage
             new AsyncRepository<SurveyResponseModel>());
     }
 
-    private void languagePicker_SelectedIndexChanged(object sender, EventArgs e)
+    protected async override void OnAppearing()
     {
-        (BindingContext as SurveyPageVM).OnSelectedIndexChanged(sender, e);
-    }
-
-    private void Button_Clicked(object sender, EventArgs e)
-    {
-        var switchToCulture = AppResources.Culture.TwoLetterISOLanguageName
-            .Equals("es", StringComparison.InvariantCultureIgnoreCase) ?
-            new CultureInfo("en-US") : new CultureInfo("es-ES");
-
-        LocalizationResourceManager.Instance.SetCulture(switchToCulture);
-
+        base.OnAppearing();
+        var vm = (SurveyPageVM)BindingContext;
+        vm.ScreenNameLbl= AppResources.ScreenNameLblStart;
+        await vm.Init();
     }
 }

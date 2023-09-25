@@ -203,11 +203,6 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         public SurveyResponseModel insertedResponse;
 
-        [ObservableProperty]
-        string selCulture;
-
-        public CultureInfo currCulture = new("en");
-
 
         public SurveyPageVM(
             INavigationService navigationService,
@@ -233,10 +228,6 @@ namespace SampleSurveyApp.Core.ViewModels
             AllPossibleAnswerOptionsCollection = new ObservableCollection<SurveyAnswerModel>();
             AnswerOptionsForCurrentQuestionCollection = new ObservableCollection<SurveyAnswerModel>();
             CheckMarkImage = ImageSource.FromResource("SampleSurveyApp.Maui.Resources.Images.check.png", typeof(SurveyPageVM).GetTypeInfo().Assembly);
-            TextInstructionLbl = AppResources.TextInstructionLbl;
-            ScreenNameLbl = AppResources.ScreenNameLblStart;
-            SaveSurveyLbl = AppResources.SaveSurveyBtnLbl;
-
         }
 
 
@@ -254,7 +245,6 @@ namespace SampleSurveyApp.Core.ViewModels
             var aad = new AddAnswerData(_surveyAnswerModelRepository);
             await aad.AddAnswersAsync();
 
-
             if (answerSource.Any()) answerSource.Clear();
             answerSource = await _surveyAnswerModelRepository.GetAllAsync();
 
@@ -271,35 +261,6 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 AllPossibleQuestionsCollection.Add(question);
             }
-
-            if (SelCulture == "en")
-            {
-                    currCulture = new CultureInfo("en-US");
-            }
-            else
-            {
-                currCulture = new CultureInfo("es-ES");
-            }
-
-
-            //get curr q
-            CurrentQuestion = AllPossibleQuestionsCollection[0];
-
-            // get answers for curr q
-            GetAnswerOptionsForCurrentQuestion();
-
-            // update question in q collection
-            var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
-            foundQ.IsSelected = true;
-            foundQ.PrevQCode = 0;
-
-            IsVisibleSurveyHeader = false;
-
-            // set screen values based on properties in CurrentQuestion
-           
-            SetTitleViewValuesOnOpen();
-            SetScreenValuesOnOpen();
-
         }
 
         private void GetAnswerOptionsForCurrentQuestion()
@@ -309,7 +270,7 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (answer.CurrQCode == CurrentQuestion.CurrQCode)
                 {
-                    answer.AText = AppResources.ResourceManager.GetString(answer.ATextLocal, currCulture);
+                    answer.AText = AppResources.ResourceManager.GetString(answer.ATextLocal, CultureInfo.CurrentCulture);
                     AnswerOptionsForCurrentQuestionCollection.Add(answer);
                 }
             }
@@ -400,6 +361,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     // get new current question
                     CurrentQuestion = NextCurrentQuestion;
+                    
                     CurrentQuestion.IsSelected = true;
 
 
@@ -566,6 +528,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public void SetTitleViewValuesOnOpen()
         {
+            
             if (SurveyIsSaved == true)
             {
                 LeftBtnLbl = "";
@@ -579,7 +542,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 if (IsAnswerReview == false)
                 {
                     IsWorkingRightBtn = true;
-                    ScreenNameLbl = CurrentQuestion.CurrQCodeDesc;
+                    ScreenNameLbl = AppResources.ResourceManager.GetString(CurrentQuestion.CurrQCodeDescLocal, CultureInfo.CurrentCulture);
                     if (CurrentQuestion.PrevQCode == 0)
                     {
                         LeftBtnLbl = "";
@@ -635,7 +598,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     IsVisibleMainInstructionLbl = false;
                     IsVisibleTextInstructionLbl = false;
-                    MainQuestionLbl = AppResources.ResourceManager.GetString(CurrentQuestion.QTextLocal, currCulture);
+                    MainQuestionLbl = AppResources.ResourceManager.GetString(CurrentQuestion.QTextLocal, CultureInfo.CurrentCulture);
                     IsVisibleRuleTypeSingle = true;
                     IsVisibleRuleTypeMultiple = false;
                     IsVisibleQTypeText = false;
@@ -749,7 +712,25 @@ namespace SampleSurveyApp.Core.ViewModels
             // insert a new record
             await _surveyModelRepository.InsertAsync(NewSurvey);
             InsertedSurvey = NewSurvey;
-            await Init();
+
+            //get curr q
+            CurrentQuestion = AllPossibleQuestionsCollection[0];
+            CurrentQuestion.CurrQCodeDesc = AppResources.ResourceManager.GetString(CurrentQuestion.CurrQCodeDescLocal, CultureInfo.CurrentCulture);
+
+            // get answers for curr q
+           GetAnswerOptionsForCurrentQuestion();
+
+            // update question in q collection
+            var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
+            foundQ.IsSelected = true;
+            foundQ.PrevQCode = 0;
+
+            IsVisibleSurveyHeader = false;
+
+            // set screen values based on properties in CurrentQuestion
+
+            SetTitleViewValuesOnOpen();
+            SetScreenValuesOnOpen();
             IsBusy = false;
 
         }
@@ -782,7 +763,7 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
-        public void OnSelectedIndexChanged(object sender, EventArgs e)
+       /* public void OnSelectedIndexChanged(object sender, EventArgs e)
         {
             Debug.WriteLine("e is" + SelectedLanguage);
             switch (SelectedLanguage)
@@ -798,7 +779,7 @@ namespace SampleSurveyApp.Core.ViewModels
             }
 
             CultureInfo.CurrentUICulture = new CultureInfo(SelCulture, false);
-        }
+        }*/
 
     }
 }

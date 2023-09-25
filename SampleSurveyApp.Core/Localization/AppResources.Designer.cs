@@ -61,6 +61,15 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change Language.
+        /// </summary>
+        public static string ChangeLanguageLbl {
+            get {
+                return ResourceManager.GetString("ChangeLanguageLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string CurrQCode01ACode01AText {
@@ -538,29 +547,20 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q1.
+        ///   Looks up a localized string similar to Delete Responses.
         /// </summary>
-        public static string CurrQCodeDescQ1 {
+        public static string DeleteResponsesLbl {
             get {
-                return ResourceManager.GetString("CurrQCodeDescQ1", resourceCulture);
+                return ResourceManager.GetString("DeleteResponsesLbl", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q2.
+        ///   Looks up a localized string similar to Delete Surveys.
         /// </summary>
-        public static string CurrQCodeDescQ2 {
+        public static string DeleteSurveysLbl {
             get {
-                return ResourceManager.GetString("CurrQCodeDescQ2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Q3.
-        /// </summary>
-        public static string CurrQCodeDescQ3 {
-            get {
-                return ResourceManager.GetString("CurrQCodeDescQ3", resourceCulture);
+                return ResourceManager.GetString("DeleteSurveysLbl", resourceCulture);
             }
         }
         
@@ -610,7 +610,16 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q01.
+        ///   Looks up a localized string similar to Overview Page.
+        /// </summary>
+        public static string OverviewPageLbl {
+            get {
+                return ResourceManager.GetString("OverviewPageLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question 01.
         /// </summary>
         public static string Q01CurrQCodeDesc {
             get {
@@ -628,7 +637,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q02.
+        ///   Looks up a localized string similar to Question 02.
         /// </summary>
         public static string Q02CurrQCodeDesc {
             get {
@@ -646,7 +655,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q03.
+        ///   Looks up a localized string similar to Question 03.
         /// </summary>
         public static string Q03CurrQCodeDesc {
             get {
@@ -664,7 +673,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q04.
+        ///   Looks up a localized string similar to Question 04.
         /// </summary>
         public static string Q04CurrQCodeDesc {
             get {
@@ -682,7 +691,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q05.
+        ///   Looks up a localized string similar to Question 05.
         /// </summary>
         public static string Q05CurrQCodeDesc {
             get {
@@ -700,7 +709,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q06.
+        ///   Looks up a localized string similar to Question 06.
         /// </summary>
         public static string Q06CurrQCodeDesc {
             get {
@@ -718,7 +727,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q07.
+        ///   Looks up a localized string similar to Question 07.
         /// </summary>
         public static string Q07CurrQCodeDesc {
             get {
@@ -736,7 +745,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q08.
+        ///   Looks up a localized string similar to Question 08.
         /// </summary>
         public static string Q08CurrQCodeDesc {
             get {
@@ -754,7 +763,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q09.
+        ///   Looks up a localized string similar to Question 09.
         /// </summary>
         public static string Q09CurrQCodeDesc {
             get {
@@ -772,7 +781,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q10.
+        ///   Looks up a localized string similar to Question 10.
         /// </summary>
         public static string Q10CurrQCodeDesc {
             get {
@@ -790,7 +799,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q11.
+        ///   Looks up a localized string similar to Question 11.
         /// </summary>
         public static string Q11CurrQCodeDesc {
             get {
@@ -808,7 +817,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q12.
+        ///   Looks up a localized string similar to Question 12.
         /// </summary>
         public static string Q12CurrQCodeDesc {
             get {
@@ -826,7 +835,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q13.
+        ///   Looks up a localized string similar to Question 13.
         /// </summary>
         public static string Q13CurrQCodeDesc {
             get {
@@ -844,7 +853,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q14.
+        ///   Looks up a localized string similar to Question 14.
         /// </summary>
         public static string Q14CurrQCodeDesc {
             get {
@@ -862,7 +871,7 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Q15.
+        ///   Looks up a localized string similar to Question 15.
         /// </summary>
         public static string Q15CurrQCodeDesc {
             get {
@@ -894,6 +903,15 @@ namespace SampleSurveyApp.Core.Localization {
         public static string RightBtnLblReview {
             get {
                 return ResourceManager.GetString("RightBtnLblReview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sample Survey App.
+        /// </summary>
+        public static string SampleSurveyAppLbl {
+            get {
+                return ResourceManager.GetString("SampleSurveyAppLbl", resourceCulture);
             }
         }
         
@@ -939,6 +957,15 @@ namespace SampleSurveyApp.Core.Localization {
         public static string StartSurveyLbl {
             get {
                 return ResourceManager.GetString("StartSurveyLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Page.
+        /// </summary>
+        public static string SurveyPageLbl {
+            get {
+                return ResourceManager.GetString("SurveyPageLbl", resourceCulture);
             }
         }
         

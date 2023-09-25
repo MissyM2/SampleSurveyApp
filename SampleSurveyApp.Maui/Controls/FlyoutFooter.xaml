@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="SampleSurveyApp.Maui.Controls.FlyoutFooter">
-    <StackLayout BackgroundColor="pink" Padding="0,20,0,20">
+    <StackLayout BackgroundColor="{StaticResource Accent}" Padding="0,20,0,20">
        
         <Label Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{0:MMMM dd, yyyy}'}"
-               TextColor="GhostWhite"
+               TextColor="{StaticResource Black}"
                HorizontalOptions="Center" />
+        <Label Text="{Binding CurrCultureString}"
+                TextColor="{StaticResource Tertiary}"
+                HorizontalOptions="Center" />   
     </StackLayout>
 </ContentView>

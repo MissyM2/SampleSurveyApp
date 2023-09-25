@@ -43,10 +43,10 @@
 		  <Color>#512BD4</Color>
 		  <ForegroundFile>Resources\AppIcon\appiconfg.svg</ForegroundFile>
 		</MauiIcon>
-		<MauiIcon Include="Resources\AppIcon\appiconold.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appiconold.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#E5CDAF" />
 
 		<!-- Splash Screen -->
-		 <MauiSplashScreen Include="Resources\Splash\splashscreen.svg" Color="#f9d1b2" />		
+		 <MauiSplashScreen Include="Resources\Splash\splashscreen.svg" Color="#E5CDAF" />		
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />

@@ -16,7 +16,7 @@ namespace SampleSurveyApp.Core.Database
 
             SurveyQuestionList=new List<SurveyQuestionModel>()
             {
-                new SurveyQuestionModel () { CurrQCode=01, CurrQCodeDesc="Q01", CurrQCodeDescLocal="Q01CurrQCodeDescQ", QText="Question 1: Single Answer", QTextLocal="Q01QText", QType="SingleAnswer"},
+                new SurveyQuestionModel () { CurrQCode=01, CurrQCodeDesc="Q01", CurrQCodeDescLocal="Q01CurrQCodeDesc", QText="Question 1: Single Answer", QTextLocal="Q01QText", QType="SingleAnswer"},
                 new SurveyQuestionModel () { CurrQCode=02, CurrQCodeDesc="Q02", CurrQCodeDescLocal="Q02CurrCodeDesc", QText="Question 2: Single Answer", QTextLocal="Q02QText", QType="SingleAnswer"},
                 new SurveyQuestionModel () { CurrQCode=03, CurrQCodeDesc="Q03", CurrQCodeDescLocal="Q03CurrQCodeDesc", QText="Question 3: Single Answer", QTextLocal="Q03QText", QType="SingleAnswer"},
                 new SurveyQuestionModel () { CurrQCode=04, CurrQCodeDesc="Q04", CurrQCodeDescLocal="Q04CurrQCodeDesc", QText="Question 4: Single Answer", QTextLocal="Q04QText", QType="SingleAnswer"},

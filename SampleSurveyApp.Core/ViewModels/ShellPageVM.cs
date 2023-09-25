@@ -11,11 +11,12 @@ using System.Globalization;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
-	public partial class ShellPageVM : BaseVM
+    public partial class ShellPageVM : BaseVM
 	{
 
         private readonly INavigationService _navigationService;
         private readonly IMessageService _messageService;
+        private readonly CultureManager _cultureManager;
 
         public LocalizationResourceManager LocalizationResourceManager => LocalizationResourceManager.Instance;
 
@@ -29,7 +30,10 @@ namespace SampleSurveyApp.Core.ViewModels
         public SurveyModel insertedSurvey;
 
         [ObservableProperty]
-        string selCulture;
+        string currCulture;
+
+        [ObservableProperty]
+        string currCultureString;
 
         public ObservableCollection<SurveyModel> SurveyList { get; set; } = new();
         public ObservableCollection<SurveyResponseModel> SurveyResponseList { get; set; } = new();
@@ -37,11 +41,13 @@ namespace SampleSurveyApp.Core.ViewModels
         public ShellPageVM(
             INavigationService navigationService,
             IMessageService messageService,
+            CultureManager cultureManager,
             IAsyncRepository<SurveyModel> surveyModelRepository,
             IAsyncRepository<SurveyResponseModel> surveyResponseModelRepository)
         {
             _navigationService = navigationService;
             _messageService = messageService;
+            _cultureManager = cultureManager;
             _surveyModelRepository = surveyModelRepository;
             _surveyResponseModelRepository = surveyResponseModelRepository;
 
@@ -110,16 +116,25 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
         [RelayCommand]
+        public async Task GetLanguage()
+        {
+            Debug.WriteLine("GetLanguage: Culture of {0} in application domain {1}: {2}",
+                          Thread.CurrentThread.Name,
+                          AppDomain.CurrentDomain.FriendlyName,
+                          CultureInfo.CurrentCulture.Name); 
+
+    
+            CurrCultureString = "Current Language is " + CultureInfo.CurrentCulture.DisplayName;
+
+        }
+
+        [RelayCommand]
         public async Task ChangeLanguage()
         {
-            var switchToCulture = AppResources.Culture.TwoLetterISOLanguageName
-            .Equals("es", StringComparison.InvariantCultureIgnoreCase) ?
-            new CultureInfo("en-US") : new CultureInfo("es-ES");
+            await _cultureManager.ChangeLang(CultureInfo.CurrentCulture.Name);
+             CurrCultureString = "Current Language is " + CultureInfo.CurrentCulture.DisplayName;
 
-            LocalizationResourceManager.Instance.SetCulture(switchToCulture);
-
-            await _messageService.CustomAlert("Language", "Current language is now " + CultureInfo.CurrentCulture, "OK");
-
+            
         }
 
 

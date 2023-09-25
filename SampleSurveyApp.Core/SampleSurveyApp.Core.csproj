@@ -37,7 +37,6 @@
 	  <Folder Include="Extensions\" />
 	  <Folder Include="Services\" />
 	  <Folder Include="Validation\" />
-	  <Folder Include="ViewModels\" />
 	  <Folder Include="Domain\Base\" />
 	</ItemGroup>
 	<ItemGroup>

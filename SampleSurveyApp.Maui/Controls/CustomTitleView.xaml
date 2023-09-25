@@ -13,12 +13,12 @@
                   CommandParameter="Prev"
                   IsVisible="{Binding IsWorkingLeftBtn}"
                   IsEnabled="{Binding IsWorkingLeftBtn}"/>
-                <Label x:Name="titleLabel" FontSize="{OnPlatform Android=16, iOS=20}" FontAttributes="Bold"
-                       Text="{Binding ScreenNameLbl}"
-                       HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center"
-                       BackgroundColor="Transparent" TextColor="White" Grid.Column="1" />
-           <Button Text="{Binding RightBtnLbl}"
+        <Label x:Name="titleLabel" FontSize="{OnPlatform Android=16, iOS=20}" FontAttributes="Bold"
+                    Text="{Binding ScreenNameLbl}"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    BackgroundColor="Transparent" TextColor="White" Grid.Column="1" />
+        <Button Text="{Binding RightBtnLbl}"
                    BackgroundColor="transparent"
                    TextColor="White"
                    Grid.Column="2" FontSize="{OnPlatform Android=14, iOS=18}"

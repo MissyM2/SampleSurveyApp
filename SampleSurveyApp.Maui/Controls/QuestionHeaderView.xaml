@@ -4,21 +4,23 @@
              xmlns:localize="clr-namespace:SampleSurveyApp.Core.Localization;assembly=SampleSurveyApp.Core"
              x:Class="SampleSurveyApp.Maui.Controls.QuestionHeaderView">
     <StackLayout Margin="0,0,0,20">
-        <StackLayout BackgroundColor="{StaticResource Tertiary}" Padding="0,10,0,10">
+        <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,10,0,10">
                 <Label Text="{Binding SurveyId}"
-                       TextColor="White"
+                       TextColor="{StaticResource Primary}"
                        HorizontalTextAlignment="Center"
                         VerticalTextAlignment="Center"/>
         </StackLayout>
 
-        <StackLayout BackgroundColor="{StaticResource Yellow100Accent}" Padding="0,25,0,25"
+        <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,25,0,25"
                      IsVisible="{Binding IsVisibleMainInstructionLbl}">
             <Label Text="{Binding MainQuestionLbl}"
                     VerticalOptions="Center"
+                   FontAttributes="Bold"
+                   FontSize="16"
                     Margin="10,0,10,0"/>
         </StackLayout>
 
-        <StackLayout BackgroundColor="{StaticResource Yellow300Accent}" Padding="0,10,0,10">
+        <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,10,0,10">
             <StackLayout>
                 <Label Text="{Binding MainInstructionLbl}" Margin="10,0,20,0"
                        IsVisible="{Binding IsVisibleMainInstructionLbl}"

@@ -4,7 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SampleSurveyApp.Maui"
-    xmlns:helpers="clr-namespace:SampleSurveyApp.Maui.Helpers"
+    xmlns:localize="clr-namespace:SampleSurveyApp.Core.Localization;assembly=SampleSurveyApp.Core"
     xmlns:controls="clr-namespace:SampleSurveyApp.Maui.Controls"
     xmlns:pages="clr-namespace:SampleSurveyApp.Maui.Pages"
     xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
@@ -27,7 +27,7 @@
         <DataTemplate>
             <Grid ColumnDefinitions="50,*" Padding="10">
                 <Image Source="{Binding Icon}"/>
-                <Label Grid.Column="1" Text="{Binding Title}" TextColor="#004e89" FontAttributes="Bold"/>
+                <Label Grid.Column="1" Text="{Binding Title}" TextColor="{StaticResource Black}" FontAttributes="Bold"/>
             </Grid>
         </DataTemplate>
     </Shell.ItemTemplate>
@@ -36,7 +36,7 @@
         <DataTemplate>
             <Grid ColumnDefinitions="50,*" Padding="10">
                 <Image Source="{Binding Icon}" BackgroundColor="Transparent"/>
-                <Label Grid.Column="1" Text="{Binding Title}" TextColor="#ff6b35" FontAttributes="Bold"/>
+                <Label Grid.Column="1" Text="{Binding Title}" TextColor="{StaticResource Primary}" FontAttributes="Bold"/>
             </Grid>
         </DataTemplate>
     </Shell.MenuItemTemplate>
@@ -51,26 +51,26 @@
     </Shell.FlyoutFooter>
 
 
-    <FlyoutItem Title="Survey Page" Icon="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#ff6b35}">
+    <FlyoutItem Title="{localize:Translate SurveyPageLbl}" Icon="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#BC2649}">
         <ShellContent ContentTemplate="{DataTemplate pages:SurveyPage}" Route="SurveyPage"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="Overview Page" Icon="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#ff6b35}">
+    <FlyoutItem Title="{localize:Translate OverviewPageLbl}" Icon="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#BC2649}">
         <ShellContent ContentTemplate="{DataTemplate pages:OverviewPage}" Route="OverviewPage"/>
 
     </FlyoutItem>
-    <MenuItem Text="Curr Lang" 
+    <MenuItem Text="{localize:Translate ChangeLanguageLbl}" 
               Command="{Binding ChangeLanguageCommand}"
-              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#ff6b35}">
+              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#BC2649}">
     </MenuItem>
 
-    <MenuItem Text="Delete Surveys"
+    <MenuItem Text="{localize:Translate DeleteSurveysLbl}"
               Command="{Binding DeleteAllSurveysCommand}"
-              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#ff6b35}">
+              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#BC2649}">
         
     </MenuItem>
-    <MenuItem Text="Delete Response"
+    <MenuItem Text="{localize:Translate DeleteResponsesLbl}"
               Command="{Binding DeleteAllResponsesCommand}"
-              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.DeleteIcon}, Size=25, Color=#ff6b35}"/>
+              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.DeleteIcon}, Size=25, Color=#BC2649}"/>
 </Shell>
 
