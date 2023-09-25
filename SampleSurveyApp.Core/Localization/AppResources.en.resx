@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CancelMsg" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="ChangeLanguageLbl" xml:space="preserve">
     <value>Change Language</value>
+  </data>
+  <data name="CountMsg1" xml:space="preserve">
+    <value>There are</value>
+  </data>
+  <data name="CountMsg2" xml:space="preserve">
+    <value>.  Delete?</value>
   </data>
   <data name="CurrQCode01ACode01AText" xml:space="preserve">
     <value>Yes</value>
@@ -300,6 +309,21 @@
   <data name="MainQuestionLblReview" xml:space="preserve">
     <value>Please review your answers here.</value>
   </data>
+  <data name="NoAnswerMultipleMsg" xml:space="preserve">
+    <value>Please make your selection(s).</value>
+  </data>
+  <data name="NoAnswerMultipleMsgTitle" xml:space="preserve">
+    <value>No selections</value>
+  </data>
+  <data name="NoAnswerSingleMsg" xml:space="preserve">
+    <value>Please make a choice.</value>
+  </data>
+  <data name="NoAnswerSingleTextMsgTitle" xml:space="preserve">
+    <value>No answer</value>
+  </data>
+  <data name="NoAnswerTextMsg" xml:space="preserve">
+    <value>Please enter your answer, greater than 3 chars. You added</value>
+  </data>
   <data name="OverviePageLbl" xml:space="preserve">
     <value>Overview Page</value>
   </data>
@@ -396,6 +420,15 @@
   <data name="Q15QText" xml:space="preserve">
     <value>Question 15: Text</value>
   </data>
+  <data name="ResponseCountMsgTitle" xml:space="preserve">
+    <value>Response Count</value>
+  </data>
+  <data name="ResponsesDeletedMsg" xml:space="preserve">
+    <value>responses in database.</value>
+  </data>
+  <data name="ResponsesDeletedMsgTitle" xml:space="preserve">
+    <value>Responses deleted</value>
+  </data>
   <data name="RightBtnLblNext" xml:space="preserve">
     <value>Next</value>
   </data>
@@ -413,7 +446,6 @@
   </data>
   <data name="ScreenNameLblReview" xml:space="preserve">
     <value>Review</value>
-    <comment>6</comment>
   </data>
   <data name="ScreenNameLblStart" xml:space="preserve">
     <value>Sample Survey App</value>
@@ -421,8 +453,17 @@
   <data name="StartSurveyLbl" xml:space="preserve">
     <value>Start Survey</value>
   </data>
+  <data name="SurveyCountMsgTitle" xml:space="preserve">
+    <value>Survey Count</value>
+  </data>
   <data name="SurveyPageLbl" xml:space="preserve">
     <value>Survey Page</value>
+  </data>
+  <data name="SurveysDeletedMsg" xml:space="preserve">
+    <value>surveys in database.</value>
+  </data>
+  <data name="SurveysDeletedMsgTitle" xml:space="preserve">
+    <value>Surveys deleted</value>
   </data>
   <data name="TextInstructionLbl" xml:space="preserve">
     <value>The maximum character allowed is</value>

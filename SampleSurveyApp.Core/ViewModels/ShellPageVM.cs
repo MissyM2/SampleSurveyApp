@@ -72,7 +72,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 if (SurveyList.Any()) SurveyList.Clear();
                 var surveys = new List<SurveyModel>();
                 surveys = await _surveyModelRepository.GetAllAsync();
-                var deleteSurveys = await _messageService.DisplayAlert("Survey Count", "There are " + surveys.Count + ".  Delete?", "OK", "Cancel");
+                var deleteSurveys = await _messageService.DisplayAlert(AppResources.SurveyCountMsgTitle, AppResources.CountMsg1 + " " + surveys.Count + AppResources.CountMsg2, "OK", AppResources.CancelMsg);
                 if (deleteSurveys == true)
                 {
                     foreach (var survey in surveys)
@@ -85,7 +85,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     return;
                 }
                 surveys = await _surveyModelRepository.GetAllAsync();
-                await _messageService.CustomAlert("Surveys deleted", surveys.Count + " surveys in database.", "OK");
+                await _messageService.CustomAlert(AppResources.SurveysDeletedMsgTitle, surveys.Count + " " + AppResources.SurveysDeletedMsg, "OK");
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 IsBusy = true;
                 if (SurveyResponseList.Any()) SurveyResponseList.Clear();
                 var responses = new List<SurveyResponseModel>();
-                var deleteResponses = await _messageService.DisplayAlert("Response Count", "There are " + responses.Count + ".  Delete?", "OK", "Cancel");
+                var deleteResponses = await _messageService.DisplayAlert(AppResources.ResponseCountMsgTitle, AppResources.CountMsg1 + " " + responses.Count + AppResources.CountMsg2, "OK", AppResources.CancelMsg);
 
                 responses = await _surveyResponseModelRepository.GetAllAsync();
                 foreach (var response in responses)
@@ -117,7 +117,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
 
                 responses = await _surveyResponseModelRepository.GetAllAsync();
-                await _messageService.CustomAlert("Responses deleted", responses.Count + " responses in database.", "OK");
+                await _messageService.CustomAlert(AppResources.ResponsesDeletedMsgTitle, responses.Count + " " + AppResources.ResponsesDeletedMsg, "OK");
 
 
             }

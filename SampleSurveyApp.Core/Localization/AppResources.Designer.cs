@@ -61,11 +61,38 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string CancelMsg {
+            get {
+                return ResourceManager.GetString("CancelMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change Language.
         /// </summary>
         public static string ChangeLanguageLbl {
             get {
                 return ResourceManager.GetString("ChangeLanguageLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are.
+        /// </summary>
+        public static string CountMsg1 {
+            get {
+                return ResourceManager.GetString("CountMsg1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .  Delete?.
+        /// </summary>
+        public static string CountMsg2 {
+            get {
+                return ResourceManager.GetString("CountMsg2", resourceCulture);
             }
         }
         
@@ -610,6 +637,51 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please make your selection(s)..
+        /// </summary>
+        public static string NoAnswerMultipleMsg {
+            get {
+                return ResourceManager.GetString("NoAnswerMultipleMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No selections.
+        /// </summary>
+        public static string NoAnswerMultipleMsgTitle {
+            get {
+                return ResourceManager.GetString("NoAnswerMultipleMsgTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please make a choice..
+        /// </summary>
+        public static string NoAnswerSingleMsg {
+            get {
+                return ResourceManager.GetString("NoAnswerSingleMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No answer.
+        /// </summary>
+        public static string NoAnswerSingleTextMsgTitle {
+            get {
+                return ResourceManager.GetString("NoAnswerSingleTextMsgTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter your answer, greater than 3 chars. You added.
+        /// </summary>
+        public static string NoAnswerTextMsg {
+            get {
+                return ResourceManager.GetString("NoAnswerTextMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overview Page.
         /// </summary>
         public static string OverviewPageLbl {
@@ -889,6 +961,33 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Response Count.
+        /// </summary>
+        public static string ResponseCountMsgTitle {
+            get {
+                return ResourceManager.GetString("ResponseCountMsgTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to responses in database..
+        /// </summary>
+        public static string ResponsesDeletedMsg {
+            get {
+                return ResourceManager.GetString("ResponsesDeletedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Responses deleted.
+        /// </summary>
+        public static string ResponsesDeletedMsgTitle {
+            get {
+                return ResourceManager.GetString("ResponsesDeletedMsgTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next.
         /// </summary>
         public static string RightBtnLblNext {
@@ -961,11 +1060,38 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Survey Count.
+        /// </summary>
+        public static string SurveyCountMsgTitle {
+            get {
+                return ResourceManager.GetString("SurveyCountMsgTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Survey Page.
         /// </summary>
         public static string SurveyPageLbl {
             get {
                 return ResourceManager.GetString("SurveyPageLbl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to surveys in database..
+        /// </summary>
+        public static string SurveysDeletedMsg {
+            get {
+                return ResourceManager.GetString("SurveysDeletedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surveys deleted.
+        /// </summary>
+        public static string SurveysDeletedMsgTitle {
+            get {
+                return ResourceManager.GetString("SurveysDeletedMsgTitle", resourceCulture);
             }
         }
         

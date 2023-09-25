@@ -295,21 +295,21 @@ namespace SampleSurveyApp.Core.ViewModels
                     if (CurrentQuestion.QType == "Text" && TextLen < 3)
                     {
                         Debug.WriteLine("no text entered");
-                        await _messageService.CustomAlert("No Answer", "Please enter your answer, greater than 3 chars. You added " + TextLen, "OK");
+                        await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerTextMsg + " " + TextLen, "OK");
                         return;
                     }
 
                     if (CurrentQuestion.QType == "SingleAnswer")
                     {
                         Debug.WriteLine("CurrentQuestion.Qtype ==SingleAnswer: no answer selected");
-                        await _messageService.CustomAlert("No Answer", "Please make a choice.", "OK");
+                        await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerSingleMsg, "OK");
                         return;
                     }
 
                     if (CurrentQuestion.QType == "MultipleAnswers")
                     {
                         Debug.WriteLine("CurrentQuestion.QType == MultipleAnswers: no answer selected");
-                        await _messageService.CustomAlert("Answer", "Please make your selection(s).", "OK");
+                        await _messageService.CustomAlert(AppResources.NoAnswerMultipleMsgTitle, AppResources.NoAnswerMultipleMsg, "OK");
                         return;
                     }
                     

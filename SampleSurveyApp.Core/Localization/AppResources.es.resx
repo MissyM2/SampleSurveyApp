@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CancelMsg" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
   <data name="ChangeLanguageLbl" xml:space="preserve">
     <value>Cambiar idioma</value>
+  </data>
+  <data name="CountMsg1" xml:space="preserve">
+    <value>Hay</value>
+  </data>
+  <data name="CountMsg2" xml:space="preserve">
+    <value>. ¿Borrar?</value>
   </data>
   <data name="CurrQCode01ACode01AText" xml:space="preserve">
     <value>Sí</value>
@@ -300,6 +309,21 @@
   <data name="MainQuestionLblReview" xml:space="preserve">
     <value>Por favor revise sus respuestas aquí.</value>
   </data>
+  <data name="NoAnswerMultipleMsg" xml:space="preserve">
+    <value>Por favor haga su(s) selección(es).</value>
+  </data>
+  <data name="NoAnswerMultipleMsgTitle" xml:space="preserve">
+    <value>Sin selecciones</value>
+  </data>
+  <data name="NoAnswerSingleMsg" xml:space="preserve">
+    <value>Por favor, haz una elección..</value>
+  </data>
+  <data name="NoAnswerSingleTextMsgTitle" xml:space="preserve">
+    <value>Sin respuesta</value>
+  </data>
+  <data name="NoAnswerTextMsg" xml:space="preserve">
+    <value>Por favor ingrese su respuesta, mayor a 3 caracteres. Tu agregaste </value>
+  </data>
   <data name="OverviewPageLbl" xml:space="preserve">
     <value>Página de descripción general</value>
   </data>
@@ -402,6 +426,15 @@
   <data name="QTextQ3" xml:space="preserve">
     <value>Pregunta 3: Respuesta única</value>
   </data>
+  <data name="ResponseCountMsgTitle" xml:space="preserve">
+    <value>Recuento de respuestas</value>
+  </data>
+  <data name="ResponsesDeletedMsg" xml:space="preserve">
+    <value>respuestas en la base de datos.</value>
+  </data>
+  <data name="ResponsesDeletedMsgTitle" xml:space="preserve">
+    <value>Respuestas eliminadas</value>
+  </data>
   <data name="RightBtnLblNext" xml:space="preserve">
     <value>Próximo</value>
   </data>
@@ -426,8 +459,17 @@
   <data name="StartSurveyLbl" xml:space="preserve">
     <value>Empezar encuesta</value>
   </data>
+  <data name="SurveyCountMsgTitle" xml:space="preserve">
+    <value>Recuento de encuestas</value>
+  </data>
   <data name="SurveyPageLbl" xml:space="preserve">
     <value>Página de encuesta</value>
+  </data>
+  <data name="SurveysDeletedMsg" xml:space="preserve">
+    <value>encuestas en base de datos.</value>
+  </data>
+  <data name="SurveysDeletedMsgTitle" xml:space="preserve">
+    <value>Encuestas eliminadas</value>
   </data>
   <data name="TextInstructionLbl" xml:space="preserve">
     <value>El carácter máximo permitido es</value>
