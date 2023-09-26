@@ -203,6 +203,9 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         public SurveyResponseModel insertedResponse;
 
+        [ObservableProperty]
+        public string flyoutBehaviorStr = "Disabled";
+
 
         public SurveyPageVM(
             INavigationService navigationService,
@@ -236,6 +239,7 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task Init()
         {
+            
             await _surveyQuestionModelRepository.DeleteAllAsync();
             var aqd = new AddQuestionData(_surveyQuestionModelRepository);
             await aqd.AddQuestionsAsync();
@@ -732,6 +736,8 @@ namespace SampleSurveyApp.Core.ViewModels
 
             SetTitleViewValuesOnOpen();
             SetScreenValuesOnOpen();
+            //Shell.Current.FlyoutIsPresented = false;
+            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
             IsBusy = false;
 
         }

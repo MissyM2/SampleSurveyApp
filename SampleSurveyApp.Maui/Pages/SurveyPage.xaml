@@ -8,8 +8,7 @@
              xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
              xmlns:controls="clr-namespace:SampleSurveyApp.Maui.Controls"
              x:Name="SurveyPageName"
-             x:DataType="vm:SurveyPageVM"
-             Shell.FlyoutBehavior="Flyout">
+             x:DataType="vm:SurveyPageVM">
 
     <ContentPage.Resources>
         <Style TargetType="CollectionView">
