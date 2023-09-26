@@ -38,6 +38,10 @@
         <DataTemplate x:Key="AnswerReviewDataTemplate">
             <controls:AnswerReviewView />   
         </DataTemplate>
+
+        <DataTemplate x:Key="AnswerReviewHeaderDataTemplate">
+            <controls:AnswerReviewHeaderView />   
+        </DataTemplate>
         
     </ContentPage.Resources>
 
@@ -69,15 +73,15 @@
 
              <!--QType is SingleAnswer-->
              <CollectionView x:Name="listSingleCv"
-                                ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
-                                SelectionMode="Single"
-                                SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
-                                SelectionChangedCommand="{Binding AnswerSelectedCommand}"
-                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
-                                Margin="12,8,12,0"
-                                IsVisible="{Binding IsVisibleRuleTypeSingle}"
-                                IsEnabled="{Binding IsVisibleRuleTypeSingle}"
-                                ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+                            ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
+                            SelectionChangedCommand="{Binding AnswerSelectedCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                            Margin="12,8,12,0"
+                            IsVisible="{Binding IsVisibleRuleTypeSingle}"
+                            IsEnabled="{Binding IsVisibleRuleTypeSingle}"
+                            ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
 
             <!--QType is MultipleAnswers-->
             <CollectionView x:Name="MultipleSelectionsCV"
@@ -99,7 +103,8 @@
                             IsGrouped="True"
                             IsVisible="{Binding IsVisibleAnswerReview}"
                             BackgroundColor="Transparent"
-                            ItemTemplate="{StaticResource AnswerReviewDataTemplate}">
+                            ItemTemplate="{StaticResource AnswerReviewDataTemplate}"
+                            GroupHeaderTemplate="{StaticResource AnswerReviewHeaderDataTemplate}">
                 <CollectionView.Triggers>
                     <Trigger TargetType="CollectionView"
                                 Property="IsVisible"
@@ -114,17 +119,6 @@
                                 Value="575"/>
                         </Trigger>
                 </CollectionView.Triggers>
-                <CollectionView.GroupHeaderTemplate>
-                    <DataTemplate>
-                        <VerticalStackLayout>
-                            <StackLayout BackgroundColor="{StaticResource NeutralA}" Padding="5,10,5,9">
-                                <Label Text="{Binding QText}" />
-                            </StackLayout>
-                            <BoxView BackgroundColor="LightBlue" HeightRequest="1"/>
-                        </VerticalStackLayout>
-                    </DataTemplate>
-                </CollectionView.GroupHeaderTemplate>
-            
             </CollectionView>
 
             <!--QuestionType is Text-->
