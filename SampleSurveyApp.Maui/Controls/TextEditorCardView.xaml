@@ -5,7 +5,7 @@
              x:Class="SampleSurveyApp.Maui.Controls.TextEditorCardView">
     <StackLayout>
          <Frame HeightRequest="200"
-                WidthRequest="250"
+                WidthRequest="{OnPlatform iOS=350, Android=400}"
                         BorderColor="LightGray"
                         Padding="0">
             <Editor x:Name="txtEditor"

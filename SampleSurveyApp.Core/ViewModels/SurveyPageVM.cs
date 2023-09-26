@@ -647,6 +647,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
                 else  // must be review page
                 {
+                    SaveSurveyLbl = AppResources.SaveSurveyBtnLbl;
                     MainQuestionLbl = AppResources.MainQuestionLblReview;
                     MainInstructionLbl = AppResources.MainInstructionLblReview;
                     IsVisibleMainInstructionLbl = true;

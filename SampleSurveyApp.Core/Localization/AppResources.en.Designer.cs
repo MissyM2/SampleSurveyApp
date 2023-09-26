@@ -19,14 +19,14 @@ namespace SampleSurveyApp.Core.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Build.Tasks.StronglyTypedResourceBuilder", "15.1.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AppResources {
+    public class AppResources_en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AppResources() {
+        internal AppResources_en() {
         }
         
         /// <summary>
@@ -36,7 +36,7 @@ namespace SampleSurveyApp.Core.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SampleSurveyApp.Core.Localization.AppResources", typeof(AppResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SampleSurveyApp.Core.Localization.AppResources.en", typeof(AppResources_en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -675,6 +675,15 @@ namespace SampleSurveyApp.Core.Localization {
         public static string NoAnswerTextMsg {
             get {
                 return ResourceManager.GetString("NoAnswerTextMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overview Page.
+        /// </summary>
+        public static string OverviePageLbl {
+            get {
+                return ResourceManager.GetString("OverviePageLbl", resourceCulture);
             }
         }
         

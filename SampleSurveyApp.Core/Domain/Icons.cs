@@ -10,5 +10,7 @@ namespace SampleSurveyApp.Core.Domain
     {
         public static string HomeIcon = "\ue88a";
         public static string DeleteIcon = "\ue872";
+        public static string TranslateIcon = "\ue8e2";
+        public static string SummarizeIcon = "\uf071";
     }
 }

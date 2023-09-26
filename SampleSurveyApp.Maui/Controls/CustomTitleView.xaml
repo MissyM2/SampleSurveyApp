@@ -1,20 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:localize="clr-namespace:SampleSurveyApp.Core.Localization;assembly=SampleSurveyApp.Core"
              x:Class="SampleSurveyApp.Maui.Controls.CustomTitleView">
    <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*">
           <Button Text="{Binding LeftBtnLbl}"
                   BackgroundColor="Transparent"
                   TextColor="White"
-                  FontSize="{OnPlatform Android=14, iOS=18}"
+                  FontSize="{OnPlatform Android=14, iOS=14}"
                   Grid.Column="0"
                   HorizontalOptions="Start"
                   Command="{Binding NavigateCommand}"
                   CommandParameter="Prev"
                   IsVisible="{Binding IsWorkingLeftBtn}"
                   IsEnabled="{Binding IsWorkingLeftBtn}"/>
-        <Label x:Name="titleLabel" FontSize="{OnPlatform Android=16, iOS=20}" FontAttributes="Bold"
+        <Label x:Name="titleLabel" FontSize="{OnPlatform Android=16, iOS=16}" FontAttributes="Bold"
                     Text="{Binding ScreenNameLbl}"
                     HorizontalTextAlignment="Center"
                     VerticalTextAlignment="Center"
@@ -22,12 +21,12 @@
         <Button Text="{Binding RightBtnLbl}"
                    BackgroundColor="transparent"
                    TextColor="White"
-                   Grid.Column="2" FontSize="{OnPlatform Android=14, iOS=18}"
+                   Grid.Column="2" FontSize="{OnPlatform Android=14, iOS=14}"
                    HorizontalOptions="End"
                    Command="{Binding NavigateCommand}"
                    CommandParameter="Next"
                    IsVisible="{Binding IsWorkingRightBtn}"
                    IsEnabled="{Binding IsWorkingRightBtn}"/>
-            </Grid>
+     </Grid>
 </ContentView>
 

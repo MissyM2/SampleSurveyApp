@@ -468,4 +468,7 @@
   <data name="TextInstructionLbl" xml:space="preserve">
     <value>The maximum character allowed is</value>
   </data>
+  <data name="ThankYouLbl" xml:space="preserve">
+    <value>Thank you for participating in this survey.</value>
+  </data>
 </root>

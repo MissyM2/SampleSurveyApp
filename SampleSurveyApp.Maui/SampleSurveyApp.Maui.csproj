@@ -12,7 +12,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>SampleSurveyApp.Maui</ApplicationTitle>
+		<ApplicationTitle>Sample Survey</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.samplesurveyapp.maui</ApplicationId>
@@ -39,11 +39,11 @@
 	</ItemGroup>-->
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg">
-		  <Color>#512BD4</Color>
+		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg">
+		  <Color>#E5CDAF</Color>
 		  <ForegroundFile>Resources\AppIcon\appiconfg.svg</ForegroundFile>
-		</MauiIcon>
-		<MauiIcon Include="Resources\AppIcon\appiconold.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#E5CDAF" />
+		</MauiIcon>-->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#BC2649" />
 
 		<!-- Splash Screen -->
 		 <MauiSplashScreen Include="Resources\Splash\splashscreen.svg" Color="#E5CDAF" />		

@@ -14,10 +14,11 @@
         <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,25,0,25"
                      IsVisible="{Binding IsVisibleMainInstructionLbl}">
             <Label Text="{Binding MainQuestionLbl}"
-                    VerticalOptions="Center"
+                   TextColor="{StaticResource Tertiary}"
+                   VerticalOptions="Center"
                    FontAttributes="Bold"
-                   FontSize="16"
-                    Margin="10,0,10,0"/>
+                   FontSize="{OnPlatform iOS=18, Android=20}"
+                   Margin="10,0,10,0"/>
         </StackLayout>
 
         <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,10,0,10">
@@ -37,9 +38,9 @@
                         <FormattedString>
                             <Span Text="{Binding TextInstructionLbl}" />
                             <Span Text="{Binding MaxTextLen}" />
-                             <Span Text=": " />
+                            <Span Text=": " />
                             <Span Text="{Binding TextLen}"
-                                  TextColor="{StaticResource Primary}"/>
+                                  TextColor="{StaticResource Tertiary}"/>
                         </FormattedString>
                     </Label.FormattedText>
                     

@@ -10,7 +10,7 @@
     xmlns:models="clr-namespace:SampleSurveyApp.Core.Domain;assembly=SampleSurveyApp.Core"
     Shell.FlyoutBehavior="Flyout"
     FlyoutWidth="250"
-    FlyoutHeight="450">
+    FlyoutHeight="550">
     <!--<Shell.FlyoutBackground>
         <LinearGradientBrush StartPoint="0,0"
                              EndPoint="1,1">
@@ -55,18 +55,18 @@
         <ShellContent ContentTemplate="{DataTemplate pages:SurveyPage}" Route="SurveyPage"/>
     </FlyoutItem>
 
-    <FlyoutItem Title="{localize:Translate OverviewPageLbl}" Icon="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#BC2649}">
+    <FlyoutItem Title="{localize:Translate OverviewPageLbl}" Icon="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.SummarizeIcon}, Size=25, Color=#BC2649}">
         <ShellContent ContentTemplate="{DataTemplate pages:OverviewPage}" Route="OverviewPage"/>
 
     </FlyoutItem>
     <MenuItem Text="{localize:Translate ChangeLanguageLbl}" 
               Command="{Binding ChangeLanguageCommand}"
-              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#BC2649}">
+              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.TranslateIcon}, Size=25, Color=#BC2649}">
     </MenuItem>
 
     <MenuItem Text="{localize:Translate DeleteSurveysLbl}"
               Command="{Binding DeleteAllSurveysCommand}"
-              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.HomeIcon}, Size=25, Color=#BC2649}">
+              IconImageSource="{FontImage FontFamily=MaterialIcons, Glyph={x:Static models:Icons.DeleteIcon}, Size=25, Color=#BC2649}">
         
     </MenuItem>
     <MenuItem Text="{localize:Translate DeleteResponsesLbl}"

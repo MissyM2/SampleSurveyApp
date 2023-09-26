@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localize="clr-namespace:SampleSurveyApp.Core.Localization;assembly=SampleSurveyApp.Core"
              x:Class="SampleSurveyApp.Maui.Controls.EndOfSurveyView" >
 
     <Grid HeightRequest="600">
-        <Label Text="Thank you for participating in this survey."
+        <Label Text="{localize:Translate ThankYouLbl}"
                FontSize="{OnPlatform Android=18, iOS=20}"
-               VerticalOptions="Center"
-               HorizontalTextAlignment="Center"/>
+               VerticalOptions="CenterAndExpand"
+               HorizontalTextAlignment="Center"
+               WidthRequest="200"
+               HeightRequest="500"/>
     </Grid>
 </ContentView>
-
