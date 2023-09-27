@@ -39,12 +39,11 @@
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#BC2649" />
 
-		<!-- Splash Screen -->
-		 <MauiSplashScreen Include="Resources\Splash\splashscreen.svg" Color="#E5CDAF" />		
-
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<!--<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />-->
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#E5CDAF" BaseSize="128,128" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
