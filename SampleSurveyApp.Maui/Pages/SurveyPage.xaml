@@ -97,6 +97,32 @@
                 <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
                         <controls:TextEditorCardView />
                 </StackLayout>
+
+                 <!--REVIEW ANSWERS-->
+                    <StackLayout IsVisible="{Binding IsPortrait}">
+                        <CollectionView x:Name="responseCVPortrait"
+                                        ItemsSource="{Binding UserAnswerGroups}"
+                                        IsGrouped="True"
+                                        IsVisible="{Binding IsVisibleAnswerReview}"
+                                        BackgroundColor="Transparent"
+                                        ItemTemplate="{StaticResource AnswerReviewDataTemplate}"
+                                        GroupHeaderTemplate="{StaticResource AnswerReviewHeaderDataTemplate}">
+                            <CollectionView.Triggers>
+                                <Trigger TargetType="CollectionView"
+                                            Property="IsVisible"
+                                            Value="False">
+                                    <Setter Property="HeightRequest"
+                                            Value="0"/>
+                                </Trigger>
+                                <Trigger TargetType="CollectionView"
+                                            Property="IsVisible"
+                                            Value="True">
+                                    <Setter Property="HeightRequest"
+                                            Value="575"/>
+                                    </Trigger>
+                            </CollectionView.Triggers>
+                        </CollectionView>
+                    </StackLayout>
             </StackLayout>
 
         </StackLayout>
@@ -110,7 +136,7 @@
                </StackLayout>
 
                   <!--Container for Answers--> 
-                <StackLayout Grid.Column="1" Padding="15,70,15,15" >
+                <StackLayout Grid.Column="1" >
 
                      <!--QType is SingleAnswer-->
                      <CollectionView x:Name="listSingleCvLandscape"
@@ -119,7 +145,7 @@
                                     SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
                                     SelectionChangedCommand="{Binding AnswerSelectedCommand}"
                                     SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
-                                    Margin="12,8,12,0"
+                                    Margin="12,78,12,0"
                                     IsVisible="{Binding IsVisibleRuleTypeSingle}"
                                     IsEnabled="{Binding IsVisibleRuleTypeSingle}"
                                     ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
@@ -137,40 +163,35 @@
                     <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
                             <controls:TextEditorCardView />
                     </StackLayout>
+
+                     <!--REVIEW ANSWERS-->
+                        <CollectionView x:Name="responseCVLandscape"
+                                        ItemsSource="{Binding UserAnswerGroups}"
+                                        IsGrouped="True"
+                                        IsVisible="{Binding IsVisibleAnswerReview}"
+                                        BackgroundColor="Transparent"
+                                        ItemTemplate="{StaticResource AnswerReviewDataTemplate}"
+                                        GroupHeaderTemplate="{StaticResource AnswerReviewHeaderDataTemplate}">
+                            <CollectionView.Triggers>
+                                <Trigger TargetType="CollectionView"
+                                            Property="IsVisible"
+                                            Value="False">
+                                    <Setter Property="HeightRequest"
+                                            Value="0"/>
+                                </Trigger>
+                                <Trigger TargetType="CollectionView"
+                                            Property="IsVisible"
+                                            Value="True">
+                                    <Setter Property="HeightRequest"
+                                            Value="575"/>
+                                    </Trigger>
+                            </CollectionView.Triggers>
+                        </CollectionView>
                 </StackLayout>
             </Grid>
         </StackLayout>
 
-
-
-
-
-
         <StackLayout>
-
-            <!--REVIEW ANSWERS-->
-            <CollectionView x:Name="responseCV"
-                            ItemsSource="{Binding UserAnswerGroups}"
-                            IsGrouped="True"
-                            IsVisible="{Binding IsVisibleAnswerReview}"
-                            BackgroundColor="Transparent"
-                            ItemTemplate="{StaticResource AnswerReviewDataTemplate}"
-                            GroupHeaderTemplate="{StaticResource AnswerReviewHeaderDataTemplate}">
-                <CollectionView.Triggers>
-                    <Trigger TargetType="CollectionView"
-                                Property="IsVisible"
-                                Value="False">
-                        <Setter Property="HeightRequest"
-                                Value="0"/>
-                    </Trigger>
-                    <Trigger TargetType="CollectionView"
-                                Property="IsVisible"
-                                Value="True">
-                        <Setter Property="HeightRequest"
-                                Value="575"/>
-                        </Trigger>
-                </CollectionView.Triggers>
-            </CollectionView>
 
             <!--QuestionType is Text-->
             <StackLayout IsVisible="{Binding IsVisibleThankYouText}">
