@@ -189,6 +189,9 @@
   <data name="CurrQCode05ACode11AText" xml:space="preserve">
     <value>Multiple Selection Option 11</value>
   </data>
+  <data name="CurrQCode05ACode12AText" xml:space="preserve">
+    <value>Multiple Selection Option 12</value>
+  </data>
   <data name="CurrQCode05ACode13AText" xml:space="preserve">
     <value>Multiple Selection Option 13</value>
   </data>

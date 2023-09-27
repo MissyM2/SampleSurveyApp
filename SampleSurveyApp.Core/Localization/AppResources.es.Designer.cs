@@ -274,6 +274,15 @@ namespace SampleSurveyApp.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to pción de selección múltiple 12.
+        /// </summary>
+        public static string CurrQCode05ACode12AText {
+            get {
+                return ResourceManager.GetString("CurrQCode05ACode12AText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Opción de selección múltiple 13.
         /// </summary>
         public static string CurrQCode05ACode13AText {
