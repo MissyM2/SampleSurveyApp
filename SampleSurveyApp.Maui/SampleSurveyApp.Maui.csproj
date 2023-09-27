@@ -51,7 +51,6 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-		<MauiSplashScreen Include="Resources\Splash\splashscreen.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -60,26 +59,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Controls\" />
-	  <None Remove="Pages\" />
-	  <None Remove="Resources\AppIcon\appicon.svg" />
-	  <None Remove="Resources\AppIcon\appiconfg.svg" />
-	  <None Remove="Resources\Splash\splashscreen.svg" />
-	  <None Remove="Services\" />
-	  <None Remove="Resources\Images\check.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Pages\" />
-	  <Folder Include="Services\" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\SampleSurveyApp.Core\SampleSurveyApp.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Include="Resources\Images\check.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <MauiImage Include="Resources\AppIcon\appiconfg.svg" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Update="Controls\FlyoutFooter.xaml">
