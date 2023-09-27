@@ -25,7 +25,7 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
-
+		builder.Services.AddSingleton<IDeviceDisplay>(DeviceDisplay.Current);
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IMessageService, MessageService>();
 

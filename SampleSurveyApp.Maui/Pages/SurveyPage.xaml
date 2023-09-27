@@ -61,41 +61,92 @@
         </StackLayout>
 
           
-   <!-- Survey-->
+   <!-- Survey/Portrait-->
+        <StackLayout IsVisible="{Binding IsPortrait}">
 
-        <!-- Survey Question Header Info-->
-        <StackLayout IsVisible="{Binding IsVisibleSurveyHeader}">
-            <controls:QuestionHeaderView />
-       </StackLayout>
+            <!-- Survey Question Header Info-->
+            <StackLayout IsVisible="{Binding IsVisibleSurveyHeader}">
+                <controls:QuestionHeaderView />
+           </StackLayout>
 
-        <!-- Container for Answers -->
-        <StackLayout>
+            <!-- Container for Answers -->
+            <StackLayout>
 
-             <!--QType is SingleAnswer-->
-             <CollectionView x:Name="listSingleCv"
-                            ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
-                            SelectionChangedCommand="{Binding AnswerSelectedCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
-                            Margin="12,8,12,0"
-                            IsVisible="{Binding IsVisibleRuleTypeSingle}"
-                            IsEnabled="{Binding IsVisibleRuleTypeSingle}"
-                            ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+                 <!--QType is SingleAnswer-->
+                 <CollectionView x:Name="listSingleCvPortrait"
+                                ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
+                                SelectionChangedCommand="{Binding AnswerSelectedCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                                Margin="12,8,12,0"
+                                IsVisible="{Binding IsVisibleRuleTypeSingle}"
+                                IsEnabled="{Binding IsVisibleRuleTypeSingle}"
+                                ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
 
-            <!--QType is MultipleAnswers-->
-            <CollectionView x:Name="MultipleSelectionsCV"
-                            ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
-                            SelectionMode="Multiple"
-                            SelectionChangedCommand="{Binding MultipleSelectionCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference MultipleSelectionsCV}}"
-                            IsVisible="{Binding IsVisibleRuleTypeMultiple}"
-                            ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+                <!--QType is MultipleAnswers-->
+                <CollectionView x:Name="MultipleSelectionsCVPortrait"
+                                ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                SelectionMode="Multiple"
+                                SelectionChangedCommand="{Binding MultipleSelectionCommand}"
+                                SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference MultipleSelectionsCV}}"
+                                IsVisible="{Binding IsVisibleRuleTypeMultiple}"
+                                ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
 
-            <!--QuestionType is Text-->
-            <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
-                    <controls:TextEditorCardView />
+                <!--QuestionType is Text-->
+                <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
+                        <controls:TextEditorCardView />
+                </StackLayout>
             </StackLayout>
+
+        </StackLayout>
+
+    <!-- Survey/Landscape-->
+        <StackLayout IsVisible="{Binding IsLandscape}">
+            <Grid ColumnDefinitions="*,*">
+                 <!-- Survey Question Header Info -->
+                 <StackLayout Grid.Column="0" IsVisible="{Binding IsVisibleSurveyHeader}" BackgroundColor="Transparent">
+                    <controls:QuestionHeaderView />
+               </StackLayout>
+
+                  <!--Container for Answers--> 
+                <StackLayout Grid.Column="1" Padding="15,70,15,15" >
+
+                     <!--QType is SingleAnswer-->
+                     <CollectionView x:Name="listSingleCvLandscape"
+                                    ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                    SelectionMode="Single"
+                                    SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
+                                    SelectionChangedCommand="{Binding AnswerSelectedCommand}"
+                                    SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                                    Margin="12,8,12,0"
+                                    IsVisible="{Binding IsVisibleRuleTypeSingle}"
+                                    IsEnabled="{Binding IsVisibleRuleTypeSingle}"
+                                    ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+
+                    <!--QType is MultipleAnswers-->
+                    <CollectionView x:Name="MultipleSelectionsCVLandscape"
+                                    ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                    SelectionMode="Multiple"
+                                    SelectionChangedCommand="{Binding MultipleSelectionCommand}"
+                                    SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference MultipleSelectionsCV}}"
+                                    IsVisible="{Binding IsVisibleRuleTypeMultiple}"
+                                    ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+
+                    <!--QuestionType is Text-->
+                    <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
+                            <controls:TextEditorCardView />
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </StackLayout>
+
+
+
+
+
+
+        <StackLayout>
 
             <!--REVIEW ANSWERS-->
             <CollectionView x:Name="responseCV"

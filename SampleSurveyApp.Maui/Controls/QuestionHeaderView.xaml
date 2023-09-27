@@ -3,60 +3,123 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:localize="clr-namespace:SampleSurveyApp.Core.Localization;assembly=SampleSurveyApp.Core"
              x:Class="SampleSurveyApp.Maui.Controls.QuestionHeaderView">
-    <StackLayout Margin="0,0,0,20">
-        <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,10,0,10">
-                <Label Text="{Binding SurveyId}"
-                       TextColor="{StaticResource Primary}"
-                       HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center"/>
-        </StackLayout>
+    <StackLayout>
 
-        <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,25,0,25"
-                     IsVisible="{Binding IsVisibleMainInstructionLbl}">
-            <Label Text="{Binding MainQuestionLbl}"
-                   TextColor="{StaticResource Tertiary}"
-                   VerticalOptions="Center"
-                   FontAttributes="Bold"
-                   FontSize="{OnPlatform iOS=18, Android=20}"
-                   Margin="10,0,10,0"/>
-        </StackLayout>
-
-        <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,10,0,10">
-            <StackLayout>
-                <Label Text="{Binding MainInstructionLbl}" Margin="10,0,20,0"
-                       IsVisible="{Binding IsVisibleMainInstructionLbl}"
-                        TextColor="{StaticResource Black}"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Start"/>
-            
-                <Label Margin="10,0,20,0"
-                       IsVisible="{Binding IsVisibleTextInstructionLbl}"
-                        TextColor="{StaticResource Black}"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Start">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="{Binding TextInstructionLbl}" />
-                            <Span Text="{Binding MaxTextLen}" />
-                            <Span Text=": " />
-                            <Span Text="{Binding TextLen}"
-                                  TextColor="{StaticResource Tertiary}"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                    
-                </Label>
-             </StackLayout>
-            <StackLayout IsVisible="{Binding IsVisibleAnswerReview}" Padding="0,10,0,10">
-                <Button Text="{Binding SaveSurveyLbl}"
-                        WidthRequest="200"
-                        HeightRequest="{OnPlatform Android=45, iOS=30}"
-                        FontSize="{OnPlatform Android=14, iOS=16}"
-                        BackgroundColor="{StaticResource Tertiary}"
-                        Command="{Binding SaveSurveyCommand}"
-                        VerticalOptions="Center" />
+        <!-- Portrait -->
+        <StackLayout Margin="0,0,0,20" IsVisible="{Binding IsPortrait}">
+            <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,10,0,10">
+                    <Label Text="{Binding SurveyId}"
+                           TextColor="{StaticResource Primary}"
+                           HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center"/>
             </StackLayout>
-        </StackLayout>
-        <BoxView BackgroundColor="LightBlue" HeightRequest="2"/>
-    </StackLayout >
+
+            <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,25,0,25"
+                         IsVisible="{Binding IsVisibleMainInstructionLbl}">
+                <Label Text="{Binding MainQuestionLbl}"
+                       TextColor="{StaticResource Tertiary}"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       FontSize="{OnPlatform iOS=18, Android=20}"
+                       Margin="10,0,10,0"/>
+            </StackLayout>
+
+            <StackLayout BackgroundColor="{StaticResource Secondary}" Padding="0,10,0,10">
+                <StackLayout>
+                    <Label Text="{Binding MainInstructionLbl}" Margin="10,0,20,0"
+                           IsVisible="{Binding IsVisibleMainInstructionLbl}"
+                            TextColor="{StaticResource Black}"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Start"/>
+            
+                    <Label Margin="10,0,20,0"
+                           IsVisible="{Binding IsVisibleTextInstructionLbl}"
+                            TextColor="{StaticResource Black}"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Start">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding TextInstructionLbl}" />
+                                <Span Text="{Binding MaxTextLen}" />
+                                <Span Text=": " />
+                                <Span Text="{Binding TextLen}"
+                                      TextColor="{StaticResource Tertiary}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    
+                    </Label>
+                 </StackLayout>
+                <StackLayout IsVisible="{Binding IsVisibleAnswerReview}" Padding="0,10,0,10">
+                    <Button Text="{Binding SaveSurveyLbl}"
+                            WidthRequest="200"
+                            HeightRequest="{OnPlatform Android=45, iOS=30}"
+                            FontSize="{OnPlatform Android=14, iOS=16}"
+                            BackgroundColor="{StaticResource Tertiary}"
+                            Command="{Binding SaveSurveyCommand}"
+                            VerticalOptions="Center" />
+                </StackLayout>
+            </StackLayout>
+            <BoxView BackgroundColor="LightBlue" HeightRequest="2"/>
+        </StackLayout >
+
+        <!-- Landscape -->
+        <Grid IsVisible="{Binding IsLandscape}">
+            <StackLayout Grid.Row="0" Padding="15,40,15,15" IsVisible="{Binding IsVisibleMainInstructionLbl}">
+
+                <StackLayout BackgroundColor="{StaticResource Secondary}"
+                             Padding="15"
+                             VerticalOptions="CenterAndExpand">
+                    <StackLayout>
+                        <Label Text="{Binding SurveyId}"
+                               TextColor="{StaticResource Primary}"
+                               HorizontalTextAlignment="Center"
+                               Padding="0,0,0,50"/>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="{Binding MainQuestionLbl}"
+                               TextColor="{StaticResource Tertiary}"
+                               FontAttributes="Bold"
+                               FontSize="{OnPlatform iOS=18, Android=20}" />
+
+                        <Label Text="{Binding MainInstructionLbl}" Padding="0,25,0,25" 
+                                IsVisible="{Binding IsVisibleMainInstructionLbl}"
+                                TextColor="{StaticResource Black}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Start"/>
+                    </StackLayout>
+
+                    <StackLayout Padding="0,25,0,25" >
+                        <Label Margin="10,0,20,0"
+                               IsVisible="{Binding IsVisibleTextInstructionLbl}"
+                                TextColor="{StaticResource Black}"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Start">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding TextInstructionLbl}" />
+                                    <Span Text="{Binding MaxTextLen}" />
+                                    <Span Text=": " />
+                                    <Span Text="{Binding TextLen}"
+                                          TextColor="{StaticResource Tertiary}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                    
+                        </Label>
+                    </StackLayout>
+
+                    <StackLayout IsVisible="{Binding IsVisibleAnswerReview}" Padding="0,10,0,10">
+                        <Button Text="{Binding SaveSurveyLbl}"
+                                WidthRequest="200"
+                                HeightRequest="{OnPlatform Android=45, iOS=30}"
+                                FontSize="{OnPlatform Android=14, iOS=16}"
+                                BackgroundColor="{StaticResource Tertiary}"
+                                Command="{Binding SaveSurveyCommand}"
+                                VerticalOptions="Center" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </StackLayout>
 </ContentView>
 

@@ -79,6 +79,21 @@ namespace SampleSurveyApp.Core.ViewModels
         #region UI properties
 
         [ObservableProperty]
+        bool isPortrait = true;
+
+        [ObservableProperty]
+        bool isLandscape = false;
+
+        [ObservableProperty]
+        double screenHeight;
+
+        [ObservableProperty]
+        double scrollViewScreenHeight;
+
+        [ObservableProperty]
+        double screenWidth;
+
+        [ObservableProperty]
         ImageSource checkMarkImage;
 
         [ObservableProperty]
@@ -154,6 +169,8 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isSelected;
 
         #endregion
+
+
 
         [ObservableProperty]
         string selectedItem;
