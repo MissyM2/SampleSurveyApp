@@ -108,7 +108,7 @@
                         </Label>
                     </StackLayout>
 
-                    <StackLayout IsVisible="{Binding IsVisibleAnswerReview}" Padding="0,10,0,10">
+                    <StackLayout IsVisible="{Binding IsVisibleAnswerReview}">
                         <Button Text="{Binding SaveSurveyLbl}"
                                 WidthRequest="200"
                                 HeightRequest="{OnPlatform Android=45, iOS=30}"

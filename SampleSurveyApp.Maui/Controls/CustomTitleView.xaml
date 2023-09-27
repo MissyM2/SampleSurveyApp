@@ -2,31 +2,68 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SampleSurveyApp.Maui.Controls.CustomTitleView">
-   <Grid RowDefinitions="*" ColumnDefinitions="*,2*,*">
-          <Button Text="{Binding LeftBtnLbl}"
-                  BackgroundColor="Transparent"
-                  TextColor="White"
-                  FontSize="{OnPlatform Android=14, iOS=14}"
-                  Grid.Column="0"
-                  HorizontalOptions="Start"
-                  Command="{Binding NavigateCommand}"
-                  CommandParameter="Prev"
-                  IsVisible="{Binding IsWorkingLeftBtn}"
-                  IsEnabled="{Binding IsWorkingLeftBtn}"/>
-        <Label x:Name="titleLabel" FontSize="{OnPlatform Android=16, iOS=16}" FontAttributes="Bold"
-                    Text="{Binding ScreenNameLbl}"
-                    HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center"
-                    BackgroundColor="Transparent" TextColor="White" Grid.Column="1" />
-        <Button Text="{Binding RightBtnLbl}"
-                   BackgroundColor="transparent"
-                   TextColor="White"
-                   Grid.Column="2" FontSize="{OnPlatform Android=14, iOS=14}"
-                   HorizontalOptions="End"
-                   Command="{Binding NavigateCommand}"
-                   CommandParameter="Next"
-                   IsVisible="{Binding IsWorkingRightBtn}"
-                   IsEnabled="{Binding IsWorkingRightBtn}"/>
-     </Grid>
+
+    <StackLayout>
+
+        <!-- Portrait-->
+       <Grid IsVisible="{Binding IsPortrait}" RowDefinitions="*" ColumnDefinitions="*,2*,*">
+              <Button Text="{Binding LeftBtnLbl}"
+                      BackgroundColor="Transparent"
+                      TextColor="White"
+                      FontSize="{OnPlatform Android=14, iOS=14}"
+                      Grid.Column="0"
+                      HorizontalOptions="Start"
+                      Command="{Binding NavigateCommand}"
+                      CommandParameter="Prev"
+                      IsVisible="{Binding IsWorkingLeftBtn}"
+                      IsEnabled="{Binding IsWorkingLeftBtn}"/>
+            <Label x:Name="titleLabelPortrait" FontSize="{OnPlatform Android=16, iOS=16}" FontAttributes="Bold"
+                        Text="{Binding ScreenNameLbl}"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        BackgroundColor="Transparent" TextColor="White" Grid.Column="1" />
+            <Button Text="{Binding RightBtnLbl}"
+                       BackgroundColor="transparent"
+                       TextColor="White"
+                       Grid.Column="2" FontSize="{OnPlatform Android=14, iOS=14}"
+                       HorizontalOptions="End"
+                       Command="{Binding NavigateCommand}"
+                       CommandParameter="Next"
+                       IsVisible="{Binding IsWorkingRightBtn}"
+                       IsEnabled="{Binding IsWorkingRightBtn}"/>
+        </Grid>
+
+        <!-- Landscape -->
+        <Grid IsVisible="{Binding IsLandscape}" RowDefinitions="*" ColumnDefinitions="*,2*,*" WidthRequest="500">
+              <Button Text="{Binding LeftBtnLbl}"
+                      BackgroundColor="Transparent"
+                      TextColor="{StaticResource Black}"
+                      FontSize="{OnPlatform Android=14, iOS=14}"
+                      Grid.Column="0"
+                      Padding="0,0,0,7"
+                      HorizontalOptions="Start"
+                      Command="{Binding NavigateCommand}"
+                      CommandParameter="Prev"
+                      IsVisible="{Binding IsWorkingLeftBtn}"
+                      IsEnabled="{Binding IsWorkingLeftBtn}"/>
+            <Label x:Name="titleLabelLandscape" FontSize="{OnPlatform Android=16, iOS=16}" FontAttributes="Bold"
+                        Text="{Binding ScreenNameLbl}"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Start"
+                        Padding="0,5,0,0"
+                        BackgroundColor="Transparent" TextColor="{StaticResource Black}" Grid.Column="1" />
+            <Button Text="{Binding RightBtnLbl}"
+                       BackgroundColor="transparent"
+                       TextColor="{StaticResource Black}"
+                       Grid.Column="2" FontSize="{OnPlatform Android=14, iOS=14}"
+                       HorizontalOptions="End"
+                       Command="{Binding NavigateCommand}"
+                       CommandParameter="Next"
+                       Padding="0,0,0,7"
+                       IsVisible="{Binding IsWorkingRightBtn}"
+                       IsEnabled="{Binding IsWorkingRightBtn}"/>
+         </Grid>
+    </StackLayout>
+
 </ContentView>
 

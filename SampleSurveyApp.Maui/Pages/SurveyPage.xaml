@@ -136,7 +136,7 @@
                </StackLayout>
 
                   <!--Container for Answers--> 
-                <StackLayout Grid.Column="1" >
+                <StackLayout Grid.Column="1">
 
                      <!--QType is SingleAnswer-->
                      <CollectionView x:Name="listSingleCvLandscape"
@@ -168,6 +168,7 @@
                         <CollectionView x:Name="responseCVLandscape"
                                         ItemsSource="{Binding UserAnswerGroups}"
                                         IsGrouped="True"
+                                        Margin="15,40,15,40"
                                         IsVisible="{Binding IsVisibleAnswerReview}"
                                         BackgroundColor="Transparent"
                                         ItemTemplate="{StaticResource AnswerReviewDataTemplate}"
