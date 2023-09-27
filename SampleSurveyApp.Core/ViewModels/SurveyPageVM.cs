@@ -770,23 +770,6 @@ namespace SampleSurveyApp.Core.ViewModels
 
         #endregion
 
-       /* public void OnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            Debug.WriteLine("e is" + SelectedLanguage);
-            switch (SelectedLanguage)
-            {
-                case "English":
-                    SelCulture = "en";
-                    break;
-                case "Spanish":
-                    SelCulture = "es";
-                    break;
-                default:
-                    break;
-            }
-
-            CultureInfo.CurrentUICulture = new CultureInfo(SelCulture, false);
-        }*/
 
     }
 }

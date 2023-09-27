@@ -43,7 +43,7 @@ namespace SampleSurveyApp.Core.Database
                 new SurveyAnswerModel () { CurrQCode=05, ACode=12, AText="Multiple Selection Option 12", ATextLocal="CurrQCode05ACode12AText", NavRule=-1},
                 new SurveyAnswerModel () { CurrQCode=05, ACode=13, AText="Multiple Selection Option 13", ATextLocal="CurrQCode05ACode13AText", NavRule=-1},
                 new SurveyAnswerModel () { CurrQCode=05, ACode=14, AText="Multiple Selection Option 14", ATextLocal="CurrQCode05ACode14AText", NavRule=-1},
-                new SurveyAnswerModel () { CurrQCode=05, ACode=15, AText="Multiple Selection Option 15", ATextLocal="CurrQCode05ACode15Text", NavRule=-1},
+                new SurveyAnswerModel () { CurrQCode=05, ACode=15, AText="Multiple Selection Option 15", ATextLocal="CurrQCode05ACode15AText", NavRule=-1},
                 new SurveyAnswerModel () { CurrQCode=05, ACode=16, AText="Multiple Selection Option 16", ATextLocal="CurrQCode05ACode16AText", NavRule=-1},
                 new SurveyAnswerModel () { CurrQCode=05, ACode=17, AText="Multiple Selection Option 17", ATextLocal="CurrQCode05ACode17AText", NavRule=-1},
                 new SurveyAnswerModel () { CurrQCode=05, ACode=18, AText="Multiple Selection Option 18", ATextLocal="CurrQCode05ACode18AText", NavRule=-1},

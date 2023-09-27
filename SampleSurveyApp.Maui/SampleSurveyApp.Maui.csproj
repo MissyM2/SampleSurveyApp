@@ -34,15 +34,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 	</PropertyGroup>
-	<!--<ItemGroup>
-	  <MauiImage Remove="Resources\Images\check.png" />
-	</ItemGroup>-->
+
 	<ItemGroup>
 		<!-- App Icon -->
-		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg">
-		  <Color>#E5CDAF</Color>
-		  <ForegroundFile>Resources\AppIcon\appiconfg.svg</ForegroundFile>
-		</MauiIcon>-->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#BC2649" />
 
 		<!-- Splash Screen -->
@@ -57,11 +51,12 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		<MauiSplashScreen Include="Resources\Splash\splashscreen.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -85,7 +80,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiImage Include="Resources\AppIcon\appiconfg.svg" />
-	  <MauiImage Include="Resources\Splash\splashscreen.svg" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Update="Controls\FlyoutFooter.xaml">
