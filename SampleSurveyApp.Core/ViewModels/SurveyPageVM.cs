@@ -426,8 +426,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
 
                     CurrentQuestion = NextCurrentQuestion;
-                    // CurrentQuestion.IsSelected = true;
-
+                    Debug.WriteLine("What is IsSelected on Prev? " + IsSelected);
 
                     // get answers for current question
                     GetAnswerOptionsForCurrentQuestion();
@@ -471,8 +470,12 @@ namespace SampleSurveyApp.Core.ViewModels
 
         }
 
+        //[RelayCommand]
+        //public async Task MultipleSelectionCommand()
+
         public ICommand MultipleSelectionCommand => new Command<IList<object>>((obj) =>
         {
+            _messageService.CustomAlert("selection", "Selection is " + obj.ToString(), "OK");
             List<SurveyAnswerModel> temp = new List<SurveyAnswerModel>();
 
             foreach (var item in obj)

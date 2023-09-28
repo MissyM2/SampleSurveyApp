@@ -154,6 +154,7 @@
                     <CollectionView x:Name="MultipleSelectionsCVLandscape"
                                     ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                                     SelectionMode="Multiple"
+                                    Margin="12,40,12,20"
                                     SelectionChangedCommand="{Binding MultipleSelectionCommand}"
                                     SelectionChangedCommandParameter="{Binding SelectedItems, Source={x:Reference MultipleSelectionsCV}}"
                                     IsVisible="{Binding IsVisibleRuleTypeMultiple}"

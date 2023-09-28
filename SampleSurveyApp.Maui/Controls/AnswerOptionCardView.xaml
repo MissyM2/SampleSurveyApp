@@ -7,19 +7,16 @@
              x:Class="SampleSurveyApp.Maui.Controls.AnswerOptionCardView"
              x:Name="this">
 
+    <!-- only suppresses the highlight on selected item-->
     <VisualStateManager.VisualStateGroups>
             <VisualStateGroup Name="CommonStates">
                 <VisualState Name="Normal" >
                     <VisualState.Setters>
-                        <Setter TargetName="checkMarkImage" Property="IsVisible" Value="false"/>
                         <Setter Property="BackgroundColor" Value="white"/>
-                    
                     </VisualState.Setters>
-
                 </VisualState>
                 <VisualState Name="Selected">
                     <VisualState.Setters>
-                        <Setter TargetName="checkMarkImage" Property="IsVisible" Value="true"/>
                         <Setter Property="BackgroundColor" Value="white"/>
                     </VisualState.Setters>
                 </VisualState>
@@ -37,11 +34,12 @@
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">
-                <Label x:Name="isVisibleLabel" Text="{Binding IsSelected}"/>                                 
+                <Label x:Name="isVisibleLabel" IsVisible="false" Text="{Binding IsSelected}"/>                                 
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="2" Grid.Row="0">
                 <Image x:Name="checkMarkImage" Source="check.png" Margin="0,5,0,0" HeightRequest="20">
+                    <!-- Sets the checkmark visibility based on value of isVisibleLabel -->
                     <Image.Triggers>
                                 <DataTrigger TargetType="Image" Binding="{Binding IsSelected}" Value="True">
                                     <Setter Property="IsVisible" Value="True"/>

@@ -4,6 +4,7 @@ using SampleSurveyApp.Core.Domain;
 using SampleSurveyApp.Core.Localization;
 using SampleSurveyApp.Core.ViewModels;
 using SampleSurveyApp.Maui.Services;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace SampleSurveyApp.Maui.Pages;
@@ -57,8 +58,23 @@ public partial class SurveyPage : ContentPage
         base.OnAppearing();
         await Shell.Current.DisplayAlert("Orientation", DeviceDisplay.Current.MainDisplayInfo.Orientation.ToString(), "OK");
 
+
+
         var vm = (SurveyPageVM)BindingContext;
         vm.ScreenNameLbl= AppResources.ScreenNameLblStart;
+        Debug.WriteLine($"Normal state active: {vm.IsSelected}");
         await vm.Init();
+    }
+
+    void OnNormalStateIsActiveChanged(object sender, EventArgs e)
+    {
+        StateTriggerBase stateTrigger = sender as StateTriggerBase;
+        Debug.WriteLine($"Normal state active: {stateTrigger.IsActive}");
+    }
+
+    void OnSelectedStateIsActiveChanged(object sender, EventArgs e)
+    {
+        StateTriggerBase stateTrigger = sender as StateTriggerBase;
+        Debug.WriteLine($"Selected state active: {stateTrigger.IsActive}");
     }
 }
