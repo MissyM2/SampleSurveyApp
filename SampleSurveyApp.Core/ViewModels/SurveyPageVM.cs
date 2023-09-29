@@ -8,10 +8,8 @@ using SampleSurveyApp.Core.Domain;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
-using System.Windows.Input;
 using System.Globalization;
 using SampleSurveyApp.Core.Localization;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace SampleSurveyApp.Core.ViewModels
 {
@@ -174,6 +172,9 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         string selectedItem;
+
+        public ObservableCollection<object> SelectedAnswers { get; } = new();
+
 
         [ObservableProperty]
         string selectedLanguage;
@@ -447,9 +448,68 @@ namespace SampleSurveyApp.Core.ViewModels
         #region User Input
 
         [RelayCommand]
-        public async Task UserTextAnswerChanged()
+        void SingleCVSelectionChanged() //Single Answer
         {
+            Debug.WriteLine("Single CV Selection Changed");
+            var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode == CurrentlySelectedAnswer.ACode);
+            selectedAnswer.IsSelected = true;
+            if (CurrentQuestion.QType == "Text")
+            {
+                selectedAnswer.AText = UserTextAnswer;
+            }
 
+            if (CurrentQuestion.QType != "Text")
+            {
+                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
+                otherAnswer.IsSelected = false;
+            }
+
+            CurrentNavRule = selectedAnswer.NavRule;
+
+
+            if (CurrentlySelectedAnswer.NavRule != -1)
+            {
+                CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
+                RightBtnLbl = AppResources.RightBtnLblNext;
+            }
+            else
+            {
+                CurrentQuestion.NextQCode = -1;
+                AnswerReviewIsNext = true;
+                RightBtnLbl = AppResources.RightBtnLblReview;
+            }
+
+            AnswerHasBeenSelected = true;
+        }
+
+        [RelayCommand]
+        void MultipleCVSelectionChanged()  // Multiple Answers
+        {
+            Debug.WriteLine("Multiple CV Selection Changed");
+            foreach (var item in SelectedAnswers)
+            {
+                var currAnswer = item as SurveyAnswerModel;
+                currAnswer.IsSelected = true;
+
+                //Check to see if this is the last question
+                if (currAnswer.NavRule != -1)
+                {
+                    CurrentQuestion.NextQCode = currAnswer.NavRule;
+                    RightBtnLbl = AppResources.RightBtnLblNext;
+                }
+                else
+                {
+                    CurrentQuestion.NextQCode = -1;
+                    AnswerReviewIsNext = true;
+                    RightBtnLbl = AppResources.RightBtnLblReview;
+                }
+            }
+            AnswerHasBeenSelected = true;
+        }
+
+        [RelayCommand]
+        public void UserTextAnswerChanged()
+        {
             Debug.WriteLine("User Text Answer");
             TextLen = UserTextAnswer.Length;
             if (TextLen == 0)
@@ -465,84 +525,6 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 Debug.WriteLine("more than 1 character" + TextLen);
             }
-
-
-
-        }
-
-        //[RelayCommand]
-        //public async Task MultipleSelectionCommand()
-
-        public ICommand MultipleSelectionCommand => new Command<IList<object>>((obj) =>
-        {
-            _messageService.CustomAlert("selection", "Selection is " + obj.ToString(), "OK");
-            List<SurveyAnswerModel> temp = new List<SurveyAnswerModel>();
-
-            foreach (var item in obj)
-            {
-                var selectedItems = item as SurveyAnswerModel;
-                selectedItems.IsSelected = true;
-
-                temp.Add(selectedItems);
-
-                // Check to see if this is the last question
-                if (selectedItems.NavRule != -1)
-                {
-                    CurrentQuestion.NextQCode = selectedItems.NavRule;
-                    //AnswerReviewIsNext = false;
-                    RightBtnLbl = AppResources.RightBtnLblNext;
-                }
-                else
-                {
-                    CurrentQuestion.NextQCode = -1;
-                    AnswerReviewIsNext = true;
-                    RightBtnLbl = AppResources.RightBtnLblReview;
-                }
-
-            }
-            CurrentlySelectedAnswers.Clear();
-            foreach (var item in temp)
-            {
-                CurrentlySelectedAnswers.Add(item);
-                CurrentNavRule = item.NavRule;
-
-            }
-            AnswerHasBeenSelected = true;
-        });
-
-        [RelayCommand]
-        public async Task AnswerSelected() //Single Answer
-        {
-            
-            var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode == CurrentlySelectedAnswer.ACode);
-            selectedAnswer.IsSelected = true;
-            if (CurrentQuestion.QType == "Text")
-            {
-                selectedAnswer.AText = UserTextAnswer;
-            }
-
-            if (CurrentQuestion.QType != "Text")
-            {
-                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
-                otherAnswer.IsSelected = false;
-            }
-
-            CurrentNavRule = selectedAnswer.NavRule;
-            
-
-            if (CurrentlySelectedAnswer.NavRule != -1)
-            {
-                CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
-                RightBtnLbl = AppResources.RightBtnLblNext;
-            }
-            else
-            {
-                CurrentQuestion.NextQCode = -1;
-                AnswerReviewIsNext = true;
-                RightBtnLbl = AppResources.RightBtnLblReview;
-            }
-
-            AnswerHasBeenSelected = true;
         }
 
         #endregion

@@ -26,7 +26,7 @@ public partial class SurveyPage : ContentPage
             new AsyncRepository<SurveyResponseModel>());
 
         DeviceDisplay.Current.MainDisplayInfoChanged += Current_MainDisplayInfoChanged;
-
+        
     }
 
     private void Current_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
