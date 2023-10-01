@@ -36,10 +36,11 @@ public partial class SurveyPage : ContentPage
         if (DeviceDisplay.Current.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
         {
 
-            vm.IsLandscape = true;
-            vm.IsPortrait = false;
+            
             vm.ScreenHeight = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Height;
             vm.ScreenWidth = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Width;
+            vm.IsLandscape = true;
+            vm.IsPortrait = false;
             vm.ScrollViewScreenHeight = vm.ScreenHeight - 200;
 
         }

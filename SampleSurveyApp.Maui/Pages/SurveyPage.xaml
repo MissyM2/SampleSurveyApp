@@ -50,7 +50,7 @@
     </Shell.TitleView>
 
     <StackLayout>
-        <StackLayout IsVisible="{Binding IsVisibleSurveyStartButton}" Padding="0,10,0,10">
+        <AbsoluteLayout IsVisible="{Binding IsVisibleSurveyStartButton}">
             <Button Text="{localize:Translate StartSurveyLbl}"
                         WidthRequest="200"
                         HeightRequest="{OnPlatform Android=50, iOS=30}"
@@ -58,49 +58,72 @@
                         Command="{Binding CreateSurveyCommand}"
                         BackgroundColor="{StaticResource Tertiary}"
                         VerticalOptions="Center"/>
-        </StackLayout>
+        </AbsoluteLayout>
 
           
    <!-- Survey/Portrait-->
-        <StackLayout IsVisible="{Binding IsPortrait}">
+        <AbsoluteLayout IsVisible="{Binding IsPortrait}"
+                        BackgroundColor="Bisque"
+                        Padding="0"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand">
 
             <!-- Survey Question Header Info-->
-            <StackLayout IsVisible="{Binding IsVisibleSurveyHeader}">
+            <StackLayout IsVisible="{Binding IsVisibleSurveyHeader}"
+                         BackgroundColor="Blue"
+                         AbsoluteLayout.LayoutBounds="0,0,1,.2"
+                         AbsoluteLayout.LayoutFlags="All">
                 <controls:QuestionHeaderView />
            </StackLayout>
 
             <!-- Container for Answers -->
-            <StackLayout>
 
                  <!--QType is SingleAnswer-->
-                 <CollectionView x:Name="singleSelectionCvPortrait"
-                                ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
-                                SelectionMode="Single"
-                                SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
-                                SelectionChangedCommand="{Binding SingleCVSelectionChangedCommand}"
-                                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
-                                Margin="12,8,12,0"
-                                IsVisible="{Binding IsVisibleRuleTypeSingle}"
-                                IsEnabled="{Binding IsVisibleRuleTypeSingle}"
-                                ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+                <StackLayout BackgroundColor="Lime"
+                          IsVisible="{Binding IsVisibleRuleTypeSingle}"
+                          AbsoluteLayout.LayoutBounds="0.45, .24, .9, .1"
+                          AbsoluteLayout.LayoutFlags="All">
+                     <CollectionView x:Name="singleSelectionCvPortrait"
+                                    ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                    SelectionMode="Single"
+                                    VerticalOptions="Center"
+                                    SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
+                                    SelectionChangedCommand="{Binding SingleCVSelectionChangedCommand}"
+                                    SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                                    IsVisible="{Binding IsVisibleRuleTypeSingle}"
+                                    IsEnabled="{Binding IsVisibleRuleTypeSingle}"
+                                    ItemTemplate="{StaticResource AnswerOptionDataTemplate}"
+                                    BackgroundColor="PeachPuff"/>
+                </StackLayout>
 
                 <!--QType is MultipleAnswers-->
-                 <CollectionView x:Name="multipleSelectionsCVPortrait"
-                                ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
-                                SelectedItems="{Binding SelectedAnswers}"
-                                SelectionMode="Multiple"
-                                SelectionChangedCommand="{Binding MultipleCVSelectionChangedCommand}"
-                                SelectionChangedCommandParameter="{Binding .}"
-                                IsVisible="{Binding IsVisibleRuleTypeMultiple}"
-                                ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+                <StackLayout BackgroundColor="Orange" IsVisible="{Binding IsVisibleRuleTypeMultiple}"
+                         AbsoluteLayout.LayoutBounds="0.45, .24, .9, .1"
+                         AbsoluteLayout.LayoutFlags="All" >
+                     <CollectionView x:Name="multipleSelectionsCVPortrait"
+                                    ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                    SelectedItems="{Binding SelectedAnswers}"
+                                    SelectionMode="Multiple"
+                                    HeightRequest="250"
+                                    MaximumHeightRequest="250"
+                                    SelectionChangedCommand="{Binding MultipleCVSelectionChangedCommand}"
+                                    SelectionChangedCommandParameter="{Binding .}"
+                                    IsVisible="{Binding IsVisibleRuleTypeMultiple}"
+                                    ItemTemplate="{StaticResource AnswerOptionDataTemplate}"
+                                    BackgroundColor="pink"/>
+                </StackLayout>
 
                 <!--QuestionType is Text-->
-                <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
-                        <controls:TextEditorCardView />
+                <StackLayout IsVisible="{Binding IsVisibleQTypeText}"
+                             AbsoluteLayout.LayoutBounds="0.45, .24, .9, -.1"
+                             AbsoluteLayout.LayoutFlags="All">
+                        <controls:TextEditorCardView  BackgroundColor="BlanchedAlmond"/>
                 </StackLayout>
 
                  <!--REVIEW ANSWERS-->
-                    <StackLayout IsVisible="{Binding IsPortrait}">
+                   <StackLayout IsVisible="{Binding IsPortrait}"
+                             AbsoluteLayout.LayoutBounds="0.45, .24, .9, -.1"
+                             AbsoluteLayout.LayoutFlags="All">
                         <CollectionView x:Name="responseCVPortrait"
                                         ItemsSource="{Binding UserAnswerGroups}"
                                         IsGrouped="True"
@@ -124,85 +147,136 @@
                             </CollectionView.Triggers>
                         </CollectionView>
                     </StackLayout>
-            </StackLayout>
 
-        </StackLayout>
+        </AbsoluteLayout>
 
     <!-- Survey/Landscape-->
-        <StackLayout IsVisible="{Binding IsLandscape}">
-            <Grid ColumnDefinitions="*,*">
-                 <!-- Survey Question Header Info -->
-                 <StackLayout Grid.Column="0" IsVisible="{Binding IsVisibleSurveyHeader}" BackgroundColor="Transparent">
-                    <controls:QuestionHeaderView />
-               </StackLayout>
+       <AbsoluteLayout  IsVisible="{Binding IsLandscape}"
+                        BackgroundColor="Bisque"
+                        Padding="0"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand">
+            
+             <!-- Survey Question Header Info -->
+             <StackLayout BackgroundColor="Blue"
+                          AbsoluteLayout.LayoutBounds="0,0.3,.48,.5"
+                          AbsoluteLayout.LayoutFlags="All">
+                    <controls:QuestionHeaderView IsVisible="{Binding IsVisibleSurveyHeader}"
+                                                 VerticalOptions="Center"
+                                                 BackgroundColor="pink"/>
+            </StackLayout>
 
-                  <!--Container for Answers--> 
-                <StackLayout Grid.Column="1">
+             <!--Container for Answers-->
+             <!-- QType is SingleAnswer -->
+             <StackLayout BackgroundColor="Lime"
+                          IsVisible="{Binding IsVisibleRuleTypeSingle}"
+                          AbsoluteLayout.LayoutBounds="1, 0.4, .5, .2"
+                          AbsoluteLayout.LayoutFlags="All">
+            
+                         <CollectionView x:Name="singleSelectionCvLandscape"
+                                        ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                        SelectionMode="Single"
+                                        VerticalOptions="Center"
+                                        SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
+                                        SelectionChangedCommand="{Binding SingleCVSelectionChangedCommand}"
+                                        SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+                                        IsVisible="{Binding IsVisibleRuleTypeSingle}"
+                                        IsEnabled="{Binding IsVisibleRuleTypeSingle}"
+                                        ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+            </StackLayout>
+        
+            <!-- QType is MultipleAnswers -->
+            <StackLayout BackgroundColor="Orange" IsVisible="{Binding IsVisibleRuleTypeMultiple}"
+                         AbsoluteLayout.LayoutBounds="1, 0.1, .5, 0.5"
+                         AbsoluteLayout.LayoutFlags="All" >
+                        <CollectionView x:Name="multipleSelectionsCVLandscape"
+                                        ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
+                                        SelectionMode="Multiple"
+                                        HeightRequest="250"
+                                        MaximumHeightRequest="250"
+                                        SelectedItems="{Binding SelectedAnswers}"
+                                        SelectionChangedCommand="{Binding MultipleCVSelectionChangedCommand}"
+                                        IsVisible="{Binding IsVisibleRuleTypeMultiple}"
+                                        IsEnabled="{Binding IsVisibleRuleTypeMultiple}"
+                                        ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+            </StackLayout>
 
-                     <!--QType is SingleAnswer-->
-                     <CollectionView x:Name="singleSelectionCvLandscape"
-                                    ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
-                                    SelectionMode="Single"
-                                    SelectedItem="{Binding CurrentlySelectedAnswer, Mode=TwoWay}"
-                                    SelectionChangedCommand="{Binding SingleCVSelectionChangedCommand}"
-                                    SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
-                                    Margin="12,78,12,0"
-                                    IsVisible="{Binding IsVisibleRuleTypeSingle}"
-                                    IsEnabled="{Binding IsVisibleRuleTypeSingle}"
-                                    ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+            <!-- QuestionType is Text -->
+            <StackLayout IsVisible="{Binding IsVisibleQTypeText}"
+                        AbsoluteLayout.LayoutBounds="1, 0.1, .5, -.5"
+                        AbsoluteLayout.LayoutFlags="All" >
+                    <controls:TextEditorCardView BackgroundColor="lightCyan"/>
+            </StackLayout>
 
-                    <!--QType is MultipleAnswers-->
-                    <CollectionView x:Name="multipleSelectionsCVLandscape"
-                                    ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
-                                    SelectionMode="Multiple"
-                                    SelectedItems="{Binding SelectedAnswers}"
-                                    Margin="12,40,12,20"
-                                    SelectionChangedCommand="{Binding MultipleCVSelectionChangedCommand}"
-                                    IsVisible="{Binding IsVisibleRuleTypeMultiple}"
-                                    ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
+            <!-- REVIEW ANSWERS -->
+            <StackLayout IsVisible="{Binding IsVisibleAnswerReview}"
+                        AbsoluteLayout.LayoutBounds="1, 0.1, .5, -.5"
+                        AbsoluteLayout.LayoutFlags="All">
+                <CollectionView x:Name="responseCVLandscape"
+                                    ItemsSource="{Binding UserAnswerGroups}"
+                                    IsGrouped="True"
+                                    HeightRequest="200"
 
-                    <!--QuestionType is Text-->
-                    <StackLayout IsVisible="{Binding IsVisibleQTypeText}">
-                            <controls:TextEditorCardView />
-                    </StackLayout>
-
-                     <!--REVIEW ANSWERS-->
-                        <CollectionView x:Name="responseCVLandscape"
-                                        ItemsSource="{Binding UserAnswerGroups}"
-                                        IsGrouped="True"
-                                        Margin="15,40,15,40"
-                                        IsVisible="{Binding IsVisibleAnswerReview}"
-                                        BackgroundColor="Transparent"
-                                        ItemTemplate="{StaticResource AnswerReviewDataTemplate}"
-                                        GroupHeaderTemplate="{StaticResource AnswerReviewHeaderDataTemplate}">
-                            <CollectionView.Triggers>
-                                <Trigger TargetType="CollectionView"
-                                            Property="IsVisible"
-                                            Value="False">
-                                    <Setter Property="HeightRequest"
-                                            Value="0"/>
+                                    BackgroundColor="Transparent"
+                                    ItemTemplate="{StaticResource AnswerReviewDataTemplate}"
+                                    GroupHeaderTemplate="{StaticResource AnswerReviewHeaderDataTemplate}">
+                        <CollectionView.Triggers>
+                            <Trigger TargetType="CollectionView"
+                                        Property="IsVisible"
+                                        Value="False">
+                                <Setter Property="HeightRequest"
+                                        Value="0"/>
+                            </Trigger>
+                            <Trigger TargetType="CollectionView"
+                                        Property="IsVisible"
+                                        Value="True">
+                                <Setter Property="HeightRequest"
+                                        Value="575"/>
                                 </Trigger>
-                                <Trigger TargetType="CollectionView"
-                                            Property="IsVisible"
-                                            Value="True">
-                                    <Setter Property="HeightRequest"
-                                            Value="575"/>
-                                    </Trigger>
-                            </CollectionView.Triggers>
-                        </CollectionView>
-                </StackLayout>
-            </Grid>
-        </StackLayout>
+                        </CollectionView.Triggers>
+                    </CollectionView>
+            </StackLayout>
+      </AbsoluteLayout>
 
-        <StackLayout>
+                    <!-- REVIEW ANSWERS -->
+                    <!--<CollectionView x:Name="responseCVLandscape"
+                                    ItemsSource="{Binding UserAnswerGroups}"
+                                    IsGrouped="True"
+                                    Grid.Column="1"
+                                    Margin="15,40,15,40"
+                                    IsVisible="{Binding IsVisibleAnswerReview}"
+                                    BackgroundColor="Transparent"
+                                    ItemTemplate="{StaticResource AnswerReviewDataTemplate}"
+                                    GroupHeaderTemplate="{StaticResource AnswerReviewHeaderDataTemplate}">
+                        <CollectionView.Triggers>
+                            <Trigger TargetType="CollectionView"
+                                        Property="IsVisible"
+                                        Value="False">
+                                <Setter Property="HeightRequest"
+                                        Value="0"/>
+                            </Trigger>
+                            <Trigger TargetType="CollectionView"
+                                        Property="IsVisible"
+                                        Value="True">
+                                <Setter Property="HeightRequest"
+                                        Value="575"/>
+                                </Trigger>
+                        </CollectionView.Triggers>
+                    </CollectionView>-->
+                   <!-- </FlexLayout>-->
+                <!--</Grid>-->
+           <!-- </FlexLayout> -->
+       <!-- </VerticalStackLayout>-->
 
-            <!--QuestionType is Text-->
+        <!--<StackLayout>
+
+            QuestionType is Text
             <StackLayout IsVisible="{Binding IsVisibleThankYouText}">
                 <controls:EndOfSurveyView />
             </StackLayout>
 
 
-        </StackLayout>
+        </StackLayout>-->
 
     </StackLayout>
       

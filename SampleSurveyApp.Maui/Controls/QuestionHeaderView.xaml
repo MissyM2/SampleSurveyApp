@@ -64,7 +64,7 @@
 
         <!-- Landscape -->
         <Grid IsVisible="{Binding IsLandscape}">
-            <StackLayout Grid.Row="0" Padding="15,40,15,15" IsVisible="{Binding IsVisibleMainInstructionLbl}">
+            <StackLayout Grid.Row="0" IsVisible="{Binding IsVisibleMainInstructionLbl}">
 
                 <StackLayout BackgroundColor="{StaticResource Secondary}"
                              Padding="15"

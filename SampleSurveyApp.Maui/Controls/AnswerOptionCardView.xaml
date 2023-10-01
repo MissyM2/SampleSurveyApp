@@ -23,23 +23,18 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-    <StackLayout>
-          
         <Grid x:Name="responseGrid"
             ColumnDefinitions="*, 40,40"
-            RowDefinitions="40, 20">
+            RowDefinitions="20, 20"
+            VerticalOptions="Center">
 
             <VerticalStackLayout VerticalOptions="Center">
                 <Label Text="{Binding AText}" Margin="10,4,4,4" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">
-                <Label x:Name="isVisibleLabel" IsVisible="false" Text="{Binding IsSelected}"/>                                 
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Grid.Column="2" Grid.Row="0">
+        <VerticalStackLayout Grid.Column="1" Grid.Row="0">
                 <Image x:Name="checkMarkImage" Source="check.png" Margin="0,5,0,0" HeightRequest="20">
-                    <!-- Sets the checkmark visibility based on value of isVisibleLabel -->
+                     <!--Sets the checkmark visibility based on value of isVisibleLabel -->
                     <Image.Triggers>
                                 <DataTrigger TargetType="Image" Binding="{Binding IsSelected}" Value="True">
                                     <Setter Property="IsVisible" Value="True"/>
@@ -50,10 +45,13 @@
                          </Image.Triggers>
                     </Image>
             </VerticalStackLayout>
-           
-          
+
+            <VerticalStackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="Center">
+                <Label x:Name="isVisibleLabel" IsVisible="false" Text="{Binding IsSelected}"/>                                 
+            </VerticalStackLayout>
+
+            
         </Grid>
-        <BoxView Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" BackgroundColor="LightBlue" HeightRequest="1"/>
-    </StackLayout>
+
 </ContentView>
 
