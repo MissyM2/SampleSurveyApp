@@ -24,7 +24,7 @@
         </VisualStateManager.VisualStateGroups>
 
         <Grid x:Name="responseGrid"
-            ColumnDefinitions="*, 40,40"
+            ColumnDefinitions="225, 40,40"
             RowDefinitions="20, 20"
             VerticalOptions="Center">
 
@@ -32,8 +32,9 @@
                 <Label Text="{Binding AText}" Margin="10,4,4,4" />
             </VerticalStackLayout>
 
-        <VerticalStackLayout Grid.Column="1" Grid.Row="0">
+        <VerticalStackLayout Grid.Column="1" Grid.Row="0" BackgroundColor="Transparent">
                 <Image x:Name="checkMarkImage" Source="check.png" Margin="0,5,0,0" HeightRequest="20">
+
                      <!--Sets the checkmark visibility based on value of isVisibleLabel -->
                     <Image.Triggers>
                                 <DataTrigger TargetType="Image" Binding="{Binding IsSelected}" Value="True">

@@ -82,14 +82,14 @@
                                FontAttributes="Bold"
                                FontSize="{OnPlatform iOS=18, Android=20}" />
 
-                        <Label Text="{Binding MainInstructionLbl}" Padding="0,25,0,25" 
+                        <Label Text="{Binding MainInstructionLbl}" Padding="0,25,0,0" 
                                 IsVisible="{Binding IsVisibleMainInstructionLbl}"
                                 TextColor="{StaticResource Black}"
                                 VerticalOptions="Center"
                                 HorizontalOptions="Start"/>
                     </StackLayout>
 
-                    <StackLayout Padding="0,25,0,25" >
+                    <StackLayout Padding="0,25,0,0" >
                         <Label Margin="10,0,20,0"
                                IsVisible="{Binding IsVisibleTextInstructionLbl}"
                                 TextColor="{StaticResource Black}"
