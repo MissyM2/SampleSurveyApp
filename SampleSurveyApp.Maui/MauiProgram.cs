@@ -29,12 +29,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IMessageService, MessageService>();
 
-        builder.Services.AddSingleton<SurveyPage>();
-        builder.Services.AddSingleton<SurveyPageVM>();
+        builder.Services.AddTransient<SurveyPage>();
+        builder.Services.AddTransient<SurveyPageVM>();
 
         builder.Services.AddSingleton<OverviewPage>();
 
-        builder.Services.AddSingleton<ShellPageVM>();
+        builder.Services.AddTransient<ShellPageVM>();
 
 
         return builder.Build();

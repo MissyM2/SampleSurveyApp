@@ -257,45 +257,62 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task Init()
         {
+            try
+            {
+                await _surveyQuestionModelRepository.DeleteAllAsync();
+                var aqd = new AddQuestionData(_surveyQuestionModelRepository);
+                await aqd.AddQuestionsAsync();
+
+                await _surveyAnswerModelRepository.DeleteAllAsync();
+
+                var aad = new AddAnswerData(_surveyAnswerModelRepository);
+                await aad.AddAnswersAsync();
+
+                if (answerSource.Any()) answerSource.Clear();
+                answerSource = await _surveyAnswerModelRepository.GetAllAsync();
+
+                foreach (var answer in answerSource)
+                {
+                    AllPossibleAnswerOptionsCollection.Add(answer);
+                }
+
+                // get all possible questions and answers
+                if (questionSource.Any()) questionSource.Clear();
+                questionSource = await _surveyQuestionModelRepository.GetAllAsync();
+
+                foreach (var question in questionSource)
+                {
+                    AllPossibleQuestionsCollection.Add(question);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SurveyPageVM.cs:Init((: '{ex}'");
+            }
             
-            await _surveyQuestionModelRepository.DeleteAllAsync();
-            var aqd = new AddQuestionData(_surveyQuestionModelRepository);
-            await aqd.AddQuestionsAsync();
-
-            await _surveyAnswerModelRepository.DeleteAllAsync();
-
-            var aad = new AddAnswerData(_surveyAnswerModelRepository);
-            await aad.AddAnswersAsync();
-
-            if (answerSource.Any()) answerSource.Clear();
-            answerSource = await _surveyAnswerModelRepository.GetAllAsync();
-
-            foreach (var answer in answerSource)
-            {
-                AllPossibleAnswerOptionsCollection.Add(answer);
-            }
-
-            // get all possible questions and answers
-            if (questionSource.Any()) questionSource.Clear();
-            questionSource = await _surveyQuestionModelRepository.GetAllAsync();
-
-            foreach (var question in questionSource)
-            {
-                AllPossibleQuestionsCollection.Add(question);
-            }
+            
         }
 
         private void GetAnswerOptionsForCurrentQuestion()
         {
-            AnswerOptionsForCurrentQuestionCollection.Clear();
-            foreach (var answer in answerSource)
+            try
             {
-                if (answer.CurrQCode == CurrentQuestion.CurrQCode)
+                AnswerOptionsForCurrentQuestionCollection.Clear();
+                foreach (var answer in answerSource)
                 {
-                    answer.AText = AppResources.ResourceManager.GetString(answer.ATextLocal, CultureInfo.CurrentCulture);
-                    AnswerOptionsForCurrentQuestionCollection.Add(answer);
+                    if (answer.CurrQCode == CurrentQuestion.CurrQCode)
+                    {
+                        answer.AText = AppResources.ResourceManager.GetString(answer.ATextLocal, CultureInfo.CurrentCulture);
+                        AnswerOptionsForCurrentQuestionCollection.Add(answer);
+                    }
                 }
+
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SurveyPageVM.cs:GetAnswerOptionsForCurrentQuestion((: '{ex}'");
+            }
+            
         }
 
 
@@ -304,141 +321,145 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task Navigate(string direction)
         {
-            Console.WriteLine("NavigateClicked");
-            //CurrentlySelectedAnswer = null;
-
-            if (direction == "Next")
+            try
             {
-                
-                // request answer if empty
-
-                if (CurrentQuestion.NextQCode == -2)
+                if (direction == "Next")
                 {
-                    if (CurrentQuestion.QType == "Text" && TextLen < 3)
-                    {
-                        Debug.WriteLine("no text entered");
-                        await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerTextMsg + " " + TextLen, "OK");
-                        return;
-                    }
 
-                    if (CurrentQuestion.QType == "SingleAnswer")
-                    {
-                        Debug.WriteLine("CurrentQuestion.Qtype ==SingleAnswer: no answer selected");
-                        await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerSingleMsg, "OK");
-                        return;
-                    }
+                    // request answer if empty
 
-                    if (CurrentQuestion.QType == "MultipleAnswers")
-                    {
-                        Debug.WriteLine("CurrentQuestion.QType == MultipleAnswers: no answer selected");
-                        await _messageService.CustomAlert(AppResources.NoAnswerMultipleMsgTitle, AppResources.NoAnswerMultipleMsg, "OK");
-                        return;
-                    }
-                    
-                }
-
-                // multiple choice and multiple selection answers are chosen before the Next is tapped
-                if (CurrentQuestion.QType == "Text")
-                {
-                    //  there is only one answer option for a text q
-                    CurrentlySelectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode);
-                }
-
-
-                // set current nav rule
-                if (CurrentQuestion.NextQCode == -1)  // next screen is review
-                {
-                    CurrentNavRule = -1;
-                }
-
-                if (CurrentNavRule == -1) // any question with a NavRule of -1, meaning the next screen is the AnswerReview
-                {
-                    // set current nav rule
                     if (CurrentQuestion.NextQCode == -2)
                     {
-                        CurrentNavRule = -1;
+                        if (CurrentQuestion.QType == "Text" && TextLen < 3)
+                        {
+                            await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerTextMsg + " " + TextLen, "OK");
+                            return;
+                        }
+
+                        if (CurrentQuestion.QType == "SingleAnswer")
+                        {
+                            await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerSingleMsg, "OK");
+                            return;
+                        }
+
+                        if (CurrentQuestion.QType == "MultipleAnswers")
+                        {
+                            await _messageService.CustomAlert(AppResources.NoAnswerMultipleMsgTitle, AppResources.NoAnswerMultipleMsg, "OK");
+                            return;
+                        }
+
                     }
 
-                    // set 
-                    IsAnswerReview = true;
-                    
-                    CurrentQuestion.NextQCode = -1;
-                    CreateUserResponsesCollection();
+                    // multiple choice and multiple selection answers are chosen before the Next is tapped
+                    if (CurrentQuestion.QType == "Text")
+                    {
+                        //  there is only one answer option for a text q
+                        CurrentlySelectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode);
+                    }
 
-                    // set title view
-                    SetTitleViewValuesOnOpen();
 
-                    // set screen values based on properties in CurrentQuestion
-                    SetScreenValuesOnOpen();
-
-                }
-                else  // all questions with a NavRule other than -1, meaning the next screen is another question
-                {
                     // set current nav rule
-                    CurrentNavRule = CurrentQuestion.NextQCode;
-                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
-
-                    // set prevqcode on CurrentQuestion
-                    NextCurrentQuestion.PrevQCode = CurrentQuestion.CurrQCode;
-
-                    // get new current question
-                    CurrentQuestion = NextCurrentQuestion;
-                    
-                    CurrentQuestion.IsSelected = true;
-
-
-                    // get answers for current question
-                    GetAnswerOptionsForCurrentQuestion();
-
-                    // set title view
-                    SetTitleViewValuesOnOpen();
-                }
-
-
-            }
-            else // direction == "Prev"
-            {
-                // set current nav rule
-                if (IsAnswerReview == true)
-                {
-                    if (CurrentQuestion.NextQCode == -1)
+                    if (CurrentQuestion.NextQCode == -1)  // next screen is review
                     {
                         CurrentNavRule = -1;
                     }
-                }
 
-                IsAnswerReview = false;
-                
-                if (CurrentNavRule == -1)  // first question from review
+                    if (CurrentNavRule == -1) // any question with a NavRule of -1, meaning the next screen is the AnswerReview
+                    {
+                        // set current nav rule
+                        if (CurrentQuestion.NextQCode == -2)
+                        {
+                            CurrentNavRule = -1;
+                        }
+
+                        // set 
+                        IsAnswerReview = true;
+
+                        CurrentQuestion.NextQCode = -1;
+                        CreateUserResponsesCollection();
+
+                        // set title view
+                        SetTitleViewValuesOnOpen();
+
+                        // set screen values based on properties in CurrentQuestion
+                        SetScreenValuesOnOpen();
+
+                    }
+                    else  // all questions with a NavRule other than -1, meaning the next screen is another question
+                    {
+                        // set current nav rule
+                        CurrentNavRule = CurrentQuestion.NextQCode;
+                        NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
+
+                        // set prevqcode on CurrentQuestion
+                        NextCurrentQuestion.PrevQCode = CurrentQuestion.CurrQCode;
+
+                        // get new current question
+                        CurrentQuestion = NextCurrentQuestion;
+
+                        CurrentQuestion.IsSelected = true;
+
+
+                        // get answers for current question
+                        GetAnswerOptionsForCurrentQuestion();
+
+                        // set title view
+                        SetTitleViewValuesOnOpen();
+                    }
+
+
+                }
+                else // direction == "Prev"
                 {
-                    // set current navigation rule
-                    CurrentNavRule = CurrentQuestion.CurrQCode;
+                    // set current nav rule
+                    if (IsAnswerReview == true)
+                    {
+                        if (CurrentQuestion.NextQCode == -1)
+                        {
+                            CurrentNavRule = -1;
+                        }
+                    }
 
-                    // get answers for current question
-                    GetAnswerOptionsForCurrentQuestion();
+                    IsAnswerReview = false;
 
-                    // set title view
-                    SetTitleViewValuesOnOpen();
+                    if (CurrentNavRule == -1)  // first question from review
+                    {
+                        // set current navigation rule
+                        CurrentNavRule = CurrentQuestion.CurrQCode;
+
+                        // get answers for current question
+                        GetAnswerOptionsForCurrentQuestion();
+
+                        // set title view
+                        SetTitleViewValuesOnOpen();
+                    }
+                    else // all others
+                    {
+                        // set current navigation rule
+                        CurrentNavRule = CurrentQuestion.PrevQCode;
+                        NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
+
+                        // set CurrentQuestion
+                        CurrentQuestion = NextCurrentQuestion;
+
+                        // get answers for current question
+                        GetAnswerOptionsForCurrentQuestion();
+
+                        // set title view
+                        SetTitleViewValuesOnOpen();
+                    }
                 }
-                else // all others
-                {
-                    // set current navigation rule
-                    CurrentNavRule = CurrentQuestion.PrevQCode;
-                    NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
 
-                    CurrentQuestion = NextCurrentQuestion;
-                    Debug.WriteLine("What is IsSelected on Prev? " + IsSelected);
 
-                    // get answers for current question
-                    GetAnswerOptionsForCurrentQuestion();
+                SetScreenValuesOnOpen();
 
-                    // set title view
-                    SetTitleViewValuesOnOpen();
-                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"SurveyPageVM.cs:Navigate: '{ex}'");
             }
 
-
-            SetScreenValuesOnOpen();
+           
 
         }
 
@@ -450,51 +471,27 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         void SingleCVSelectionChanged() //Single Answer
         {
-            Debug.WriteLine("Single CV Selection Changed");
-            var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode == CurrentlySelectedAnswer.ACode);
-            selectedAnswer.IsSelected = true;
-            if (CurrentQuestion.QType == "Text")
+            try
             {
-                selectedAnswer.AText = UserTextAnswer;
-            }
-
-            if (CurrentQuestion.QType != "Text")
-            {
-                var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
-                otherAnswer.IsSelected = false;
-            }
-
-            CurrentNavRule = selectedAnswer.NavRule;
-
-
-            if (CurrentlySelectedAnswer.NavRule != -1)
-            {
-                CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
-                RightBtnLbl = AppResources.RightBtnLblNext;
-            }
-            else
-            {
-                CurrentQuestion.NextQCode = -1;
-                AnswerReviewIsNext = true;
-                RightBtnLbl = AppResources.RightBtnLblReview;
-            }
-
-            AnswerHasBeenSelected = true;
-        }
-
-        [RelayCommand]
-        void MultipleCVSelectionChanged()  // Multiple Answers
-        {
-            Debug.WriteLine("Multiple CV Selection Changed");
-            foreach (var item in SelectedAnswers)
-            {
-                var currAnswer = item as SurveyAnswerModel;
-                currAnswer.IsSelected = true;
-
-                //Check to see if this is the last question
-                if (currAnswer.NavRule != -1)
+                var selectedAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode == CurrentlySelectedAnswer.ACode);
+                selectedAnswer.IsSelected = true;
+                if (CurrentQuestion.QType == "Text")
                 {
-                    CurrentQuestion.NextQCode = currAnswer.NavRule;
+                    selectedAnswer.AText = UserTextAnswer;
+                }
+
+                if (CurrentQuestion.QType != "Text")
+                {
+                    var otherAnswer = AnswerOptionsForCurrentQuestionCollection.FirstOrDefault(x => x.CurrQCode == CurrentlySelectedAnswer.CurrQCode && x.ACode != CurrentlySelectedAnswer.ACode);
+                    otherAnswer.IsSelected = false;
+                }
+
+                CurrentNavRule = selectedAnswer.NavRule;
+
+
+                if (CurrentlySelectedAnswer.NavRule != -1)
+                {
+                    CurrentQuestion.NextQCode = CurrentlySelectedAnswer.NavRule;
                     RightBtnLbl = AppResources.RightBtnLblNext;
                 }
                 else
@@ -503,28 +500,73 @@ namespace SampleSurveyApp.Core.ViewModels
                     AnswerReviewIsNext = true;
                     RightBtnLbl = AppResources.RightBtnLblReview;
                 }
+
+                AnswerHasBeenSelected = true;
             }
-            AnswerHasBeenSelected = true;
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SurveyPageVM.cs:SingleCVSelectionChanged: '{ex}'");
+            }
+           
+        }
+
+        [RelayCommand]
+        void MultipleCVSelectionChanged()  // Multiple Answers
+        {
+            try
+            {
+                foreach (var item in SelectedAnswers)
+                {
+                    var currAnswer = item as SurveyAnswerModel;
+                    currAnswer.IsSelected = true;
+
+                    //Check to see if this is the last question
+                    if (currAnswer.NavRule != -1)
+                    {
+                        CurrentQuestion.NextQCode = currAnswer.NavRule;
+                        RightBtnLbl = AppResources.RightBtnLblNext;
+                    }
+                    else
+                    {
+                        CurrentQuestion.NextQCode = -1;
+                        AnswerReviewIsNext = true;
+                        RightBtnLbl = AppResources.RightBtnLblReview;
+                    }
+                }
+                AnswerHasBeenSelected = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SurveyPageVM.cs:MultipleCVSelectionChanged: '{ex}'");
+            }
+            
         }
 
         [RelayCommand]
         public void UserTextAnswerChanged()
         {
-            Debug.WriteLine("User Text Answer");
-            TextLen = UserTextAnswer.Length;
-            if (TextLen == 0)
+            try
             {
-                Debug.WriteLine("User has added 0 character." + TextLen);
+                TextLen = UserTextAnswer.Length;
+                if (TextLen == 0)
+                {
+                    Debug.WriteLine("User has added 0 character." + TextLen);
 
+                }
+                else if (TextLen == 1)
+                {
+                    Debug.WriteLine("User has added 1 character." + TextLen);
+                }
+                else
+                {
+                    Debug.WriteLine("more than 1 character" + TextLen);
+                }
             }
-            else if (TextLen == 1)
+            catch (Exception ex)
             {
-                Debug.WriteLine("User has added 1 character." + TextLen);
+                Debug.WriteLine($"SurveyPageVM.cs:UserTextAnswerChanged: '{ex}'");
             }
-            else
-            {
-                Debug.WriteLine("more than 1 character" + TextLen);
-            }
+            
         }
 
         #endregion
@@ -534,139 +576,153 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public void SetTitleViewValuesOnOpen()
         {
-            
-            if (SurveyIsSaved == true)
+            try
             {
-                LeftBtnLbl = "";
-                IsWorkingLeftBtn = false;
-                RightBtnLbl = "";
-                IsWorkingRightBtn = false;
-                ScreenNameLbl = AppResources.ScreenNameLblEndOfSurvey;
-            }
-            else
-            {
-                if (IsAnswerReview == false)
+                if (SurveyIsSaved == true)
                 {
-                    IsWorkingRightBtn = true;
-                    ScreenNameLbl = AppResources.ResourceManager.GetString(CurrentQuestion.CurrQCodeDescLocal, CultureInfo.CurrentCulture);
-                    if (CurrentQuestion.PrevQCode == 0)
-                    {
-                        LeftBtnLbl = "";
-                        IsWorkingLeftBtn = false;
-                    }
-                    else
-                    {
-                        LeftBtnLbl = AppResources.LeftBtnLblPrev;
-                        IsWorkingLeftBtn = true;
-                    }
-
-                    if (CurrentQuestion.NextQCode == -1)
-                    {
-                        RightBtnLbl = AppResources.RightBtnLblReview;
-                    }
-                    else
-                    {
-                        RightBtnLbl = AppResources.RightBtnLblNext;
-                    }
+                    LeftBtnLbl = "";
+                    IsWorkingLeftBtn = false;
+                    RightBtnLbl = "";
+                    IsWorkingRightBtn = false;
+                    ScreenNameLbl = AppResources.ScreenNameLblEndOfSurvey;
                 }
                 else
                 {
-                    ScreenNameLbl = AppResources.ScreenNameLblReview;
-                    LeftBtnLbl = AppResources.LeftBtnLblPrev;
-                    RightBtnLbl = "";
-                    IsWorkingRightBtn = false;
+                    if (IsAnswerReview == false)
+                    {
+                        IsWorkingRightBtn = true;
+                        ScreenNameLbl = AppResources.ResourceManager.GetString(CurrentQuestion.CurrQCodeDescLocal, CultureInfo.CurrentCulture);
+                        if (CurrentQuestion.PrevQCode == 0)
+                        {
+                            LeftBtnLbl = "";
+                            IsWorkingLeftBtn = false;
+                        }
+                        else
+                        {
+                            LeftBtnLbl = AppResources.LeftBtnLblPrev;
+                            IsWorkingLeftBtn = true;
+                        }
 
+                        if (CurrentQuestion.NextQCode == -1)
+                        {
+                            RightBtnLbl = AppResources.RightBtnLblReview;
+                        }
+                        else
+                        {
+                            RightBtnLbl = AppResources.RightBtnLblNext;
+                        }
+                    }
+                    else
+                    {
+                        ScreenNameLbl = AppResources.ScreenNameLblReview;
+                        LeftBtnLbl = AppResources.LeftBtnLblPrev;
+                        RightBtnLbl = "";
+                        IsWorkingRightBtn = false;
+
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SurveyPageVM.cs:SetTitleViewValuesOnOpen: '{ex}'");
             }
         }
 
 
         public void SetScreenValuesOnOpen()
         {
-            SurveyId = InsertedSurvey.Suid.ToString();
-            IsVisibleSurveyStartButton = false;
+            try
+            {
+                SurveyId = InsertedSurvey.Suid.ToString();
+                IsVisibleSurveyStartButton = false;
 
-            if (SurveyIsSaved == true)
-            {
-                IsVisibleSurveyHeader = false;
-                IsVisibleRuleTypeSingle = false;
-                IsVisibleRuleTypeMultiple = false;
-                IsVisibleAnswerReview = false;
-                IsVisibleQTypeText = false;
-                IsVisibleThankYouText = true;
-            }
-            else
-            {
-                IsVisibleSurveyHeader = true;
-                
-                if (IsAnswerReview == false)
+                if (SurveyIsSaved == true)
                 {
-
-                    IsVisibleMainInstructionLbl = false;
-                    IsVisibleTextInstructionLbl = false;
-                    MainQuestionLbl = AppResources.ResourceManager.GetString(CurrentQuestion.QTextLocal, CultureInfo.CurrentCulture);
-                    IsVisibleRuleTypeSingle = true;
+                    IsVisibleSurveyHeader = false;
+                    IsVisibleRuleTypeSingle = false;
                     IsVisibleRuleTypeMultiple = false;
-                    IsVisibleQTypeText = false;
                     IsVisibleAnswerReview = false;
-                    IsVisibleThankYouText = false;
+                    IsVisibleQTypeText = false;
+                    IsVisibleThankYouText = true;
+                }
+                else
+                {
+                    IsVisibleSurveyHeader = true;
 
-                    if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
+                    if (IsAnswerReview == false)
                     {
-                        IsVisibleMainInstructionLbl = true;
+
+                        IsVisibleMainInstructionLbl = false;
                         IsVisibleTextInstructionLbl = false;
+                        MainQuestionLbl = AppResources.ResourceManager.GetString(CurrentQuestion.QTextLocal, CultureInfo.CurrentCulture);
                         IsVisibleRuleTypeSingle = true;
                         IsVisibleRuleTypeMultiple = false;
                         IsVisibleQTypeText = false;
                         IsVisibleAnswerReview = false;
                         IsVisibleThankYouText = false;
-                        MainInstructionLbl = AppResources.MainInstructionLblSingleAnswer;
+
+                        if (CurrentQuestion.QType == "SingleAnswer")     // CurrentQuestion.QType must be SingleAnswer
+                        {
+                            IsVisibleMainInstructionLbl = true;
+                            IsVisibleTextInstructionLbl = false;
+                            IsVisibleRuleTypeSingle = true;
+                            IsVisibleRuleTypeMultiple = false;
+                            IsVisibleQTypeText = false;
+                            IsVisibleAnswerReview = false;
+                            IsVisibleThankYouText = false;
+                            MainInstructionLbl = AppResources.MainInstructionLblSingleAnswer;
+                            IsVisibleMainInstructionLbl = true;
+                            IsVisibleTextInstructionLbl = false;
+                        }
+                        else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
+                        {
+                            IsVisibleMainInstructionLbl = false;
+                            IsVisibleTextInstructionLbl = false;
+                            IsVisibleRuleTypeSingle = false;
+                            IsVisibleRuleTypeMultiple = true;
+                            IsVisibleQTypeText = false;
+                            IsVisibleAnswerReview = false;
+                            IsVisibleThankYouText = false;
+                            MainInstructionLbl = AppResources.MainInstructionLblMultipleAnswers;
+                            IsVisibleMainInstructionLbl = true;
+                            IsVisibleTextInstructionLbl = false;
+                        }
+                        else // CurrentQuestion.QType must be Text
+                        {
+                            IsVisibleMainInstructionLbl = false;
+                            IsVisibleTextInstructionLbl = true;
+                            IsVisibleRuleTypeSingle = false;
+                            IsVisibleRuleTypeMultiple = false;
+                            IsVisibleAnswerReview = false;
+                            IsVisibleQTypeText = true;
+                            IsVisibleThankYouText = false;
+                            IsVisibleMainInstructionLbl = false;
+                            IsVisibleMainInstructionLbl = true;
+                            IsVisibleTextInstructionLbl = true;
+                        }
+                    }
+                    else  // must be review page
+                    {
+                        SaveSurveyLbl = AppResources.SaveSurveyBtnLbl;
+                        MainQuestionLbl = AppResources.MainQuestionLblReview;
+                        MainInstructionLbl = AppResources.MainInstructionLblReview;
                         IsVisibleMainInstructionLbl = true;
                         IsVisibleTextInstructionLbl = false;
-                    }
-                    else if (CurrentQuestion.QType == "MultipleAnswers")     // CurrentQuestion.QType must be MultipleAnswers
-                    {
-                        IsVisibleMainInstructionLbl = false;
                         IsVisibleTextInstructionLbl = false;
-                        IsVisibleRuleTypeSingle = false;
-                        IsVisibleRuleTypeMultiple = true;
-                        IsVisibleQTypeText = false;
-                        IsVisibleAnswerReview = false;
-                        IsVisibleThankYouText = false;
-                        MainInstructionLbl = AppResources.MainInstructionLblMultipleAnswers;
-                        IsVisibleMainInstructionLbl = true;
-                        IsVisibleTextInstructionLbl = false;
-                    }
-                    else // CurrentQuestion.QType must be Text
-                    {
-                        IsVisibleMainInstructionLbl = false;
-                        IsVisibleTextInstructionLbl = true;
                         IsVisibleRuleTypeSingle = false;
                         IsVisibleRuleTypeMultiple = false;
-                        IsVisibleAnswerReview = false;
-                        IsVisibleQTypeText = true;
+                        IsVisibleAnswerReview = true;
+                        IsVisibleQTypeText = false;
                         IsVisibleThankYouText = false;
-                        IsVisibleMainInstructionLbl=false;
-                        IsVisibleMainInstructionLbl = true;
-                        IsVisibleTextInstructionLbl = true;
+
                     }
                 }
-                else  // must be review page
-                {
-                    SaveSurveyLbl = AppResources.SaveSurveyBtnLbl;
-                    MainQuestionLbl = AppResources.MainQuestionLblReview;
-                    MainInstructionLbl = AppResources.MainInstructionLblReview;
-                    IsVisibleMainInstructionLbl = true;
-                    IsVisibleTextInstructionLbl = false;
-                    IsVisibleTextInstructionLbl = false;
-                    IsVisibleRuleTypeSingle = false;
-                    IsVisibleRuleTypeMultiple = false;
-                    IsVisibleAnswerReview = true;
-                    IsVisibleQTypeText = false;
-                    IsVisibleThankYouText = false;
-
-                }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SurveyPageVM.cs:SetScreenValuesOnOpen: '{ex}'");
+            }
+            
         }
 
         #endregion
@@ -676,15 +732,23 @@ namespace SampleSurveyApp.Core.ViewModels
 
         private void CreateUserResponsesCollection()
         {
-            UserAnswerGroups.Clear();
-            var dict = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true)).GroupBy(o => o.CurrQCode)
-                .ToDictionary(g => g.Key, g => g.ToList());
+            try
+            {
+                UserAnswerGroups.Clear();
+                var dict = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true)).GroupBy(o => o.CurrQCode)
+                    .ToDictionary(g => g.Key, g => g.ToList());
 
-            foreach (KeyValuePair<int, List<SurveyAnswerModel>> item in dict)
-            {          
-                var q = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode == item.Key);
-                UserAnswerGroups.Add(new AnswerGroup(item.Key, q.QText, new List<SurveyAnswerModel>(item.Value)));
+                foreach (KeyValuePair<int, List<SurveyAnswerModel>> item in dict)
+                {
+                    var q = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode == item.Key);
+                    UserAnswerGroups.Add(new AnswerGroup(item.Key, q.QText, new List<SurveyAnswerModel>(item.Value)));
+                }
             }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"SurveyPageVM.cs:CreateUserResponsesCollection: '{ex}'");
+            }
+           
         }
 
         public class AnswerGroup : List<SurveyAnswerModel>
@@ -706,67 +770,83 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task CreateSurvey()
         {
-            if (IsBusy) return;
+            try
+            {
+                if (IsBusy) return;
 
-            IsBusy = true;
-            NewSurvey = new SurveyModel();
-            NewSurvey.SurveyDate = DateTime.Now;
-            NewSurvey.SurveyStatus = "I";
-            NewSurvey.SyncStatus = "I";
-            NewSurvey.Suid = Guid.NewGuid(); ;
+                IsBusy = true;
+                NewSurvey = new SurveyModel();
+                NewSurvey.SurveyDate = DateTime.Now;
+                NewSurvey.SurveyStatus = "I";
+                NewSurvey.SyncStatus = "I";
+                NewSurvey.Suid = Guid.NewGuid(); ;
 
 
-            // insert a new record
-            await _surveyModelRepository.InsertAsync(NewSurvey);
-            InsertedSurvey = NewSurvey;
+                // insert a new record
+                await _surveyModelRepository.InsertAsync(NewSurvey);
+                InsertedSurvey = NewSurvey;
 
-            //get curr q
-            CurrentQuestion = AllPossibleQuestionsCollection[0];
-            CurrentQuestion.CurrQCodeDesc = AppResources.ResourceManager.GetString(CurrentQuestion.CurrQCodeDescLocal, CultureInfo.CurrentCulture);
+                //get curr q
+                CurrentQuestion = AllPossibleQuestionsCollection[0];
+                CurrentQuestion.CurrQCodeDesc = AppResources.ResourceManager.GetString(CurrentQuestion.CurrQCodeDescLocal, CultureInfo.CurrentCulture);
 
-            // get answers for curr q
-           GetAnswerOptionsForCurrentQuestion();
+                // get answers for curr q
+                GetAnswerOptionsForCurrentQuestion();
 
-            // update question in q collection
-            var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
-            foundQ.IsSelected = true;
-            foundQ.PrevQCode = 0;
+                // update question in q collection
+                var foundQ = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode.Equals(CurrentQuestion.CurrQCode));
+                foundQ.IsSelected = true;
+                foundQ.PrevQCode = 0;
 
-            IsVisibleSurveyHeader = false;
+                IsVisibleSurveyHeader = false;
 
-            // set screen values based on properties in CurrentQuestion
+                // set screen values based on properties in CurrentQuestion
 
-            SetTitleViewValuesOnOpen();
-            SetScreenValuesOnOpen();
-            //Shell.Current.FlyoutIsPresented = false;
-            Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
-            IsBusy = false;
+                SetTitleViewValuesOnOpen();
+                SetScreenValuesOnOpen();
+                //Shell.Current.FlyoutIsPresented = false;
+                Shell.Current.FlyoutBehavior = FlyoutBehavior.Disabled;
+                IsBusy = false;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SurveyPageVM.cs:CreateSurvey: '{ex}'");
+            }
+            
 
         }
 
         [RelayCommand]
         public async Task SaveSurvey()
         {
-            // save survey responses
-            var answerList = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true));
-            foreach (var item in answerList)
+            try
             {
+                // save survey responses
+                var answerList = AllPossibleAnswerOptionsCollection.Where(x => x.IsSelected.Equals(true));
+                foreach (var item in answerList)
+                {
 
-                NewResponse = new SurveyResponseModel();
-                NewResponse.SurveyId = InsertedSurvey.Suid;
-                NewResponse.CurrQCode = item.CurrQCode;
-                var founditem = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode == item.CurrQCode);
-                NewResponse.QText = founditem.QText;
-                NewResponse.ACode = item.ACode;
-                NewResponse.AText = item.AText;
+                    NewResponse = new SurveyResponseModel();
+                    NewResponse.SurveyId = InsertedSurvey.Suid;
+                    NewResponse.CurrQCode = item.CurrQCode;
+                    var founditem = AllPossibleQuestionsCollection.FirstOrDefault(x => x.CurrQCode == item.CurrQCode);
+                    NewResponse.QText = founditem.QText;
+                    NewResponse.ACode = item.ACode;
+                    NewResponse.AText = item.AText;
 
-                await _surveyResponseModelRepository.InsertAsync(NewResponse);
+                    await _surveyResponseModelRepository.InsertAsync(NewResponse);
+                }
+
+                SurveyIsSaved = true;
+
+                SetTitleViewValuesOnOpen();
+                SetScreenValuesOnOpen();
             }
-
-            SurveyIsSaved = true;
-
-            SetTitleViewValuesOnOpen();
-            SetScreenValuesOnOpen();
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SurveyPageVM.cs:SaveSurvey: '{ex}'");
+            }
+            
 
         }
 

@@ -31,51 +31,83 @@ public partial class SurveyPage : ContentPage
 
     private void Current_MainDisplayInfoChanged(object sender, DisplayInfoChangedEventArgs e)
     {
-        //Shell.Current.DisplayAlert("Orientation", $"Current Orientation: {DeviceDisplay.Current.MainDisplayInfo.Orientation}", "OK");
-        var vm = (SurveyPageVM)BindingContext;
-        if (DeviceDisplay.Current.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
+        try
         {
+            //Shell.Current.DisplayAlert("Orientation", $"Current Orientation: {DeviceDisplay.Current.MainDisplayInfo.Orientation}", "OK");
+            var vm = (SurveyPageVM)BindingContext;
+            if (DeviceDisplay.Current.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
+            {
 
-            
-            vm.ScreenHeight = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Height;
-            vm.ScreenWidth = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Width;
-            vm.IsLandscape = true;
-            vm.IsPortrait = false;
-            vm.ScrollViewScreenHeight = vm.ScreenHeight - 200;
+
+                vm.ScreenHeight = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Height;
+                vm.ScreenWidth = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Width;
+                vm.IsLandscape = true;
+                vm.IsPortrait = false;
+                vm.ScrollViewScreenHeight = vm.ScreenHeight - 200;
+
+            }
+            else
+            {
+                vm.IsLandscape = false;
+                vm.IsPortrait = true;
+                vm.ScreenHeight = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Height;
+                vm.ScreenWidth = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Width;
+                vm.ScrollViewScreenHeight = vm.ScreenHeight - 200;
+            }
 
         }
-        else
+        catch (Exception ex)
         {
-            vm.IsLandscape = false;
-            vm.IsPortrait = true;
-            vm.ScreenHeight = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Height;
-            vm.ScreenWidth = Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfo.Width;
-            vm.ScrollViewScreenHeight = vm.ScreenHeight - 200;
+            Debug.WriteLine($"SurveyPage.xaml.cs:Current_MainDisplayInfoChanged: '{ex}'");
         }
+        
     }
 
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        await Shell.Current.DisplayAlert("Orientation", DeviceDisplay.Current.MainDisplayInfo.Orientation.ToString(), "OK");
 
+        try
+        {
+            await Shell.Current.DisplayAlert("Orientation", DeviceDisplay.Current.MainDisplayInfo.Orientation.ToString(), "OK");
+            var vm = (SurveyPageVM)BindingContext;
+            vm.ScreenNameLbl = AppResources.ScreenNameLblStart;
+            Debug.WriteLine($"Normal state active: {vm.IsSelected}");
+            await vm.Init();
 
-
-        var vm = (SurveyPageVM)BindingContext;
-        vm.ScreenNameLbl= AppResources.ScreenNameLblStart;
-        Debug.WriteLine($"Normal state active: {vm.IsSelected}");
-        await vm.Init();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"SurveyPage.xaml.cs:OnAppearing: '{ex}'");
+        }
+        
     }
 
     void OnNormalStateIsActiveChanged(object sender, EventArgs e)
     {
-        StateTriggerBase stateTrigger = sender as StateTriggerBase;
-        Debug.WriteLine($"Normal state active: {stateTrigger.IsActive}");
+        try
+        {
+            StateTriggerBase stateTrigger = sender as StateTriggerBase;
+            Debug.WriteLine($"Normal state active: {stateTrigger.IsActive}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"SurveyPage.xaml.cs:OnNormalStateIsActiveChanged(: '{ex}'");
+        }
+        
     }
 
     void OnSelectedStateIsActiveChanged(object sender, EventArgs e)
     {
-        StateTriggerBase stateTrigger = sender as StateTriggerBase;
-        Debug.WriteLine($"Selected state active: {stateTrigger.IsActive}");
+        try
+        {
+            StateTriggerBase stateTrigger = sender as StateTriggerBase;
+            Debug.WriteLine($"Selected state active: {stateTrigger.IsActive}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"SurveyPage.xaml.cs:OnSelectedStateIsActiveChanged(: '{ex}'");
+        }
+
     }
 }

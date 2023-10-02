@@ -89,7 +89,7 @@ namespace SampleSurveyApp.Core.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
+                Debug.WriteLine($"ShellPageVM.cs:DeleteAllSurveys: Unable to delete all surveys: {ex.Message}");
                 await _messageService.CustomAlert("Error", "Failed to delete all surveys", "OK");
             }
             finally
@@ -123,7 +123,7 @@ namespace SampleSurveyApp.Core.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unable to delete all surveys: {ex.Message}");
+                Debug.WriteLine($"ShellPageVM.cs:DeleteAllResponses: Unable to delete all responses: {ex.Message}");
                 await _messageService.CustomAlert("Error", "Failed to delete all responses", "OK");
 
             }
@@ -136,25 +136,43 @@ namespace SampleSurveyApp.Core.ViewModels
         [RelayCommand]
         public async Task GetLanguage()
         {
-            Debug.WriteLine("GetLanguage: Culture of {0} in application domain {1}: {2}",
+            try
+            {
+                Debug.WriteLine("GetLanguage: Culture of {0} in application domain {1}: {2}",
                           Thread.CurrentThread.Name,
                           AppDomain.CurrentDomain.FriendlyName,
-                          CultureInfo.CurrentCulture.Name); 
+                          CultureInfo.CurrentCulture.Name);
 
-    
-            CurrCultureString = "Lang " + CultureInfo.CurrentCulture.DisplayName;
+
+                CurrCultureString = "Lang " + CultureInfo.CurrentCulture.DisplayName;
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"ShellPageVM.cs:GetLanguage: '{ex}'");
+            }
+            
 
         }
 
         [RelayCommand]
         public async Task ChangeLanguage()
         {
-            await _cultureManager.ChangeLang(CultureInfo.CurrentCulture.Name);
-             CurrCultureString = "Lang: " + CultureInfo.CurrentCulture.DisplayName;
+            try
+            {
+                await _cultureManager.ChangeLang(CultureInfo.CurrentCulture.Name);
+                CurrCultureString = "Lang: " + CultureInfo.CurrentCulture.DisplayName;
 
-            //CultureInfo ci = CultureInfo.CurrentCulture;
-            CurrDate = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.LongDatePattern, CultureInfo.CurrentCulture);
+                //CultureInfo ci = CultureInfo.CurrentCulture;
+                CurrDate = DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.LongDatePattern, CultureInfo.CurrentCulture);
 
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"ShellPageVM.cs:ChangeLanguage: '{ex}'");
+            }
+            
 
 
         }

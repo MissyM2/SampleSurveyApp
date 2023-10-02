@@ -85,7 +85,7 @@
                      <!--QType is SingleAnswer-->
                     <StackLayout BackgroundColor="Transparent"
                               IsVisible="{Binding IsVisibleRuleTypeSingle}"
-                              AbsoluteLayout.LayoutBounds="0.45, .24, .9, .1"
+                              AbsoluteLayout.LayoutBounds="1.6, .3, .9, .1"
                               AbsoluteLayout.LayoutFlags="All">
                          <CollectionView x:Name="singleSelectionCvPortrait"
                                         ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
@@ -102,7 +102,7 @@
 
                     <!--QType is MultipleAnswers-->
                          <CollectionView x:Name="multipleSelectionsCVPortrait"
-                                         AbsoluteLayout.LayoutBounds="0.45, .24, .9, .6"
+                                         AbsoluteLayout.LayoutBounds="1, .3, .9, .6"
                                         AbsoluteLayout.LayoutFlags="All" 
                                         ItemsSource="{Binding AnswerOptionsForCurrentQuestionCollection}"
                                         SelectedItems="{Binding SelectedAnswers}"
@@ -116,11 +116,33 @@
                                         BackgroundColor="Transparent"/>
 
                     <!--QuestionType is Text-->
-                    <StackLayout IsVisible="{Binding IsVisibleQTypeText}"
-                                 AbsoluteLayout.LayoutBounds="0.45, .24, .9, -.1"
-                                 AbsoluteLayout.LayoutFlags="All">
-                            <controls:TextEditorCardView  BackgroundColor="Transparent"/>
-                    </StackLayout>
+                    <Frame  IsVisible="{Binding IsVisibleQTypeText}"
+                            AbsoluteLayout.LayoutBounds="0.45, .4, .9, -.1"
+                            AbsoluteLayout.LayoutFlags="All"
+                            HeightRequest="200"
+                            WidthRequest="{OnPlatform iOS=350, Android=400}"
+                            BorderColor="LightGray"
+                            Padding="0">
+                        <Editor x:Name="txtEditorPortrait"
+                                Placeholder="Text goes here"
+                                Text="{Binding UserTextAnswer, Mode=TwoWay}">
+                            <Editor.Behaviors>
+                                <toolkit:EventToCommandBehavior
+                                    EventName="TextChanged"
+                                    Command="{Binding UserTextAnswerChangedCommand}"/>
+                                <toolkit:CharactersValidationBehavior
+                                    MinimumLength="{Binding MinTextLen}"
+                                    MaximumLength="{Binding MaxTextLen}"
+                                    Flags="ValidateOnValueChanged"
+                                    CharacterType="Digit"
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    MaximumCharacterTypeCount="{Binding TextLen, Source={x:Reference MaximumCharacterCountEntry}}"
+                                    MinimumCharacterTypeCount="{Binding TextLen, Source={x:Reference MinimumCharacterCountEntry}}"/>
+                            </Editor.Behaviors>
+
+                        </Editor>
+                    </Frame>
 
                      <!--REVIEW ANSWERS-->
                             <CollectionView x:Name="responseCVPortrait"
@@ -203,15 +225,37 @@
                                 ItemTemplate="{StaticResource AnswerOptionDataTemplate}"/>
 
                 <!-- QuestionType is Text -->
-                <StackLayout IsVisible="{Binding IsVisibleQTypeText}"
-                            AbsoluteLayout.LayoutBounds="1, 0.1, .5, -.5"
-                            AbsoluteLayout.LayoutFlags="All" >
-                        <controls:TextEditorCardView BackgroundColor="lightCyan"/>
-                </StackLayout>
+               <Frame  IsVisible="{Binding IsVisibleQTypeText}"
+                            AbsoluteLayout.LayoutBounds="1,.1, .5, 1"
+                            AbsoluteLayout.LayoutFlags="All"
+                            HeightRequest="200"
+                            WidthRequest="{OnPlatform iOS=350, Android=400}"
+                            BorderColor="LightGray"
+                            Padding="0">
+                        <Editor x:Name="txtEditorLandscape"
+                                Placeholder="Text goes here"
+                                Text="{Binding UserTextAnswer, Mode=TwoWay}">
+                            <Editor.Behaviors>
+                                <toolkit:EventToCommandBehavior
+                                    EventName="TextChanged"
+                                    Command="{Binding UserTextAnswerChangedCommand}"/>
+                                <toolkit:CharactersValidationBehavior
+                                    MinimumLength="{Binding MinTextLen}"
+                                    MaximumLength="{Binding MaxTextLen}"
+                                    Flags="ValidateOnValueChanged"
+                                    CharacterType="Digit"
+                                    InvalidStyle="{StaticResource InvalidEntryStyle}"
+                                    ValidStyle="{StaticResource ValidEntryStyle}"
+                                    MaximumCharacterTypeCount="{Binding TextLen, Source={x:Reference MaximumCharacterCountEntry}}"
+                                    MinimumCharacterTypeCount="{Binding TextLen, Source={x:Reference MinimumCharacterCountEntry}}"/>
+                            </Editor.Behaviors>
+
+                        </Editor>
+                    </Frame>
 
                 <!-- REVIEW ANSWERS -->
                 <CollectionView x:Name="responseCVLandscape"
-                                AbsoluteLayout.LayoutBounds="1, 0, .5, 1.2"
+                                AbsoluteLayout.LayoutBounds="1, 0, .5, 1"
                                 AbsoluteLayout.LayoutFlags="All"
                                 ItemsSource="{Binding UserAnswerGroups}"
                                 SelectionMode="None"

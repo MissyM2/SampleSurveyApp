@@ -24,7 +24,7 @@
         </VisualStateManager.VisualStateGroups>
 
         <Grid x:Name="responseGrid"
-            ColumnDefinitions="225, 40,40"
+            ColumnDefinitions="225, 40,20"
             RowDefinitions="20, 20"
             VerticalOptions="Center">
 
