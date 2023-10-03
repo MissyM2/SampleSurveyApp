@@ -49,15 +49,6 @@
                     
                     </Label>
                  </StackLayout>
-                <StackLayout IsVisible="{Binding IsVisibleAnswerReview}" Padding="0,10,0,10">
-                    <Button Text="{Binding SaveSurveyLbl}"
-                            WidthRequest="200"
-                            HeightRequest="{OnPlatform Android=45, iOS=30}"
-                            FontSize="{OnPlatform Android=14, iOS=16}"
-                            BackgroundColor="{StaticResource Tertiary}"
-                            Command="{Binding SaveSurveyCommand}"
-                            VerticalOptions="Center" />
-                </StackLayout>
             </StackLayout>
             <BoxView BackgroundColor="LightBlue" HeightRequest="2"/>
         </StackLayout >
@@ -108,15 +99,7 @@
                         </Label>
                     </StackLayout>
 
-                    <StackLayout IsVisible="{Binding IsVisibleAnswerReview}">
-                        <Button Text="{Binding SaveSurveyLbl}"
-                                WidthRequest="200"
-                                HeightRequest="{OnPlatform Android=45, iOS=30}"
-                                FontSize="{OnPlatform Android=14, iOS=16}"
-                                BackgroundColor="{StaticResource Tertiary}"
-                                Command="{Binding SaveSurveyCommand}"
-                                VerticalOptions="Center" />
-                    </StackLayout>
+                   
                 </StackLayout>
             </StackLayout>
         </Grid>

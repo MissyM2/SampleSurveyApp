@@ -234,6 +234,9 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isAnswerReview = false;
 
         [ObservableProperty]
+        bool isReadyToSave = false;
+
+        [ObservableProperty]
         bool answerReviewIsNext;
         #endregion
 
@@ -321,100 +324,105 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 if (direction == "Next")
                 {
-
-                    // request answer if empty
-
-                    if (CurrentQuestion.NextQCode == -2)
+                    if (IsReadyToSave == true)
                     {
+                        await SaveSurvey();
+                    }
+                    else
+                    {
+
+                        // request answer if empty
+                        if (CurrentQuestion.NextQCode == -2)
+                        {
+                            if (CurrentQuestion.QType == "Text")
+                            {
+                                if (TextLen < MinTextLen)
+                                {
+                                    await _messageService.CustomAlert("Too short", "Entry must be, at least " + MinTextLen + " characters long.", "OK");
+                                    return;
+                                }
+
+                                if (TextLen > MaxTextLen)
+                                {
+                                    await _messageService.CustomAlert("Too long", "Entry can be no more than " + MaxTextLen + " characters long.", "OK");
+                                    return;
+                                }
+                                //await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerTextMsg + " " + TextLen, "OK");
+                            }
+
+                            if (CurrentQuestion.QType == "SingleAnswer")
+                            {
+                                await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerSingleMsg, "OK");
+                                return;
+                            }
+
+                            if (CurrentQuestion.QType == "MultipleAnswers")
+                            {
+                                await _messageService.CustomAlert(AppResources.NoAnswerMultipleMsgTitle, AppResources.NoAnswerMultipleMsg, "OK");
+                                return;
+                            }
+
+                        }
+
+                        // multiple choice and multiple selection answers are chosen before the Next is tapped
                         if (CurrentQuestion.QType == "Text")
                         {
-                            if (TextLen < MinTextLen)
-                            {
-                                await _messageService.CustomAlert("Too short", "Entry must be, at least " + MinTextLen + " characters long.", "OK");
-                                return;
-                            }
-
-                            if (TextLen > MaxTextLen)
-                            {
-                                await _messageService.CustomAlert("Too long", "Entry can be no more than " + MaxTextLen + " characters long.", "OK");
-                                return;
-                            }
-                            //await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerTextMsg + " " + TextLen, "OK");
-                        }
-
-                        if (CurrentQuestion.QType == "SingleAnswer")
-                        {
-                            await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerSingleMsg, "OK");
-                            return;
-                        }
-
-                        if (CurrentQuestion.QType == "MultipleAnswers")
-                        {
-                            await _messageService.CustomAlert(AppResources.NoAnswerMultipleMsgTitle, AppResources.NoAnswerMultipleMsg, "OK");
-                            return;
-                        }
-
-                    }
-
-                    // multiple choice and multiple selection answers are chosen before the Next is tapped
-                    if (CurrentQuestion.QType == "Text")
-                    {
                        
-                        //  there is only one answer option for a text q
-                        CurrentlySelectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode);
-                    }
+                            //  there is only one answer option for a text q
+                            CurrentlySelectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode);
+                        }
 
 
-                    // set current nav rule
-                    if (CurrentQuestion.NextQCode == -1)  // next screen is review
-                    {
-                        CurrentNavRule = -1;
-                    }
-
-                    if (CurrentNavRule == -1) // any question with a NavRule of -1, meaning the next screen is the AnswerReview
-                    {
                         // set current nav rule
-                        if (CurrentQuestion.NextQCode == -2)
+                        if (CurrentQuestion.NextQCode == -1)  // next screen is review
                         {
                             CurrentNavRule = -1;
                         }
 
-                        // set 
-                        IsAnswerReview = true;
+                        if (CurrentNavRule == -1) // any question with a NavRule of -1, meaning the next screen is the AnswerReview
+                        {
+                            // set current nav rule
+                            if (CurrentQuestion.NextQCode == -2)
+                            {
+                                CurrentNavRule = -1;
+                            }
 
-                        CurrentQuestion.NextQCode = -1;
-                        CreateUserResponsesCollection();
+                            // set 
+                            IsAnswerReview = true;
 
-                        // set title view
-                        SetTitleViewValuesOnOpen();
+                            CurrentQuestion.NextQCode = -1;
+                            CreateUserResponsesCollection();
 
-                        // set screen values based on properties in CurrentQuestion
-                        SetScreenValuesOnOpen();
+                            // set title view
+                            SetTitleViewValuesOnOpen();
+
+                            // set screen values based on properties in CurrentQuestion
+                            SetScreenValuesOnOpen();
+
+                        }
+                        else  // all questions with a NavRule other than -1, meaning the next screen is another question
+                        {
+                            // set current nav rule
+                            CurrentNavRule = CurrentQuestion.NextQCode;
+                            NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
+
+                            // set prevqcode on CurrentQuestion
+                            NextCurrentQuestion.PrevQCode = CurrentQuestion.CurrQCode;
+
+                            // get new current question
+                            CurrentQuestion = NextCurrentQuestion;
+
+                            CurrentQuestion.IsSelected = true;
+
+
+                            // get answers for current question
+                            GetAnswerOptionsForCurrentQuestion();
+
+                            // set title view
+                            SetTitleViewValuesOnOpen();
+                        }
 
                     }
-                    else  // all questions with a NavRule other than -1, meaning the next screen is another question
-                    {
-                        // set current nav rule
-                        CurrentNavRule = CurrentQuestion.NextQCode;
-                        NextCurrentQuestion = AllPossibleQuestionsCollection.FirstOrDefault(v => v.CurrQCode == CurrentNavRule);
-
-                        // set prevqcode on CurrentQuestion
-                        NextCurrentQuestion.PrevQCode = CurrentQuestion.CurrQCode;
-
-                        // get new current question
-                        CurrentQuestion = NextCurrentQuestion;
-
-                        CurrentQuestion.IsSelected = true;
-
-
-                        // get answers for current question
-                        GetAnswerOptionsForCurrentQuestion();
-
-                        // set title view
-                        SetTitleViewValuesOnOpen();
-                    }
-
-
                 }
                 else // direction == "Prev"
                 {
@@ -629,8 +637,9 @@ namespace SampleSurveyApp.Core.ViewModels
                     {
                         ScreenNameLbl = AppResources.ScreenNameLblReview;
                         LeftBtnLbl = AppResources.LeftBtnLblPrev;
-                        RightBtnLbl = "";
-                        IsWorkingRightBtn = false;
+                        RightBtnLbl = "Save Survey";
+                        IsReadyToSave = true;
+                        IsWorkingRightBtn = true;
 
                     }
                 }
