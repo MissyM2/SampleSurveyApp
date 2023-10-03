@@ -19,16 +19,6 @@ public partial class AppShell : Shell
             new CultureManager(),
             new AsyncRepository<SurveyModel>(),
             new AsyncRepository<SurveyResponseModel>());
-
-        Routing.RegisterRoute(nameof(SurveyPage), typeof(SurveyPage));
-        Routing.RegisterRoute(nameof(OverviewPage), typeof(OverviewPage));
-    }
-
-    protected async override void OnAppearing()
-    {
-        base.OnAppearing();
-        var vm = (ShellPageVM)BindingContext;
-        await vm.GetLanguage();
     }
 }
 

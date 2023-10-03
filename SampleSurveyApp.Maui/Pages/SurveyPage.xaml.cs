@@ -63,25 +63,25 @@ public partial class SurveyPage : ContentPage
         
     }
 
-    protected async override void OnAppearing()
-    {
-        base.OnAppearing();
+    //protected async override void OnAppearing()
+    //{
+    //    base.OnAppearing();
 
-        try
-        {
-            await Shell.Current.DisplayAlert("Orientation", DeviceDisplay.Current.MainDisplayInfo.Orientation.ToString(), "OK");
-            var vm = (SurveyPageVM)BindingContext;
-            vm.ScreenNameLbl = AppResources.ScreenNameLblStart;
-            Debug.WriteLine($"Normal state active: {vm.IsSelected}");
-            await vm.Init();
+    //    try
+    //    {
+    //        await Shell.Current.DisplayAlert("Orientation", DeviceDisplay.Current.MainDisplayInfo.Orientation.ToString(), "OK");
+    //        var vm = (SurveyPageVM)BindingContext;
+    //        vm.ScreenNameLbl = AppResources.ScreenNameLblStart;
+    //        Debug.WriteLine($"Normal state active: {vm.IsSelected}");
+    //        await vm.Init();
 
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"SurveyPage.xaml.cs:OnAppearing: '{ex}'");
-        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Debug.WriteLine($"SurveyPage.xaml.cs:OnAppearing: '{ex}'");
+    //    }
         
-    }
+    //}
 
     void OnNormalStateIsActiveChanged(object sender, EventArgs e)
     {

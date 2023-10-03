@@ -40,6 +40,21 @@ namespace SampleSurveyApp.Core.ViewModels
 
         public LocalizationResourceManager LocalizationResourceManager => LocalizationResourceManager.Instance;
 
+        [ObservableProperty]
+        public SurveyModel newSurvey;
+
+        [ObservableProperty]
+        public SurveyModel insertedSurvey;
+
+        [ObservableProperty]
+        bool surveyIsSaved = false;
+
+        [ObservableProperty]
+        public SurveyResponseModel newResponse;
+
+        [ObservableProperty]
+        public SurveyResponseModel insertedResponse;
+
         #endregion
 
         #region Current Question and Current Answers
@@ -69,57 +84,22 @@ namespace SampleSurveyApp.Core.ViewModels
         bool answerHasBeenSelected = false;
 
         public IList<SurveyAnswerModel> AnswerOptionsForCurrentQuestionCollection { get; set; }
-
-
         #endregion
 
 
-        #region UI properties
-
-        [ObservableProperty]
-        bool isPortrait = true;
-
-        [ObservableProperty]
-        bool isLandscape = false;
-
-        [ObservableProperty]
-        double screenHeight;
-
-        [ObservableProperty]
-        double scrollViewScreenHeight;
-
-        [ObservableProperty]
-        double screenWidth;
-
-        [ObservableProperty]
-        ImageSource checkMarkImage;
-
-        [ObservableProperty]
-        string mainQuestionLbl;
-
-        [ObservableProperty]
-        string mainInstructionLbl;
+        #region Visibility/Enabled Properties
 
         [ObservableProperty]
         bool isVisibleMainInstructionLbl;
 
         [ObservableProperty]
-        string textInstructionLbl;
-
-        [ObservableProperty]
         bool isVisibleTextInstructionLbl;
 
         [ObservableProperty]
-        int count;
+        bool isVisibleSurveyHeader = false;
 
         [ObservableProperty]
-        string screenNameLbl;
-
-        [ObservableProperty]
-        string leftBtnLbl;
-
-        [ObservableProperty]
-        string rightBtnLbl;
+        bool isVisibleSurveyStartButton = true;
 
         [ObservableProperty]
         bool isVisibleQTypeText;
@@ -137,23 +117,58 @@ namespace SampleSurveyApp.Core.ViewModels
         bool isVisibleThankYouText;
 
         [ObservableProperty]
-        bool isAnswerReview = false;
-
-        [ObservableProperty]
-        bool answerReviewIsNext;
-
-        [ObservableProperty]
-        bool isVisibleSurveyHeader = false;
-
-        [ObservableProperty]
-        bool isVisibleSurveyStartButton = true;
-
-        [ObservableProperty]
         bool isWorkingLeftBtn = true;
 
         [ObservableProperty]
         bool isWorkingRightBtn = true;
 
+        #endregion
+
+        #region Orientation Props
+
+        [ObservableProperty]
+        double screenHeight;
+
+        [ObservableProperty]
+        double scrollViewScreenHeight;
+
+        [ObservableProperty]
+        double screenWidth;
+
+        #endregion
+
+        #region Label Props and other UI
+
+        [ObservableProperty]
+        string mainQuestionLbl;
+
+        [ObservableProperty]
+        string mainInstructionLbl;
+
+        [ObservableProperty]
+        string textInstructionLbl;
+
+        [ObservableProperty]
+        string screenNameLbl;
+
+        [ObservableProperty]
+        string leftBtnLbl;
+
+        [ObservableProperty]
+        string rightBtnLbl;
+
+        [ObservableProperty]
+        string saveSurveyLbl;
+
+        [ObservableProperty]
+        public string flyoutBehaviorStr = "Disabled";
+
+        [ObservableProperty]
+        ImageSource checkMarkImage;
+
+        #endregion
+
+        #region Field Props
         [ObservableProperty]
         string qText;
 
@@ -166,24 +181,36 @@ namespace SampleSurveyApp.Core.ViewModels
         [ObservableProperty]
         bool isSelected;
 
-        #endregion
-
-
-
         [ObservableProperty]
         string selectedItem;
 
-        public ObservableCollection<object> SelectedAnswers { get; } = new();
-
+        [ObservableProperty]
+        string qType;
 
         [ObservableProperty]
-        string selectedLanguage;
+        string navRule;
 
         [ObservableProperty]
         int id;
 
         [ObservableProperty]
         string surveyId;
+
+        [ObservableProperty]
+        string selectedLanguage;
+
+        [ObservableProperty]
+        int count;
+
+        #endregion
+
+
+        #region Text Answer
+
+        public List<AnswerGroup> UserAnswerGroups { get; private set; } = new List<AnswerGroup>();
+        public ObservableCollection<SurveyResponseModel> AnswerCollection { get; set; } = new();
+
+        public ObservableCollection<object> SelectedAnswers { get; } = new();
 
         [ObservableProperty]
         int textLen = 0;
@@ -193,36 +220,24 @@ namespace SampleSurveyApp.Core.ViewModels
 
         [ObservableProperty]
         int maxTextLen = 25;
+        #endregion
+
+        #region Flags
 
         [ObservableProperty]
-        string qType;
+        bool isPortrait = true;
 
         [ObservableProperty]
-        string navRule;
-
-        public List<AnswerGroup> UserAnswerGroups { get; private set; } = new List<AnswerGroup>();
-        public ObservableCollection<SurveyResponseModel> AnswerCollection { get; set; } = new();
+        bool isLandscape = false;
 
         [ObservableProperty]
-        public SurveyModel newSurvey;
+        bool isAnswerReview = false;
 
         [ObservableProperty]
-        public SurveyModel insertedSurvey;
+        bool answerReviewIsNext;
+        #endregion
 
-        [ObservableProperty]
-        string saveSurveyLbl;
 
-        [ObservableProperty]
-        bool surveyIsSaved = false;
-
-        [ObservableProperty]
-        public SurveyResponseModel newResponse;
-
-        [ObservableProperty]
-        public SurveyResponseModel insertedResponse;
-
-        [ObservableProperty]
-        public string flyoutBehaviorStr = "Disabled";
 
 
         public SurveyPageVM(
@@ -252,7 +267,7 @@ namespace SampleSurveyApp.Core.ViewModels
         }
 
 
-
+        #region Initial Setup
 
         [RelayCommand]
         public async Task Init()
@@ -284,6 +299,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 {
                     AllPossibleQuestionsCollection.Add(question);
                 }
+                ScreenNameLbl = AppResources.ScreenNameLblStart;
             }
             catch (Exception ex)
             {
@@ -293,27 +309,7 @@ namespace SampleSurveyApp.Core.ViewModels
             
         }
 
-        private void GetAnswerOptionsForCurrentQuestion()
-        {
-            try
-            {
-                AnswerOptionsForCurrentQuestionCollection.Clear();
-                foreach (var answer in answerSource)
-                {
-                    if (answer.CurrQCode == CurrentQuestion.CurrQCode)
-                    {
-                        answer.AText = AppResources.ResourceManager.GetString(answer.ATextLocal, CultureInfo.CurrentCulture);
-                        AnswerOptionsForCurrentQuestionCollection.Add(answer);
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"SurveyPageVM.cs:GetAnswerOptionsForCurrentQuestion((: '{ex}'");
-            }
-            
-        }
+        #endregion
 
 
         #region Navigation
@@ -458,15 +454,34 @@ namespace SampleSurveyApp.Core.ViewModels
             {
                 Debug.WriteLine($"SurveyPageVM.cs:Navigate: '{ex}'");
             }
+        }
 
-           
+        private void GetAnswerOptionsForCurrentQuestion()
+        {
+            try
+            {
+                AnswerOptionsForCurrentQuestionCollection.Clear();
+                foreach (var answer in answerSource)
+                {
+                    if (answer.CurrQCode == CurrentQuestion.CurrQCode)
+                    {
+                        answer.AText = AppResources.ResourceManager.GetString(answer.ATextLocal, CultureInfo.CurrentCulture);
+                        AnswerOptionsForCurrentQuestionCollection.Add(answer);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SurveyPageVM.cs:GetAnswerOptionsForCurrentQuestion((: '{ex}'");
+            }
 
         }
 
         #endregion
 
 
-        #region User Input
+        #region User Input: Single, Multiple or Text
 
         [RelayCommand]
         void SingleCVSelectionChanged() //Single Answer
