@@ -24,8 +24,6 @@ It is a .Net 7.0, .Net Maui and Xunit app that has been created as a template th
 ### Structure
 Solution Name: SampleSurveyApp
 
-Sqlite db"
-    * 3 projects
 Projects:
 - SampleSurveyApp.Core
   Contains all data and logic-related folders, including all models, view models, services and database context for local Sqlite db.  Question and Answer data must be added to the database with required information.  A method is run at the beginning of the survey session to load all currently available questions and answers.
