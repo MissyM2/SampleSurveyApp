@@ -60,19 +60,19 @@ Projects:
 
 ### Libraries
 
-- TodoSample.Core
+- SampleSurveyApp.Core
   
   - CommunityToolkit.Mvvm
   - sqlite-net-pcl
   - SQLitePCLRaw.bundle_green
   - SQLitePCLRaw.provider.dynamic_cdecl
  
-- TodoSampleApp.Maui
+- SampleSurveyApp.Maui
 
   - Microsoft.Extensions.Logging.Debug
   - CommunityToolkit.Maui
  
-- TodoSampleApp.Test (NO TESTS, YET)
+- SampleSurveyApp.Tests (NO TESTS, YET)
 
   - Microsoft.NET.Test.Sdk
   - xunit
