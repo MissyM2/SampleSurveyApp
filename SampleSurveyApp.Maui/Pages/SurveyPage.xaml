@@ -147,7 +147,7 @@
 
                      <!--REVIEW ANSWERS-->
                             <CollectionView x:Name="responseCVPortrait"
-                                            AbsoluteLayout.LayoutBounds="0.45, .24, 1, 1.5"
+                                            AbsoluteLayout.LayoutBounds="0.45, .4, 1, 1.5"
                                             AbsoluteLayout.LayoutFlags="All"
                                             ItemsSource="{Binding UserAnswerGroups}"
                                             IsGrouped="True"

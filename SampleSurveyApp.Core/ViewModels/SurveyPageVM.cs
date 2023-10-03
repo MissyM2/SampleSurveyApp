@@ -426,6 +426,7 @@ namespace SampleSurveyApp.Core.ViewModels
                 }
                 else // direction == "Prev"
                 {
+                    IsReadyToSave = false;
                     // set current nav rule
                     if (IsAnswerReview == true)
                     {

@@ -22,6 +22,7 @@
                         HorizontalTextAlignment="Center"
                         VerticalTextAlignment="Center"
                         BackgroundColor="Transparent" TextColor="White" Grid.Column="1" />
+            <Label x:Name="isReviewLabelPortrait" Text="{Binding IsVisibleAnswerReview}" IsVisible="false"/>
             <Button Text="{Binding RightBtnLbl}"
                        BackgroundColor="transparent"
                        TextColor="White"
@@ -30,7 +31,20 @@
                        Command="{Binding NavigateCommand}"
                        CommandParameter="Next"
                        IsVisible="{Binding IsWorkingRightBtn}"
-                       IsEnabled="{Binding IsWorkingRightBtn}"/>
+                       IsEnabled="{Binding IsWorkingRightBtn}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                                 Binding="{Binding Source={x:Reference isReviewLabelPortrait},
+                                 Path=Text}"
+                                 Value="True">
+                        <Setter Property="TextColor"
+                                Value="Red" />
+                        <Setter Property="FontAttributes"
+                                Value="Bold"/>
+                    </DataTrigger>
+                </Button.Triggers>
+
+                </Button>
         </Grid>
 
         <!-- Landscape -->
@@ -52,6 +66,7 @@
                         VerticalTextAlignment="Start"
                         Padding="0,5,0,0"
                         BackgroundColor="Transparent" TextColor="{StaticResource Black}" Grid.Column="1" />
+            <Label x:Name="isReviewLabelLandscape" Text="{Binding IsVisibleAnswerReview}" IsVisible="false"/>
             <Button Text="{Binding RightBtnLbl}"
                        BackgroundColor="transparent"
                        TextColor="{StaticResource Black}"
@@ -61,7 +76,19 @@
                        CommandParameter="Next"
                        Padding="0,0,0,7"
                        IsVisible="{Binding IsWorkingRightBtn}"
-                       IsEnabled="{Binding IsWorkingRightBtn}"/>
+                       IsEnabled="{Binding IsWorkingRightBtn}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button"
+                                 Binding="{Binding Source={x:Reference isReviewLabelLandscape},
+                                 Path=Text}"
+                                 Value="True">
+                        <Setter Property="TextColor"
+                                Value="Red" />
+                        <Setter Property="FontAttributes"
+                                Value="Bold"/>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
          </Grid>
     </StackLayout>
 
