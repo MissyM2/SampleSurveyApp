@@ -139,9 +139,7 @@
                                     Flags="ValidateOnValueChanged"
                                     CharacterType="Digit"
                                     InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                    ValidStyle="{StaticResource ValidEntryStyle}"
-                                    MaximumCharacterTypeCount="{Binding TextLen, Source={x:Reference MaximumCharacterCountEntry}}"
-                                    MinimumCharacterTypeCount="{Binding TextLen, Source={x:Reference MinimumCharacterCountEntry}}"/>
+                                    ValidStyle="{StaticResource ValidEntryStyle}"/>
                             </Editor.Behaviors>
 
                         </Editor>
@@ -248,9 +246,7 @@
                                     Flags="ValidateOnValueChanged"
                                     CharacterType="Digit"
                                     InvalidStyle="{StaticResource InvalidEntryStyle}"
-                                    ValidStyle="{StaticResource ValidEntryStyle}"
-                                    MaximumCharacterTypeCount="{Binding TextLen, Source={x:Reference MaximumCharacterCountEntry}}"
-                                    MinimumCharacterTypeCount="{Binding TextLen, Source={x:Reference MinimumCharacterCountEntry}}"/>
+                                    ValidStyle="{StaticResource ValidEntryStyle}"/>
                             </Editor.Behaviors>
 
                         </Editor>

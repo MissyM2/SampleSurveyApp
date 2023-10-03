@@ -326,10 +326,20 @@ namespace SampleSurveyApp.Core.ViewModels
 
                     if (CurrentQuestion.NextQCode == -2)
                     {
-                        if (CurrentQuestion.QType == "Text" && TextLen < 3)
+                        if (CurrentQuestion.QType == "Text")
                         {
-                            await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerTextMsg + " " + TextLen, "OK");
-                            return;
+                            if (TextLen < MinTextLen)
+                            {
+                                await _messageService.CustomAlert("Too short", "Entry must be, at least " + MinTextLen + " characters long.", "OK");
+                                return;
+                            }
+
+                            if (TextLen > MaxTextLen)
+                            {
+                                await _messageService.CustomAlert("Too long", "Entry can be no more than " + MaxTextLen + " characters long.", "OK");
+                                return;
+                            }
+                            //await _messageService.CustomAlert(AppResources.NoAnswerSingleTextMsgTitle, AppResources.NoAnswerTextMsg + " " + TextLen, "OK");
                         }
 
                         if (CurrentQuestion.QType == "SingleAnswer")
@@ -349,6 +359,7 @@ namespace SampleSurveyApp.Core.ViewModels
                     // multiple choice and multiple selection answers are chosen before the Next is tapped
                     if (CurrentQuestion.QType == "Text")
                     {
+                       
                         //  there is only one answer option for a text q
                         CurrentlySelectedAnswer = AllPossibleAnswerOptionsCollection.FirstOrDefault(x => x.CurrQCode == CurrentQuestion.CurrQCode);
                     }
@@ -563,19 +574,6 @@ namespace SampleSurveyApp.Core.ViewModels
             try
             {
                 TextLen = UserTextAnswer.Length;
-                if (TextLen == 0)
-                {
-                    Debug.WriteLine("User has added 0 character." + TextLen);
-
-                }
-                else if (TextLen == 1)
-                {
-                    Debug.WriteLine("User has added 1 character." + TextLen);
-                }
-                else
-                {
-                    Debug.WriteLine("more than 1 character" + TextLen);
-                }
             }
             catch (Exception ex)
             {
